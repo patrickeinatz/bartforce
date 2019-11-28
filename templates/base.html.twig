@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+        <!--- FONTS -->
+        <link href="https://fonts.googleapis.com/css?family=Abel|Montserrat&display=swap" rel="stylesheet">
+    {% endblock %}
+</head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2 sidenav-col">
+                    {% if is_granted('ROLE_USER') %}
+                        {% include 'nav/topnav.html.twig' %}
+                        {% include 'nav/sidenav.html.twig' %}
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <div class="card content bg-darker">
+                        <div class="card-body">{% block content %}{% endblock %}</div>
+                        <div class="card-footer"><small>{% block footer %}Copyright © {{ "now"|date("Y") }} Bartforce{% endblock %}</small></div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+        </div>
+    {% block javascripts %}
+        <script src="{{ asset('js/jquery-3.3.1.slim.min.js') }}"></script>
+        <script src="{{ asset('js/popper.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,58 @@
+<!--- #TOPNAV# -->
+<nav class="navbar navbar-expand-md fixed-top">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars fa-lg m-2"></i>
+    </button>
+    <div class="top-profile-nav">
+        <img class="user-img rounded-circle" src="//cdn.discordapp.com/avatars/269132029398876161/{{app.user.avatarHash}}.png" alt="{{app.user.username}} Avatar" width="30">
+    </div>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item mb-1">
+                <a class="nav-link rounded" href="/">
+                    <i class="fas fa-th-large fa-fw ml-2"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li class="nav-item mb-1">
+                <a class="nav-link  disabled" href="#">
+                    <i class="fas fa-comments fa-fw ml-2"></i>
+                    Forum
+                </a>
+            </li>
+            <li class="nav-item mb-1">
+                <a class="nav-link disabled" href="#">
+                    <i class="fas fa-trophy fa-fw ml-2"></i>
+                    Hall of Fame
+                </a>
+            </li>
+            <li class="nav-item mb-1">
+                <a class="nav-link disabled" href="#">
+                    <i class="fas fa-sitemap fa-fw ml-2"></i>
+                    Turniere
+                </a>
+            </li>
+            <li class="nav-item mb-1">
+                <a class="nav-link disabled" href="#">
+                    <i class="fas fa-random fa-fw ml-2"></i>
+                    Match Maker
+                </a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link rounded" href="/profile/{{ app.user.discordId }}">
+                    <i class="fa fa-address-card fa-fw ml-2"></i>
+                    Profil
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link rounded" href="/logout">
+                    <i class="fas fa-sign-out-alt fa-fw ml-2"></i>
+                    Abmelden
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<!--- #/TOPNAV# -->

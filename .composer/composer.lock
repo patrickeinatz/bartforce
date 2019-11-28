@@ -1,0 +1,53 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "da44bc09826ded10e7aef6bbac495cfb",
+    "packages": [
+        {
+            "name": "plesk/composer-command-info",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plesk/composer-command-info.git",
+                "reference": "1aed97d1b529407a8d9e835575651980a14e3e60"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/plesk/composer-command-info/zipball/1aed97d1b529407a8d9e835575651980a14e3e60",
+                "reference": "1aed97d1b529407a8d9e835575651980a14e3e60",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1",
+                "ext-json": "*",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "codeception/codeception": "^3.1",
+                "composer/composer": "^1.8"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Plesk\\ComposerCommandInfo\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Plesk\\ComposerCommandInfo\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "time": "2019-09-18T10:10:43+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

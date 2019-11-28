@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bartforce Member{% endblock %}
+
+{% block content %}
+    <h3>{{ member.user.username }}'s Profil</h3>
+    <p>
+    {% for role in member.roles %}
+        {% for roleData in roles %}
+            {% if roleData.id == role %}
+                <span class="badge badge-{{ roleData.name|lower }}">{{ roleData.name }}</span>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    </p>
+{% endblock %}

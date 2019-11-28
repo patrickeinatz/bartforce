@@ -1,0 +1,5 @@
+{
+    "require": {
+        "plesk/composer-command-info": "~1.0.2"
+    }
+}

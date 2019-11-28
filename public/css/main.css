@@ -1,0 +1,202 @@
+/* BASIC */
+html{
+    background: rgb(6,16,25);
+}
+
+body{
+    background: rgb(22,49,59);
+    background: linear-gradient(180deg, rgb(22,49,59) 0%, rgb(6,16,25) 100%);
+    background-repeat: no-repeat;
+    font-family: 'Montserrat', sans-serif; !important;
+    font-size: 14px;
+    color: rgb(222,206,149);
+    min-height: 480px;
+    padding-top: 4.5rem;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family: 'Abel', sans-serif; !important;
+}
+
+/* TOPNAV */
+.navbar{
+    display: none;
+    font-size: 14px;
+    color: rgb(222,206,149);!important;
+    padding: 5px;
+    background-color: rgb(5, 8, 10);
+}
+
+.profile-nav{
+    margin: auto;
+}
+
+.navbar-toggler{
+    color: rgb(222,206,149); !important;
+}
+
+.user-img{
+    padding: 0;
+    margin-right: 5px;
+}
+
+.top-profile-nav{
+    display: inline-block;
+    float: right;
+    margin-top: 5px;
+}
+
+a.nav-link{
+    color: rgb(222,206,149);
+}
+
+a.nav-link.disabled{
+    color: rgb(148, 115, 64);!important;
+}
+a.nav-link.disabled:hover{
+    background:none;
+}
+
+a.nav-link:hover{
+    color: rgb(20, 20, 20); !important;
+    background-color: rgb(222,206,149);
+}
+
+/* SIDENAV */
+.sidenav{
+    z-index: 100;
+    display: block;
+    position: fixed;
+    border: none;
+    border-right: 1px solid rgb(20,23,25);
+    border-image:
+            linear-gradient(
+                    to bottom,
+                    rgb(222,206,149),
+                    rgb(148, 115, 64)
+            ) 1 100%;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100%;
+    background-color: rgb(5, 8, 10);
+
+}
+
+.sidenav-col{
+    min-width: 220px;
+}
+
+.sidenav-logo{
+    margin-left: -1px;
+    margin-top: -1px;
+    max-width: 220px;
+    max-height: 50px;
+}
+
+.sidenav-profile{
+    text-align: center;
+    padding: 20px 0 0 0;
+    background-color: rgb(20,23,25);
+}
+
+.sidenav-profile-name{
+    margin: 4px 0;
+}
+
+.sidenav-profile-controls{
+    margin-top: -5px;
+    padding-bottom: 10px;
+    background-color: rgb(20,23,25);
+}
+
+a.nav-link.sidenav-link{
+    color: rgb(222,206,149);!important;
+}
+
+a.nav-link.sidenav-link.disabled{
+    color: rgb(148, 115, 64);!important;
+}
+
+a.nav-link.sidenav-link.disabled:hover{
+    background: none;
+}
+
+a.nav-link.sidenav-link:hover{
+    color: rgb(10, 10, 10);
+    background-color: rgb(222,206,149);
+}
+
+/* CONTENT CARD */
+.content{
+    border: none;
+    border-top: 1px solid rgba(132,159,169,0.25);
+}
+.content .card-footer{
+    text-align: center;
+    border: none;
+    background-color: rgb(5, 8, 10);
+}
+
+/* BACKGROUNDS */
+.bg-darker{
+    background-color: rgb(20,23,25);
+}
+
+/* TEXT */
+.text-gold-dark{
+    color: rgb(148, 115, 64);!important;
+}
+.text-gold-med{
+    color: rgb(222,206,149);!important;
+}
+
+/* BUTTONS */
+.btn-gold{
+    background-color: rgb(222,206,149);!important;
+}
+.btn-gold:hover{
+    background-color: rgb(148, 115, 64);!important;
+}
+
+
+/* BADGES */
+.badge-admin{
+    background-color: rgb(255,0,0);
+}
+
+.badge-founder{
+    background-color: rgb(6, 145, 191);
+}
+
+.badge-beardos{
+    background-color: rgb(230, 9, 127);
+}
+
+.badge-mitglieder{
+    background-color: rgb(9, 230, 101);
+}
+
+.badge-veteran{
+    background-color: rgb(163, 25, 255);
+}
+
+/* RESPONSIVE ACTIONS */
+@media screen and (min-width: 768px){
+    .sidenav {
+        display: block;
+    }
+    .navbar{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .sidenav {
+        display: none;
+    }
+    .navbar{
+        display: block;
+    }
+}
+
