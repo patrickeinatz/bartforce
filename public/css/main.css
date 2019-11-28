@@ -40,6 +40,12 @@ h1, h2, h3, h4, h5, h6{
     margin-right: 5px;
 }
 
+.user-img-profile{
+    margin-top: -75px;
+    width: 100px;
+    padding: 0;
+}
+
 .top-profile-nav{
     display: inline-block;
     float: right;
@@ -84,7 +90,7 @@ a.nav-link:hover{
 }
 
 .sidenav-col{
-    min-width: 220px;
+    min-width: 220px;!important;
 }
 
 .sidenav-logo{
