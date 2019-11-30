@@ -12,20 +12,20 @@
             </a>
         </div>
         <div class="nav-item small">
-            <a class="nav-link sidenav-link" href="/logout">
+            <a class="nav-link sidenav-link" href="{{ path('logout') }}">
                 <i class="fas fa-sign-out-alt mr-1"></i>
                 Abmelden
             </a>
         </div>
     </div>
     <div class="nav-item mb-1 mt-3">
-        <a class="nav-link sidenav-link" href="/">
+        <a class="nav-link sidenav-link" href="{{ path('index') }}">
             <i class="fas fa-th-large mr-1"></i>
             Dashboard
         </a>
     </div>
     <div class="nav-item mb-1">
-        <a class="nav-link sidenav-link disabled" href="#">
+        <a class="nav-link sidenav-link" href="{{ path('forumView') }}">
             <i class="fas fa-comments mr-1"></i>
             Forum
         </a>

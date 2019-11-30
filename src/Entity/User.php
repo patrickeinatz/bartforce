@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -46,6 +48,22 @@ class User implements UserInterface
      * @ORM\Column(type="datetime")
      */
     private $created_at;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumTopic", mappedBy="topicCreator")
+     */
+    private $forumTopics;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumPost", mappedBy="postCreator")
+     */
+    private $forumPosts;
+
+    public function __construct()
+    {
+        $this->forumTopics = new ArrayCollection();
+        $this->forumPosts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -195,6 +213,68 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         return null;
+    }
+
+    /**
+     * @return Collection|ForumTopic[]
+     */
+    public function getForumTopics(): Collection
+    {
+        return $this->forumTopics;
+    }
+
+    public function addForumTopic(ForumTopic $forumTopic): self
+    {
+        if (!$this->forumTopics->contains($forumTopic)) {
+            $this->forumTopics[] = $forumTopic;
+            $forumTopic->setTopicCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeForumTopic(ForumTopic $forumTopic): self
+    {
+        if ($this->forumTopics->contains($forumTopic)) {
+            $this->forumTopics->removeElement($forumTopic);
+            // set the owning side to null (unless already changed)
+            if ($forumTopic->getTopicCreator() === $this) {
+                $forumTopic->setTopicCreator(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ForumPost[]
+     */
+    public function getForumPosts(): Collection
+    {
+        return $this->forumPosts;
+    }
+
+    public function addForumPost(ForumPost $forumPost): self
+    {
+        if (!$this->forumPosts->contains($forumPost)) {
+            $this->forumPosts[] = $forumPost;
+            $forumPost->setPostCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeForumPost(ForumPost $forumPost): self
+    {
+        if ($this->forumPosts->contains($forumPost)) {
+            $this->forumPosts->removeElement($forumPost);
+            // set the owning side to null (unless already changed)
+            if ($forumPost->getPostCreator() === $this) {
+                $forumPost->setPostCreator(null);
+            }
+        }
+
+        return $this;
     }
 
 

@@ -9,13 +9,13 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item mb-1">
-                <a class="nav-link rounded" href="/">
+                <a class="nav-link rounded" href="{{ path('index') }}">
                     <i class="fas fa-th-large fa-fw ml-2"></i>
                     Dashboard
                 </a>
             </li>
             <li class="nav-item mb-1">
-                <a class="nav-link  disabled" href="#">
+                <a class="nav-link " href="{{ path('forumView') }}">
                     <i class="fas fa-comments fa-fw ml-2"></i>
                     Forum
                 </a>
@@ -47,7 +47,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link rounded" href="/logout">
+                <a class="nav-link rounded" href="{{ path('logout') }}">
                     <i class="fas fa-sign-out-alt fa-fw ml-2"></i>
                     Abmelden
                 </a>

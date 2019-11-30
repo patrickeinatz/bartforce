@@ -3,16 +3,57 @@
 {% block title %}Bartforce Member{% endblock %}
 
 {% block content %}
-    <h3>{{ member.user.username }}'s Profil</h3>
-    <p>
-    {% for role in member.roles %}
-        {% for roleData in roles %}
-            {% if roleData.id == role %}
-                <span class="badge badge-{{ roleData.name|lower }}">{{ roleData.name }}</span>
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-    </p>
-    <b>Nickname: </b> {{ member.nick }}
-    <img class="user-img-profile rounded float-right" src="//cdn.discordapp.com/avatars/269132029398876161/{{app.user.avatarHash}}.png" alt="{{app.user.username}} Avatar">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="page-headline"><i class="fa fa-address-card mr-1"></i> Profil</h3>
+            <button type="button" class="btn btn-sm btn-gold float-right" data-toggle="modal" data-target=".bd-example-modal-lg">
+                <small>Profil bearbeiten</small>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <img class="user-img-profile rounded" src="//cdn.discordapp.com/avatars/269132029398876161/{{app.user.avatarHash}}.png" alt="{{app.user.username}} Avatar"><br>
+            {{ member.user.username }} <br>
+            {{ member.nick }} <br>
+            {% for role in member.roles %}
+                {% for roleData in roles %}
+                    {% if roleData.id == role %}
+                        <span class="badge badge-{{ roleData.name|lower }}">{{ roleData.name }}</span>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="col-md-4">
+            <h4 class="mt-3">Stats</h4>
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-darkerGold">Forumposts <span class="badge badge-gold">23</span></li>
+                <li class="list-group-item list-group-item-darkerGold">Kudos <span class="badge badge-gold">185</span></li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <h4 class="mt-3">Gamer Info</h4>
+       </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-darker">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Profil bearbeiten</h5>
+                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body border-0">
+                    ...
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><small>Abbrechen</small></button>
+                    <button type="button" class="btn btn-sm btn-gold"><small>Absenden</small></button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

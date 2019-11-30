@@ -1,12 +1,22 @@
 /* BASIC */
 html{
+    /*
     background: rgb(6,16,25);
+    */
+    background-image: url("../img/bg/lol_pyke.jpg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
 }
 
 body{
+    /*
     background: rgb(22,49,59);
     background: linear-gradient(180deg, rgb(22,49,59) 0%, rgb(6,16,25) 100%);
     background-repeat: no-repeat;
+     */
+    background: none;
     font-family: 'Montserrat', sans-serif; !important;
     font-size: 14px;
     color: rgb(222,206,149);
@@ -41,7 +51,8 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .user-img-profile{
-    margin-top: -75px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     width: 100px;
     padding: 0;
 }
@@ -64,6 +75,21 @@ a.nav-link.disabled:hover{
 }
 
 a.nav-link:hover{
+    color: rgb(20, 20, 20); !important;
+    background-color: rgb(222,206,149);
+}
+
+/* LISTINGS */
+
+.list-group-item-darkerGold{
+    color: rgb(222,206,149);
+    background-color: rgb(20, 20, 20); !important;
+    border: 1px solid rgb(148, 115, 64);
+}
+
+.badge-gold{
+    float: right;
+    font-size: 14px;
     color: rgb(20, 20, 20); !important;
     background-color: rgb(222,206,149);
 }
@@ -134,6 +160,12 @@ a.nav-link.sidenav-link:hover{
 }
 
 /* CONTENT CARD */
+.page-headline{
+    display: inline-block;
+    float: left;
+    margin-bottom: 20px;
+}
+
 .content{
     border: none;
     border-top: 1px solid rgba(132,159,169,0.25);

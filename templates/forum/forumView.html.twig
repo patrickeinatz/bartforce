@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bartforce {{ title }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="page-headline"><i class="fas fa-comments mr-1"></i> Forum</h3>
+                <button type="button" class="btn btn-sm btn-gold float-right" data-toggle="modal" data-target=".bd-example-modal-lg">
+                    <small>Neue Kategorie</small>
+                </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-darker">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Neue Kategorie erstellen</h5>
+                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body border-0">
+                    {{ form_start(forumCategoryForm) }}
+                    {{ form_row(forumCategoryForm.title) }}
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><small>Abbrechen</small></button>
+                    <button type="submit" class="btn btn-sm btn-gold"><small>Absenden</small></button>
+                    {{ form_end(forumCategoryForm) }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
