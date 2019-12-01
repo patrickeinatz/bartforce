@@ -5,7 +5,7 @@
 {% block content %}
     <div class="row mb-4">
         <div class="col-md-12">
-            <a href="/forum" class="btn btn-sm btn-gold"><i class="fas fa-comments mr-1"></i> Kategorien</a>
+            <a href="/forum" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-comments mr-1"></i> Kategorien</a>
             <button type="button" class="btn btn-sm btn-gold float-right" data-toggle="modal" data-target=".bd-example-modal-lg">
                 <i class="fas fa-plus-circle"></i> Neues Thema
             </button>
@@ -47,8 +47,8 @@
                     {{ form_row(forumTopicForm.topicContent) }}
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><small>Abbrechen</small></button>
-                    <button type="submit" class="btn btn-sm btn-gold"><small>Absenden</small></button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
+                    <button type="submit" class="btn btn-gold">Absenden</button>
                     {{ form_end(forumTopicForm) }}
                 </div>
 

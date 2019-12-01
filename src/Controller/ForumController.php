@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\ForumCategory;
+use App\Entity\ForumPost;
 use App\Entity\ForumTopic;
 use App\Entity\User;
 use App\Form\ForumCategoryType;
+use App\Form\ForumPostType;
 use App\Form\ForumTopicType;
 use App\Repository\ForumCategoryRepository;
+use App\Repository\ForumPostRepository;
 use App\Repository\ForumTopicRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -101,16 +104,46 @@ class ForumController extends AbstractController
     public function topicView(
         EntityManagerInterface $em,
         Request $request,
+        ForumCategoryRepository $categoryRepository,
         ForumTopicRepository $topicRepository,
+        ForumPostRepository $postRepository,
         string $id
     ){
         /** @var ForumTopic $forumTopic */
         $topic = $topicRepository->findOneBy(['id' => $id]);
 
+        /** @var ForumCategory $category */
+        $category = $categoryRepository->findOneBy(['id' => $topic->getCategory()->getId()]);
+
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+        $now = new \DateTime();
+        $posts = $postRepository->findBy(['postTopic' => $id]);
+
+        $form = $this->createForm(ForumPostType::class);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            /** @var ForumPost $forumPost */
+            $forumPost = $form->getData();
+            $forumPost->setCreatedAt($now);
+            $forumPost->setUpdatedAt($now);
+            $forumPost->setPostCreator($currentUser);
+            $forumPost->setPostTopic($topic);
+            $forumPost->setPostCategory($category);
+            $em->persist($forumPost);
+            $em->flush();
+            $this->addFlash('success', 'Forum Beitrag erstellt!');
+            return $this->redirectToRoute('forumTopicView', ['id' => $id]);
+        }
+
         return $this->render('forum/forumTopicView.html.twig', [
             'title' => 'Forum Thema',
+            'category' => $category,
             'topic' => $topic,
-            'catId' =>  $topic->getCategory()->getId()
+            'posts' => $posts,
+            'catId' =>  $topic->getCategory()->getId(),
+            'forumPostForm' => $form->createView()
         ]);
     }
 }

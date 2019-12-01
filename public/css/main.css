@@ -78,7 +78,7 @@ a.nav-link{
 }
 
 a.nav-link.disabled{
-    color: rgb(148, 115, 64);!important;
+    color: rgba(132,159,169,0.75);
 }
 a.nav-link.disabled:hover{
     background:none;
@@ -169,7 +169,7 @@ a.nav-link.sidenav-link{
 }
 
 a.nav-link.sidenav-link.disabled{
-    color: rgb(148, 115, 64);!important;
+    color: rgba(132,159,169,0.75);
 }
 
 a.nav-link.sidenav-link.disabled:hover{
@@ -192,7 +192,7 @@ a.nav-link.sidenav-link:hover{
     border: none;
     border-top: 1px solid rgba(132,159,169,0.25);
 }
-.content .card-footer{
+.content-footer{
     text-align: center;
     border: none;
     background-color: rgba(5, 8, 10, 0.5);
@@ -219,6 +219,37 @@ a.nav-link.sidenav-link:hover{
     min-width: 100px;
 }
 
+.forum-category{
+    border: none;
+    color: rgb(222,206,149);
+    background-color: rgba(0,0,0,0.25);
+}
+
+.forum-category-date{
+    color: rgba(222,206,149,0.65);
+}
+
+.forum-category-desc{
+    color: rgb(222,206,149);
+}
+
+.forum-category:hover{
+    color: rgb(20,23,25);
+    background-color: rgb(222,206,149);
+}
+
+.forum-category:hover{
+    color: rgb(20,23,25);
+}
+
+.forum-category:hover .forum-category-desc{
+    color: rgb(20,23,25);
+}
+
+.forum-category:hover .forum-category-date{
+    color: rgb(20,23,25);
+}
+
 .forumTopicList-Item{
     display: block;
     color: rgb(222,206,149);
@@ -235,7 +266,7 @@ a.nav-link.sidenav-link:hover{
 }
 
 .forumTopicList-Item small{
-    color: rgb(148, 115, 64);
+    color: rgba(222,206,149,0.65);
 }
 
 .forumTopicList-Item:hover small{
@@ -244,6 +275,39 @@ a.nav-link.sidenav-link:hover{
 
 .forumTopicList-Item span{
     margin-right: 5px;
+}
+.forum-post{
+    background: none;
+    border: 1px solid rgba(132,159,169,0.1);
+    border-radius: 0;
+    margin-bottom:20px;
+}
+
+.forum-post-header{
+    color: rgb(222,206,149);
+    background-color: rgba(132,159,169,0.1);
+    vertical-align: top;
+
+}
+
+.forum-post-header-headline{
+    display: inline-block;
+}
+
+.forum-post-body{
+    background-color: rgba(0,0,0,0.25);
+}
+
+.forum-post-footer{
+    text-align: right;
+    border: none;
+    background-color: rgba(0,0,0,0.25);
+}
+
+.user-img-forum{
+    display: inline-block;
+    width: 30px;
+    margin-right: 10px;
 }
 
 /* TEXT */
@@ -254,13 +318,34 @@ a.nav-link.sidenav-link:hover{
     color: rgb(222,206,149);!important;
 }
 
+.discriminator{
+    color: rgb(132,159,169);
+}
+
 /* BUTTONS */
 .btn-gold{
     font-size: 12px;
     background-color: rgb(222,206,149);!important;
 }
+
 .btn-gold:hover{
-    background-color: rgb(148, 115, 64);!important;
+    background-color: rgb(132,159,169);
+}
+
+.btn-danger{
+    font-size: 12px;
+}
+
+.red:hover{
+    background-color: rgb(255, 110, 99);
+}
+
+.green:hover{
+    background-color: rgb(9, 230, 101);
+}
+
+.yellow:hover{
+    background-color: rgb(255, 208, 99);
 }
 
 
