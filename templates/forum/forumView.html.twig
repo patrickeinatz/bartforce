@@ -6,14 +6,28 @@
     <div class="row">
         <div class="col-md-12">
             <h3 class="page-headline"><i class="fas fa-comments mr-1"></i> Forum</h3>
-                <button type="button" class="btn btn-sm btn-gold float-right" data-toggle="modal" data-target=".bd-example-modal-lg">
-                    <small>Neue Kategorie</small>
-                </button>
+            <button type="button" class="btn btn-sm btn-gold float-right" data-toggle="modal" data-target=".bd-example-modal-lg">
+                <i class="fas fa-plus-circle"></i> Neue Kategorie
+            </button>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            {% for category in categories|sort((a, b) => a.title <=> b.title) %}
+            <div class="list-group mt-3">
+                <a href="/forum/category/{{ category.id }}" class="list-group-item list-group-item-action darkerGold">
+                    <span class="row">
+                        <span class="col-md-10">
+                            <h5 class="mb-1"><i class="fas fa-tag"></i> {{ category.title }}</h5>
+                            <small class="mb-1">{{ category.description }}</small>
+                        </span>
+                        <span class="col-md-2 pt-1 pr-3 text-right forum-stats">
+                                <small><i class="fas fa-sync"></i> {{ category.updatedAt|date("d.m.Y") }}</small>
+                        </span>
+                    </span>
+                </a>
+            </div>
+            {% endfor %}
         </div>
     </div>
     <!-- Modal -->
@@ -29,6 +43,7 @@
                 <div class="modal-body border-0">
                     {{ form_start(forumCategoryForm) }}
                     {{ form_row(forumCategoryForm.title) }}
+                    {{ form_row(forumCategoryForm.description) }}
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><small>Abbrechen</small></button>

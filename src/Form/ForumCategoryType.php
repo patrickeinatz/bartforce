@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\ForumCategory;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,6 +14,11 @@ class ForumCategoryType extends AbstractType
     {
         $builder
             ->add('title')
+            ->add('description', TextareaType::class
+            //, [
+            //            'attr' => ['class' => 'trumbowyg']
+            // ]
+            )
         ;
     }
 

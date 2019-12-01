@@ -1,17 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bartforce{% endblock %}
+{% block title %}Bartforce.de{% endblock %}
 
 {% block content %}
     {% if is_granted('ROLE_USER') %}
-        <h3>Moin {{ app.user.username }}!</h3>
-        <p>
-            Vielen Dank für deine Registrierung. Sobald es hier mehr zu entdecken gibt, werden wir dich informieren. Bis dahin wünschen wir dir weiterhin viel Spaß
-            auf unserem <a href="https://discord.gg/UqpMyZd">Discord Server</a>.
-        </p>
-        <p>
-            Folgende Daten von deinem Discord Account sind jetzt mit bartforce.de verknüpft
-        </p>
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="page-headline"><i class="fas fa-th-large mr-1"></i> Dashboard</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    Vielen Dank für deine Registrierung. Sobald es hier mehr zu entdecken gibt, werden wir dich informieren. Bis dahin wünschen wir dir weiterhin viel Spaß
+                    auf unserem <a href="https://discord.gg/UqpMyZd">Discord Server</a>.
+                </p>
+                <p>
+                    Folgende Daten von deinem Discord Account sind jetzt mit bartforce.de verknüpft
+                </p>
+            </div>
+        </div>
     {% else %}
         <div class="card bg-darker border-0">
             <div class="card-body text-center">

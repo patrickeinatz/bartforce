@@ -16,3 +16,5 @@ $(function()
 
     });
 });
+
+$('.trumbowyg').trumbowyg();

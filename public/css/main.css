@@ -91,9 +91,15 @@ a.nav-link:hover{
 
 /* LISTINGS */
 
-.list-group-item-darkerGold{
+.darkerGold{
     color: rgb(222,206,149);
     background-color: rgb(20, 20, 20); !important;
+    border: 1px solid rgb(148, 115, 64);
+}
+
+.darkerGold:hover{
+    background-color: rgb(222,206,149);
+    color: rgb(20, 20, 20); !important;
     border: 1px solid rgb(148, 115, 64);
 }
 
@@ -102,6 +108,13 @@ a.nav-link:hover{
     font-size: 14px;
     color: rgb(20, 20, 20); !important;
     background-color: rgb(222,206,149);
+}
+
+.darkerGold:hover .badge-gold{
+    float: right;
+    font-size: 14px;
+    background-color: rgb(20, 20, 20); !important;
+    color: rgb(222,206,149);
 }
 
 /* SIDENAV */
@@ -122,7 +135,6 @@ a.nav-link:hover{
     width: 220px;
     height: 100%;
     background-color: rgb(5, 8, 10);
-
 }
 
 .sidenav-col{
@@ -183,12 +195,55 @@ a.nav-link.sidenav-link:hover{
 .content .card-footer{
     text-align: center;
     border: none;
-    background-color: rgb(5, 8, 10);
+    background-color: rgba(5, 8, 10, 0.5);
 }
 
 /* BACKGROUNDS */
 .bg-darker{
     background-color: rgb(20,23,25);
+}
+
+.bg-darker-trans{
+    background-color: rgba(20,23,25,0.75);
+}
+
+/* BREADCRUMB */
+.breadcrumb{
+    font-size: 12px;
+    padding: 5px;
+    background: none;
+}
+
+/* FORUM */
+.forum-stats{
+    min-width: 100px;
+}
+
+.forumTopicList-Item{
+    display: block;
+    color: rgb(222,206,149);
+    padding: 5px 5px 5px 10px;
+    background-color: rgba(0,0,0,0.25);
+    border-radius: 3px;
+    margin-bottom: 10px;
+}
+
+.forumTopicList-Item:hover {
+    color: rgb(20,23,25);
+    text-decoration: none;
+    background-color: rgb(222,206,149);
+}
+
+.forumTopicList-Item small{
+    color: rgb(148, 115, 64);
+}
+
+.forumTopicList-Item:hover small{
+    color: rgb(20,23,25);
+}
+
+.forumTopicList-Item span{
+    margin-right: 5px;
 }
 
 /* TEXT */
@@ -201,6 +256,7 @@ a.nav-link.sidenav-link:hover{
 
 /* BUTTONS */
 .btn-gold{
+    font-size: 12px;
     background-color: rgb(222,206,149);!important;
 }
 .btn-gold:hover{

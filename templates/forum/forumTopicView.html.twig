@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bartforce {{ title }}{% endblock %}
+
+{% block content %}
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <a href="/forum" class="btn btn-sm btn-gold"><i class="fas fa-comments mr-1"></i> Kategorien</a>
+            <a href="/forum/category/{{ catId }}" class="btn btn-sm btn-gold"><i class="fas fa-tag"></i> Themen</a>
+            <button type="button" class="btn btn-sm btn-gold float-right" data-toggle="modal" data-target=".bd-example-modal-lg">
+                <i class="fas fa-plus-circle"></i> Neues Thema
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="page-headline"><i class="fas fa-stream mr-2 mb-2"></i> {{ topic.title }}</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {{ topic.topicContent|raw}}
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-darker">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Neuen Beitrag verfassen</h5>
+                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body border-0">
+
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><small>Abbrechen</small></button>
+                    <button type="submit" class="btn btn-sm btn-gold"><small>Absenden</small></button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
