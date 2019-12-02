@@ -12,9 +12,9 @@ security:
                 # managers, this option defines which one to use
                 # manager_name: 'customer'
     role_hierarchy:
-        ROLE_ADMIN: [ROLE_FOUNDER, ROLE_USER, ROLE_BEARDOS]
-        ROLE_FOUNDER: [ROLE_USER, ROLE_BEARDOS]
-        ROLE_USER: [ROLE_BEARDOS]
+        ROLE_ADMIN: [ROLE_FOUNDER, ROLE_USER, ROLE_MITGLIEDER, ROLE_BEARDOS]
+        ROLE_FOUNDER: [ROLE_USER, ROLE_MITGLIEDER, ROLE_BEARDOS]
+        ROLE_USER: [ROLE_MITGLIEDER, ROLE_BEARDOS]
 
     firewalls:
         dev:
@@ -27,10 +27,6 @@ security:
                     - App\Security\DiscordAuthenticator
             logout:
                 path: logout
-
-            remember_me:
-                secret: '%kernel.secret%'
-                lifetime: 2592000
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

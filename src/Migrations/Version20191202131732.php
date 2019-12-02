@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20191202075443 extends AbstractMigration
+final class Version20191202131732 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -26,6 +26,7 @@ final class Version20191202075443 extends AbstractMigration
         $this->addSql('CREATE TABLE forum_post (id INT AUTO_INCREMENT NOT NULL, post_creator_id INT DEFAULT NULL, post_topic_id INT DEFAULT NULL, post_category_id INT DEFAULT NULL, post_content LONGTEXT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_996BCC5A425A0767 (post_creator_id), INDEX IDX_996BCC5AA0B8A99C (post_topic_id), INDEX IDX_996BCC5AFE0617CD (post_category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE forum_reply (id INT AUTO_INCREMENT NOT NULL, reply_creator_id INT DEFAULT NULL, topic_id INT DEFAULT NULL, post_id INT DEFAULT NULL, reply_content LONGTEXT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_E5DC60376BEF02F0 (reply_creator_id), INDEX IDX_E5DC60371F55203D (topic_id), INDEX IDX_E5DC60374B89032C (post_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE forum_topic (id INT AUTO_INCREMENT NOT NULL, topic_creator_id INT DEFAULT NULL, category_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, topic_content LONGTEXT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_853478CCA471A08C (topic_creator_id), INDEX IDX_853478CC12469DE2 (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, discord_id VARCHAR(255) NOT NULL, discriminator INT NOT NULL, avatar VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, roles LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\', joined_at INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE forum_post ADD CONSTRAINT FK_996BCC5A425A0767 FOREIGN KEY (post_creator_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE forum_post ADD CONSTRAINT FK_996BCC5AA0B8A99C FOREIGN KEY (post_topic_id) REFERENCES forum_topic (id)');
         $this->addSql('ALTER TABLE forum_post ADD CONSTRAINT FK_996BCC5AFE0617CD FOREIGN KEY (post_category_id) REFERENCES forum_category (id)');
@@ -46,9 +47,13 @@ final class Version20191202075443 extends AbstractMigration
         $this->addSql('ALTER TABLE forum_reply DROP FOREIGN KEY FK_E5DC60374B89032C');
         $this->addSql('ALTER TABLE forum_post DROP FOREIGN KEY FK_996BCC5AA0B8A99C');
         $this->addSql('ALTER TABLE forum_reply DROP FOREIGN KEY FK_E5DC60371F55203D');
+        $this->addSql('ALTER TABLE forum_post DROP FOREIGN KEY FK_996BCC5A425A0767');
+        $this->addSql('ALTER TABLE forum_reply DROP FOREIGN KEY FK_E5DC60376BEF02F0');
+        $this->addSql('ALTER TABLE forum_topic DROP FOREIGN KEY FK_853478CCA471A08C');
         $this->addSql('DROP TABLE forum_category');
         $this->addSql('DROP TABLE forum_post');
         $this->addSql('DROP TABLE forum_reply');
         $this->addSql('DROP TABLE forum_topic');
+        $this->addSql('DROP TABLE user');
     }
 }

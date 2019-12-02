@@ -11,15 +11,16 @@
             </button>
         </div>
     </div>
+    {{ dump() }}
     <div class="row">
         <div class="col-md-4 text-center">
-            <img class="user-img-profile rounded" src="//cdn.discordapp.com/avatars/269132029398876161/{{app.user.avatarHash}}.png" alt="{{app.user.username}} Avatar"><br>
+            <img class="user-img-profile rounded" src="//cdn.discordapp.com/avatars/269132029398876161/" alt="{{app.user.username}} Avatar"><br>
             {{ member.user.username }} <br>
             {{ member.nick }} <br>
             {% for role in member.roles %}
                 {% for roleData in roles %}
                     {% if roleData.id == role %}
-                        <span class="badge badge-{{ roleData.name|lower }}">{{ roleData.name }}</span>
+                        <span class="badge" style="">{{ roleData.name }}</span>
                     {% endif %}
                 {% endfor %}
             {% endfor %}

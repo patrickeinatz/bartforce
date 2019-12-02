@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Entity\User;
 use RestCord\DiscordClient;
 
 class DiscordService
@@ -17,10 +18,13 @@ class DiscordService
      */
     private $guildId;
 
-    public function __construct($botToken, $guildId)
+    private $avatarPath;
+
+    public function __construct($botToken, $guildId, $avatarPath)
     {
         $this->discordServer = new DiscordClient(['token' => $botToken]);
         $this->guildId = intval($guildId);
+        $this->avatarPath = $avatarPath;
     }
 
     /**
@@ -45,6 +49,10 @@ class DiscordService
         ]);
     }
 
+    /**
+     * @param $roleId
+     * @return bool|string
+     */
     public function getGuildRoleByRoleId($roleId)
     {
         $guildRoles = $this->getGuildRoles();
@@ -57,5 +65,36 @@ class DiscordService
         }
 
         return false;
+    }
+
+    /**
+     * @param $discordId
+     * @param $hash
+     * @return string
+     */
+    public function getAvatarPath($discordId, $hash)
+    {
+        return $this->avatarPath."/".$discordId."/".$hash.".png";
+    }
+
+    /**
+     * @param User $dbUser
+     * @param array $discordUser
+     */
+    public function compareUserDataSets($dbUser, $discordUser)
+    {
+        if($dbUser->getUsername() != $discordUser->getUsername()) {
+            return false;
+        }
+
+        if($dbUser->getEmail() != $discordUser->getEmail()) {
+            return false;
+        }
+
+        if($dbUser->getAvatar() != $this->getAvatarPath($discordUser->getId(), $discordUser->getAvatarHash())){
+            return false;
+        }
+
+        return true;
     }
 }

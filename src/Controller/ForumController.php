@@ -11,6 +11,7 @@ use App\Form\ForumPostType;
 use App\Form\ForumTopicType;
 use App\Repository\ForumCategoryRepository;
 use App\Repository\ForumPostRepository;
+use App\Repository\ForumReplyRepository;
 use App\Repository\ForumTopicRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -113,6 +114,7 @@ class ForumController extends AbstractController
         ForumCategoryRepository $categoryRepository,
         ForumTopicRepository $topicRepository,
         ForumPostRepository $postRepository,
+        ForumReplyRepository $replyRepository,
         string $id
     ){
         /** @var ForumTopic $forumTopic */
@@ -125,6 +127,7 @@ class ForumController extends AbstractController
         $currentUser = $this->getUser();
         $now = new \DateTime();
         $posts = $postRepository->findBy(['postTopic' => $id]);
+        $replies = $replyRepository->findBy(['topic' => $id]);
 
         $form = $this->createForm(ForumPostType::class);
         $form->handleRequest($request);
@@ -148,6 +151,7 @@ class ForumController extends AbstractController
             'category' => $category,
             'topic' => $topic,
             'posts' => $posts,
+            'replies' => $replies,
             'catId' =>  $topic->getCategory()->getId(),
             'forumPostForm' => $form->createView()
         ]);

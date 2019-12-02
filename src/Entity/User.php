@@ -42,7 +42,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $avatarHash;
+    private $avatar;
 
     /**
      * @ORM\Column(type="datetime")
@@ -68,6 +68,16 @@ class User implements UserInterface
      * @ORM\Column(type="json")
      */
     private $roles = [];
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $joinedAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $last_login;
 
     public function __construct()
     {
@@ -149,22 +159,20 @@ class User implements UserInterface
         $this->discriminator = $discriminator;
     }
 
-
-
     /**
      * @return mixed
      */
-    public function getAvatarHash()
+    public function getAvatar()
     {
-        return $this->avatarHash;
+        return $this->avatar;
     }
 
     /**
-     * @param mixed $avatarHash
+     * @param mixed $avatar
      */
-    public function setAvatarHash($avatarHash): void
+    public function setAvatar($avatar): void
     {
-        $this->avatarHash = $avatarHash;
+        $this->avatar = $avatar;
     }
 
     /**
@@ -311,6 +319,30 @@ class User implements UserInterface
                 $forumReply->setReplyCreator(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getJoinedAt(): ?int
+    {
+        return $this->joinedAt;
+    }
+
+    public function setJoinedAt(?int $joinedAt): self
+    {
+        $this->joinedAt = $joinedAt;
+
+        return $this;
+    }
+
+    public function getLastLogin(): ?\DateTimeInterface
+    {
+        return $this->last_login;
+    }
+
+    public function setLastLogin(\DateTimeInterface $last_login): self
+    {
+        $this->last_login = $last_login;
 
         return $this;
     }

@@ -51,9 +51,8 @@ class DiscordAuthenticator extends SocialAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        /** @var User $discordUser */
+        /** @var $discordUser */
         $discordUser = $this->getDiscordClient()->fetchUserFromToken($credentials);
-        $email = $discordUser->getEmail();
 
         $extendedUserData = $this->discordService->getMemberData($discordUser->getId());
 
@@ -64,24 +63,51 @@ class DiscordAuthenticator extends SocialAuthenticator
             array_push($discordUserRoles, $this->discordService->getGuildRoleByRoleId($role));
         }
 
-        $existingUser = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
+        /** @var User $existingUser */
+        $existingUser = $this->em->getRepository(User::class)->findOneBy(['discordId' => $discordUser->getId()]);
+
         if ($existingUser) {
+
+            if(!$this->discordService->compareUserDataSets($existingUser, $discordUser)){
+                $existingUser->setUsername($discordUser->getUsername());
+                $existingUser->setEmail($discordUser->getEmail());
+                $existingUser->setAvatar(
+                    $this->discordService->getAvatarPath(
+                        $discordUser->getId(),
+                        $discordUser->getAvatarHash()
+                    )
+                );
+            }
+
+            $existingUser->setLastLogin(new \DateTime());
+            $existingUser->setRoles($discordUserRoles);
+            $this->em->persist($existingUser);
+            $this->em->flush();
+
             return $existingUser;
+
         } else {
+
             $user = new User();
+            $user->setDiscordId($discordUser->getId());
             $user->setUsername($discordUser->getUsername());
             $user->setEmail($discordUser->getEmail());
-            $user->setAvatarHash($discordUser->getAvatarHash());
-            $user->setDiscordId($discordUser->getId());
             $user->setDiscriminator($discordUser->getDiscriminator());
+            $user->setAvatar(
+                $this->discordService->getAvatarPath(
+                    $discordUser->getId(),
+                    $discordUser->getAvatarHash()
+                )
+            );
             $user->setRoles($discordUserRoles);
             $user->setCreatedAt(new \DateTime());
+            $user->setLastLogin(new \DateTime());
+            $user->setJoinedAt($extendedUserData->joined_at);
             $this->em->persist($user);
             $this->em->flush();
 
             return $user;
         }
-
     }
 
     /**
