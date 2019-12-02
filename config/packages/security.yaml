@@ -11,6 +11,11 @@ security:
                 # optional: if you're using multiple Doctrine entity
                 # managers, this option defines which one to use
                 # manager_name: 'customer'
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_FOUNDER, ROLE_USER, ROLE_BEARDOS]
+        ROLE_FOUNDER: [ROLE_USER, ROLE_BEARDOS]
+        ROLE_USER: [ROLE_BEARDOS]
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -23,6 +28,10 @@ security:
             logout:
                 path: logout
 
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 2592000
+
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 
@@ -31,6 +40,8 @@ security:
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
+    access_denied_url: /
     access_control:
+        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

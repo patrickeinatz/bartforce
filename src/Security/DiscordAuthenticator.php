@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User as User;
+use App\Services\DiscordService;
 use Symfony\Component\Security\Core\User\UserInterface as UserInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
@@ -21,12 +22,14 @@ class DiscordAuthenticator extends SocialAuthenticator
     private $clientRegistry;
     private $em;
     private $router;
+    private $discordService;
 
-    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router)
+    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, DiscordService $discordService)
     {
         $this->clientRegistry = $clientRegistry;
         $this->em = $em;
         $this->router = $router;
+        $this->discordService = $discordService;
     }
 
     public function supports(Request $request)
@@ -48,8 +51,18 @@ class DiscordAuthenticator extends SocialAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
+        /** @var User $discordUser */
         $discordUser = $this->getDiscordClient()->fetchUserFromToken($credentials);
         $email = $discordUser->getEmail();
+
+        $extendedUserData = $this->discordService->getMemberData($discordUser->getId());
+
+        $discordUserRoles = [];
+
+        foreach($extendedUserData->roles as $role)
+        {
+            array_push($discordUserRoles, $this->discordService->getGuildRoleByRoleId($role));
+        }
 
         $existingUser = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
         if ($existingUser) {
@@ -61,8 +74,8 @@ class DiscordAuthenticator extends SocialAuthenticator
             $user->setAvatarHash($discordUser->getAvatarHash());
             $user->setDiscordId($discordUser->getId());
             $user->setDiscriminator($discordUser->getDiscriminator());
+            $user->setRoles($discordUserRoles);
             $user->setCreatedAt(new \DateTime());
-
             $this->em->persist($user);
             $this->em->flush();
 
@@ -108,7 +121,7 @@ class DiscordAuthenticator extends SocialAuthenticator
     public function start(Request $request, AuthenticationException $authException = null)
     {
         return new RedirectResponse(
-            '/connect/', // might be the site, where users choose their oauth provider
+            '/login', // might be the site, where users choose their oauth provider
             Response::HTTP_TEMPORARY_REDIRECT
         );
     }

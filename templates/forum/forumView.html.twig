@@ -6,9 +6,11 @@
     <div class="row">
         <div class="col-md-12">
             <h3 class="page-headline"><i class="fas fa-comments mr-1"></i> Forum</h3>
+            {% if is_granted('ROLE_FOUNDER') %}
             <button type="button" class="btn btn-sm btn-gold green float-right" data-toggle="modal" data-target=".bd-example-modal-lg">
                 <i class="fas fa-plus-circle"></i> Neue Kategorie
             </button>
+            {% endif %}
         </div>
     </div>
     <div class="row">

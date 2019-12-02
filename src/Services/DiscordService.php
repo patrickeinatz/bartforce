@@ -45,5 +45,17 @@ class DiscordService
         ]);
     }
 
+    public function getGuildRoleByRoleId($roleId)
+    {
+        $guildRoles = $this->getGuildRoles();
 
+        foreach ($guildRoles as $role){
+            if($role->id == $roleId)
+            {
+                return 'ROLE_'.strtoupper($role->name);
+            }
+        }
+
+        return false;
+    }
 }
