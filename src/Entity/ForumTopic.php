@@ -53,9 +53,15 @@ class ForumTopic
      */
     private $forumPosts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumReply", mappedBy="topic")
+     */
+    private $forumReplies;
+
     public function __construct()
     {
         $this->forumPosts = new ArrayCollection();
+        $this->forumReplies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +166,37 @@ class ForumTopic
             // set the owning side to null (unless already changed)
             if ($forumPost->getPostTopic() === $this) {
                 $forumPost->setPostTopic(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ForumReply[]
+     */
+    public function getForumReplies(): Collection
+    {
+        return $this->forumReplies;
+    }
+
+    public function addForumReply(ForumReply $forumReply): self
+    {
+        if (!$this->forumReplies->contains($forumReply)) {
+            $this->forumReplies[] = $forumReply;
+            $forumReply->setTopic($this);
+        }
+
+        return $this;
+    }
+
+    public function removeForumReply(ForumReply $forumReply): self
+    {
+        if ($this->forumReplies->contains($forumReply)) {
+            $this->forumReplies->removeElement($forumReply);
+            // set the owning side to null (unless already changed)
+            if ($forumReply->getTopic() === $this) {
+                $forumReply->setTopic(null);
             }
         }
 

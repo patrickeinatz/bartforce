@@ -59,10 +59,16 @@ class User implements UserInterface
      */
     private $forumPosts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumReply", mappedBy="replyCreator")
+     */
+    private $forumReplies;
+
     public function __construct()
     {
         $this->forumTopics = new ArrayCollection();
         $this->forumPosts = new ArrayCollection();
+        $this->forumReplies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -271,6 +277,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($forumPost->getPostCreator() === $this) {
                 $forumPost->setPostCreator(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ForumReply[]
+     */
+    public function getForumReplies(): Collection
+    {
+        return $this->forumReplies;
+    }
+
+    public function addForumReply(ForumReply $forumReply): self
+    {
+        if (!$this->forumReplies->contains($forumReply)) {
+            $this->forumReplies[] = $forumReply;
+            $forumReply->setReplyCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeForumReply(ForumReply $forumReply): self
+    {
+        if ($this->forumReplies->contains($forumReply)) {
+            $this->forumReplies->removeElement($forumReply);
+            // set the owning side to null (unless already changed)
+            if ($forumReply->getReplyCreator() === $this) {
+                $forumReply->setReplyCreator(null);
             }
         }
 

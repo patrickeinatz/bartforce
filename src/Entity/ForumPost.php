@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,6 +47,16 @@ class ForumPost
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ForumReply", mappedBy="post")
+     */
+    private $forumReplies;
+
+    public function __construct()
+    {
+        $this->forumReplies = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -119,6 +131,37 @@ class ForumPost
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ForumReply[]
+     */
+    public function getForumReplies(): Collection
+    {
+        return $this->forumReplies;
+    }
+
+    public function addForumReply(ForumReply $forumReply): self
+    {
+        if (!$this->forumReplies->contains($forumReply)) {
+            $this->forumReplies[] = $forumReply;
+            $forumReply->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeForumReply(ForumReply $forumReply): self
+    {
+        if ($this->forumReplies->contains($forumReply)) {
+            $this->forumReplies->removeElement($forumReply);
+            // set the owning side to null (unless already changed)
+            if ($forumReply->getPost() === $this) {
+                $forumReply->setPost(null);
+            }
+        }
 
         return $this;
     }
