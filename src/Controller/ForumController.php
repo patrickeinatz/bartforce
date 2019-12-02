@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\ForumCategory;
 use App\Entity\ForumPost;
+use App\Entity\ForumReply;
 use App\Entity\ForumTopic;
 use App\Entity\User;
 use App\Form\ForumCategoryType;
 use App\Form\ForumPostType;
+use App\Form\ForumReplyType;
 use App\Form\ForumTopicType;
 use App\Repository\ForumCategoryRepository;
 use App\Repository\ForumPostRepository;
@@ -106,7 +108,7 @@ class ForumController extends AbstractController
     }
 
     /**
-     * @Route("/forum/topic/{id}", name="forumTopicView")
+     * @Route("/forum/topic/{topicId}", name="forumTopicView")
      */
     public function topicView(
         EntityManagerInterface $em,
@@ -115,10 +117,10 @@ class ForumController extends AbstractController
         ForumTopicRepository $topicRepository,
         ForumPostRepository $postRepository,
         ForumReplyRepository $replyRepository,
-        string $id
+        string $topicId
     ){
         /** @var ForumTopic $forumTopic */
-        $topic = $topicRepository->findOneBy(['id' => $id]);
+        $topic = $topicRepository->findOneBy(['id' => $topicId]);
 
         /** @var ForumCategory $category */
         $category = $categoryRepository->findOneBy(['id' => $topic->getCategory()->getId()]);
@@ -126,15 +128,18 @@ class ForumController extends AbstractController
         /** @var User $currentUser */
         $currentUser = $this->getUser();
         $now = new \DateTime();
-        $posts = $postRepository->findBy(['postTopic' => $id]);
-        $replies = $replyRepository->findBy(['topic' => $id]);
+        $posts = $postRepository->findBy(['postTopic' => $topicId]);
+        $replies = $replyRepository->findBy(['topic' => $topicId]);
 
-        $form = $this->createForm(ForumPostType::class);
-        $form->handleRequest($request);
+        $postForm = $this->createForm(ForumPostType::class);
+        $postForm->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        $replyForm = $this->createForm(ForumReplyType::class);
+        $replyForm->handleRequest($request);
+
+        if($postForm->isSubmitted() && $postForm->isValid()) {
             /** @var ForumPost $forumPost */
-            $forumPost = $form->getData();
+            $forumPost = $postForm->getData();
             $forumPost->setCreatedAt($now);
             $forumPost->setUpdatedAt($now);
             $forumPost->setPostCreator($currentUser);
@@ -143,7 +148,7 @@ class ForumController extends AbstractController
             $em->persist($forumPost);
             $em->flush();
             $this->addFlash('success', 'Forum Beitrag erstellt!');
-            return $this->redirectToRoute('forumTopicView', ['id' => $id]);
+            return $this->redirectToRoute('forumTopicView', ['topicId' => $topicId]);
         }
 
         return $this->render('forum/forumTopicView.html.twig', [
@@ -153,7 +158,45 @@ class ForumController extends AbstractController
             'posts' => $posts,
             'replies' => $replies,
             'catId' =>  $topic->getCategory()->getId(),
-            'forumPostForm' => $form->createView()
+            'forumPostForm' => $postForm->createView(),
+            'forumReplyForm' => $replyForm->createView()
         ]);
     }
+
+    /**
+     * @Route("/forum/postReply/{postId}", name="forumPostReply")
+     */
+    public function postReply(
+        EntityManagerInterface $em,
+        Request $request,
+        ForumPostRepository $postRepository,
+        ForumReplyRepository $replyRepository,
+        string $postId
+    ){
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+        $now = new \DateTime();
+
+        /** @var ForumPost $posts */
+        $post = $postRepository->findOneBy(['id' => $postId]);
+
+        $replyForm = $this->createForm(ForumReplyType::class);
+        $replyForm->handleRequest($request);
+
+        if($replyForm->isSubmitted() && $replyForm->isValid()) {
+
+            /** @var ForumReply $postReply */
+            $postReply = $replyForm->getData();
+            $postReply->setCreatedAt($now);
+            $postReply->setUpdatedAt($now);
+            $postReply->setReplyCreator($currentUser);
+            $postReply->setTopic($post->getPostTopic());
+            $postReply->setPost($post);
+            $em->persist($postReply);
+            $em->flush();
+            $this->addFlash('success', 'Forum Beitrag erstellt!');
+            return $this->redirectToRoute('forumTopicView', ['topicId' => $post->getPostTopic()->getId()]);
+        }
+    }
+
 }

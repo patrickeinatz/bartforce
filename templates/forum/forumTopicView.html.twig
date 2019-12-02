@@ -3,11 +3,12 @@
 {% block title %}Bartforce {{ title }}{% endblock %}
 
 {% block content %}
+    {{ dump(replies) }}
     <div class="row mb-4">
         <div class="col-md-12">
             <a href="/forum" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-comments mr-1"></i> Kategorien</a>
             <a href="/forum/category/{{ catId }}" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-tag"></i> Themen</a>
-            <button type="button" class="btn btn-sm btn-gold green float-right" data-toggle="modal" data-target=".bd-example-modal-lg">
+            <button type="button" class="btn btn-sm btn-gold green float-right" data-toggle="modal" data-target=".postModal">
                 <i class="fas fa-plus-circle"></i> Neuer Beitrag
             </button>
         </div>
@@ -52,20 +53,50 @@
                     </div>
                     <div class="card-body forum-post-body">
                         <p class="card-text">{{ post.postContent|raw}}</p>
+                        <hr>
+                        <ul>
+                            {% for reply in replies %}
+                                {% if reply.post.id == post.id %}
+                                    <li>{{ reply.replyContent }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
                     </div>
                     <div class="card-footer forum-post-footer">
-                        <a href="#" class="btn btn-sm btn-gold green"><i class="fas fa-clone"></i> Antworten</a>
+                        <a href="#" class="btn btn-sm btn-gold green" data-toggle="modal" data-target=".replyModal-{{ post.id }}"><i class="fas fa-clone"></i> Antworten</a>
                         {% if app.user.id == post.postCreator.id or is_granted('ROLE_ADMIN') %}
                         <a href="#" class="btn btn-sm btn-gold yellow"><i class="fas fa-wrench"></i> Bearbeiten</a>
                         <a href="#" class="btn btn-sm btn-gold red"><i class="fas fa-trash"></i> Löschen</a>
                         {% endif %}
                     </div>
                 </div>
+                <!-- Modal -->
+                <div class="modal fade replyModal-{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content bg-darker">
+                            <div class="modal-header border-0">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Neue Antwort verfassen</h5>
+                                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body border-0">
+                                {{ form_start(forumReplyForm, {'action': '/forum/postReply/'~ post.id }) }}
+                                {{ form_row(forumReplyForm.replyContent) }}
+                            </div>
+                            <div class="modal-footer border-0">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
+                                <button type="submit" class="btn btn-gold">Absenden</button>
+                                {{ form_end(forumReplyForm) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal fade postModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content bg-darker">
                 <div class="modal-header border-0">
