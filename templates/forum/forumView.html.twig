@@ -38,7 +38,7 @@
             <div class="modal-content bg-darker">
                 <div class="modal-header border-0">
                     <h5 class="modal-title" id="exampleModalLongTitle">Neue Kategorie erstellen</h5>
-                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -48,8 +48,8 @@
                     {{ form_row(forumCategoryForm.description) }}
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-gold green">Absenden</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Abbrechen</button>
+                    <button type="submit" class="btn btn-gold green"><i class="fas fa-paper-plane"></i> Absenden</button>
                     {{ form_end(forumCategoryForm) }}
                 </div>
 

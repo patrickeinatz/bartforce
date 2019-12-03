@@ -38,6 +38,12 @@ h1, h2, h3, h4, h5, h6{
     opacity: 0.3;
 }
 
+.alert-success{
+    border: none;
+    color: rgb(255,255,255);
+    background-color: rgba(9, 230, 101, 0.5) ;
+}
+
 /* TOPNAV */
 .navbar{
     display: none;
@@ -91,6 +97,21 @@ a.nav-link:hover{
 
 /* LISTINGS */
 
+.list-group{
+    background: none;!important;
+}
+
+.list-group-item{
+    background-color: rgba(0,0,0,0.25);
+    margin-bottom: 3px;
+    border: none;
+    padding: 10px;
+}
+
+.list-group-flush{
+    border-top: solid 1px rgba(132,159,169,0.25);
+}
+
 .darkerGold{
     color: rgb(222,206,149);
     background-color: rgb(20, 20, 20); !important;
@@ -104,10 +125,17 @@ a.nav-link:hover{
 }
 
 .badge-gold{
-    float: right;
-    font-size: 14px;
+    font-size: 12px;
+    margin: 0 10px;
     color: rgb(20, 20, 20); !important;
     background-color: rgb(222,206,149);
+}
+
+.badge-bluegray{
+    font-size: 12px;
+    margin: 0 5px;
+    color: rgb(20, 20, 20);
+    background-color: rgb(132,159,169);
 }
 
 .darkerGold:hover .badge-gold{
@@ -266,7 +294,7 @@ a.nav-link.sidenav-link:hover{
 }
 
 .forumTopicList-Item small{
-    color: rgba(222,206,149,0.65);
+    color: rgb(222,206,149);
 }
 
 .forumTopicList-Item:hover small{
@@ -295,7 +323,13 @@ a.nav-link.sidenav-link:hover{
 }
 
 .forum-post-body{
+    overflow: hidden;
     background-color: rgba(0,0,0,0.25);
+}
+
+.forum-post-body img {
+    max-width:100%;
+    height:auto;
 }
 
 .forum-post-footer{
@@ -308,6 +342,21 @@ a.nav-link.sidenav-link:hover{
     display: inline-block;
     width: 30px;
     margin-right: 10px;
+}
+
+.reply-content{
+    color: rgb(132,159,169);
+}
+
+.deleteReply{
+    float: right;
+    font-style: italic;
+    padding: 5px;
+    color: rgb(222,206,149);
+}
+.deleteReply:hover{
+    color: rgb(255, 255, 255);
+
 }
 
 /* TEXT */
@@ -337,7 +386,8 @@ a.nav-link.sidenav-link:hover{
 }
 
 .red:hover{
-    background-color: rgb(255, 110, 99);
+    color: rgb(255,255,255);
+    background-color: rgb(255, 89, 89);
 }
 
 .green:hover{
@@ -348,6 +398,11 @@ a.nav-link.sidenav-link:hover{
     background-color: rgb(255, 208, 99);
 }
 
+/* MODALS */
+.modal-header{
+    color: rgb(20,23,25);
+    background-color: rgb(222,206,149);
+}
 
 /* BADGES */
 .badge-admin{

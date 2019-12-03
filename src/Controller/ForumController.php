@@ -49,7 +49,7 @@ class ForumController extends AbstractController
             $forumCategory->setUpdatedAt($now);
             $em->persist($forumCategory);
             $em->flush();
-            $this->addFlash('success', 'Forum Category added!');
+            $this->addFlash('success', 'Eine neue Kategorie wurde hinzugefügt!');
             return $this->redirectToRoute('forumView');
         }
 
@@ -95,7 +95,7 @@ class ForumController extends AbstractController
             $forumTopic->setCategory($category);
             $em->persist($forumTopic);
             $em->flush();
-            $this->addFlash('success', 'Forum Thema eröffnet!');
+            $this->addFlash('success', 'Ein neues Thema wurde eröffnet!');
             return $this->redirectToRoute('forumCategoryView', ['id' => $id]);
         }
 
@@ -131,6 +131,9 @@ class ForumController extends AbstractController
         $posts = $postRepository->findBy(['postTopic' => $topicId]);
         $replies = $replyRepository->findBy(['topic' => $topicId]);
 
+        $topicForm = $this->createForm(ForumTopicType::class);
+        $topicForm->handleRequest($request);
+
         $postForm = $this->createForm(ForumPostType::class);
         $postForm->handleRequest($request);
 
@@ -147,7 +150,7 @@ class ForumController extends AbstractController
             $forumPost->setPostCategory($category);
             $em->persist($forumPost);
             $em->flush();
-            $this->addFlash('success', 'Forum Beitrag erstellt!');
+            $this->addFlash('success', 'Ein neuer Beitrag wurde erstellt!');
             return $this->redirectToRoute('forumTopicView', ['topicId' => $topicId]);
         }
 
@@ -158,6 +161,7 @@ class ForumController extends AbstractController
             'posts' => $posts,
             'replies' => $replies,
             'catId' =>  $topic->getCategory()->getId(),
+            'forumTopicForm' => $topicForm->createView(),
             'forumPostForm' => $postForm->createView(),
             'forumReplyForm' => $replyForm->createView()
         ]);
@@ -194,9 +198,123 @@ class ForumController extends AbstractController
             $postReply->setPost($post);
             $em->persist($postReply);
             $em->flush();
-            $this->addFlash('success', 'Forum Beitrag erstellt!');
+            $this->addFlash('success', 'Eine neue Antwort wurde hinzugefügt!');
             return $this->redirectToRoute('forumTopicView', ['topicId' => $post->getPostTopic()->getId()]);
         }
     }
 
+    /**
+     * @Route("/forum/deleteTopic/{topicId}", name="forumDeleteTopic")
+     */
+    public function deleteTopic(EntityManagerInterface $em, ForumTopicRepository $topicRepository, ForumPostRepository $postRepository, ForumReplyRepository $replyRepository, string $topicId)
+    {
+        $topic = $topicRepository->findOneBy(['id' => $topicId]);
+        $topicPosts = $postRepository->findBy(['postTopic' => $topic]);
+        $postReplies = $replyRepository->findBy(['topic' => $topic]);
+
+        $categoryId = $topic->getCategory()->getId();
+
+        $postCount = sizeof($topicPosts);
+        $replyCount = sizeof($postReplies);
+
+        $em->remove($topic);
+
+        foreach ($topicPosts as $post){
+            $em->remove($post);
+        }
+
+        foreach($postReplies as $reply){
+            $em->remove($reply);
+        }
+
+        $em->flush();
+        $this->addFlash('success', 'Ein Thema mit '.$postCount.' Beiträgen und '.$replyCount.' Antworten wurde gelöscht!');
+        return $this->redirectToRoute('forumCategoryView', ['id' => $categoryId]);
+    }
+
+    /**
+     * @Route("/forum/deletePost/{postId}", name="forumDeletePost")
+     */
+    public function deletePost(EntityManagerInterface $em, ForumPostRepository $postRepository, ForumReplyRepository $replyRepository, string $postId)
+    {
+       $post = $postRepository->findOneBy(['id' => $postId]);
+       $postReplies = $replyRepository->findBy(['post' => $post]);
+
+       $replyCount = sizeof($postReplies);
+       $topicId = $post->getPostTopic()->getId();
+
+       $em->remove($post);
+       foreach($postReplies as $reply){
+           $em->remove($reply);
+       }
+
+       $em->flush();
+        $this->addFlash('success', 'Ein Beitrag mit '.$replyCount.' Antworten wurde gelöscht!');
+        return $this->redirectToRoute('forumTopicView', ['topicId' => $topicId]);
+    }
+
+    /**
+     * @Route("/forum/deleteReply/{replyId}", name="forumDeleteReply")
+     */
+    public function deleteReply(EntityManagerInterface $em, ForumPostRepository $postRepository, ForumReplyRepository $replyRepository, string $replyId)
+    {
+        $reply = $replyRepository->findOneBy(['id' => $replyId]);
+        $topicId = $reply->getTopic()->getId();
+
+        $em->remove($reply);
+        $em->flush();
+        $this->addFlash('success', 'Eine Antwort wurde gelöscht!');
+        return $this->redirectToRoute('forumTopicView', ['topicId' => $topicId]);
+    }
+
+    /**
+     * @Route("/forum/topicUpdate/{topicId}", name="forumUpdatetopic")
+     */
+    public function updateTopic(
+        EntityManagerInterface $em,
+        Request $request,
+        ForumTopicRepository $topicRepository,
+        string $topicId
+    ){
+        $topic = $topicRepository->findOneBy(['id' => $topicId]);
+        $now = new \DateTime();
+        $form = $this->createForm(ForumTopicType::class, $topic);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            /** @var ForumPost $post */
+            $topic = $form->getData();
+            $topic->setUpdatedAt($now);
+            $em->persist($topic);
+            $em->flush();
+            $this->addFlash('success', 'Das Thema wurde bearbeitet!');
+            return $this->redirectToRoute('forumTopicView', ['topicId' => $topicId]);
+        }
+    }
+
+    /**
+     * @Route("/forum/postUpdate/{postId}", name="forumUpdatePost")
+     */
+    public function updatePost(
+        EntityManagerInterface $em,
+        Request $request,
+        ForumPostRepository $postRepository,
+        string $postId
+    )
+    {
+        $post = $postRepository->findOneBy(['id' => $postId]);
+        $now = new \DateTime();
+        $form = $this->createForm(ForumPostType::class, $post);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            /** @var ForumPost $post */
+            $post = $form->getData();
+            $post->setUpdatedAt($now);
+            $em->persist($post);
+            $em->flush();
+            $this->addFlash('success', 'Der Beitrag wurde bearbeitet!');
+            return $this->redirectToRoute('forumTopicView', ['topicId' => $post->getPostTopic()->getId()]);
+        }
+    }
 }

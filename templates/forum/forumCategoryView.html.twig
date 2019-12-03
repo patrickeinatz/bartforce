@@ -22,7 +22,7 @@
                 <a href="/forum/topic/{{ topic.id }}" class="forumTopicList-Item">
                     <i class="fas fa-stream mr-2 mb-2"></i> {{ topic.title }}<br>
                     <small class="pl-2">
-                        <span><i class="fas fa-clone"></i> 20</span>
+                        <span><i class="fas fa-clone"></i> {{ topic.forumPosts.values|length }}</span>
                         <span><i class="fas fa-users"></i> 4</span>
                         <span><i class="fas fa-history"></i> vor 4 Minuten</span>
                         <span><i class="far fa-calendar"></i> {{ topic.createdAt|date("d.m.Y H:i")  }}</span>
@@ -37,7 +37,7 @@
             <div class="modal-content bg-darker">
                 <div class="modal-header border-0">
                     <h5 class="modal-title" id="exampleModalLongTitle">Neue Thema eröffnen</h5>
-                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -47,8 +47,8 @@
                     {{ form_row(forumTopicForm.topicContent) }}
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-gold">Absenden</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Abbrechen</button>
+                    <button type="submit" class="btn btn-gold"><i class="fas fa-paper-plane"></i> Absenden</button>
                     {{ form_end(forumTopicForm) }}
                 </div>
 
