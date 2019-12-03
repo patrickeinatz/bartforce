@@ -23,8 +23,7 @@
                     <i class="fas fa-stream mr-2 mb-2"></i> {{ topic.title }}<br>
                     <small class="pl-2">
                         <span><i class="fas fa-clone"></i> {{ topic.forumPosts.values|length }}</span>
-                        <span><i class="fas fa-users"></i> 4</span>
-                        <span><i class="fas fa-history"></i> vor 4 Minuten</span>
+                        <span><i class="fas fa-history"></i> {{ topic.updatedAt|date("d.m.Y H:i") }}</span>
                         <span><i class="far fa-calendar"></i> {{ topic.createdAt|date("d.m.Y H:i")  }}</span>
                     </small>
                 </a>

@@ -42,6 +42,9 @@ function reparePostReply(postId)
 {
     var forms = document.querySelectorAll('form');
 
+    var title = document.getElementById('postModalTitle');
+    title.innerHTML = "Neuen Beitrag verfassen";
+
     for (var i =0; i < forms.length; i++){
         if(forms[i].name === "forum_reply") {
             var action = forms[i].getAttribute('action');
@@ -53,6 +56,8 @@ function reparePostReply(postId)
 function preparePostUpdate(postContent, postId)
 {
     var divs = document.querySelectorAll('div');
+    var title = document.getElementById('postModalTitle');
+    title.innerHTML = "Beitrag bearbeiten";
 
     for (var i =0; i < divs.length; i++) {
         if(divs[i].className == "trumbowyg-editor"){
@@ -75,6 +80,9 @@ function prepareTopicUpdate(topicTitle, topicContent, topicId)
     var divs = document.querySelectorAll('div');
     var inputs = document.querySelectorAll('input');
 
+    var title = document.getElementById('topicModalTitle');
+    title.innerHTML = "Thema bearbeiten";
+
     for (var i =0; i < divs.length; i++) {
         if(divs[i].className == "trumbowyg-editor"){
             divs[i].innerHTML = topicContent;
@@ -86,6 +94,7 @@ function prepareTopicUpdate(topicTitle, topicContent, topicId)
             inputs[j].value = topicTitle;
         }
     }
+
 
     var forms = document.querySelectorAll('form');
 

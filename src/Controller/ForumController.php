@@ -148,9 +148,16 @@ class ForumController extends AbstractController
             $forumPost->setPostCreator($currentUser);
             $forumPost->setPostTopic($topic);
             $forumPost->setPostCategory($category);
+
+            $topic->setUpdatedAt($now);
+            $category->setUpdatedAt($now);
+
+            $em->persist($topic);
+            $em->persist($category);
             $em->persist($forumPost);
             $em->flush();
             $this->addFlash('success', 'Ein neuer Beitrag wurde erstellt!');
+
             return $this->redirectToRoute('forumTopicView', ['topicId' => $topicId]);
         }
 
@@ -174,7 +181,6 @@ class ForumController extends AbstractController
         EntityManagerInterface $em,
         Request $request,
         ForumPostRepository $postRepository,
-        ForumReplyRepository $replyRepository,
         string $postId
     ){
         /** @var User $currentUser */
@@ -183,6 +189,8 @@ class ForumController extends AbstractController
 
         /** @var ForumPost $posts */
         $post = $postRepository->findOneBy(['id' => $postId]);
+        $topic = $post->getPostTopic();
+        $category = $post->getPostCategory();
 
         $replyForm = $this->createForm(ForumReplyType::class);
         $replyForm->handleRequest($request);
@@ -196,6 +204,15 @@ class ForumController extends AbstractController
             $postReply->setReplyCreator($currentUser);
             $postReply->setTopic($post->getPostTopic());
             $postReply->setPost($post);
+
+            $topic->setUpdatedAt($now);
+            $post->setUpdatedAt($now);
+            $category->setUpdatedAt($now);
+
+            $em->persist($topic);
+            $em->persist($post);
+            $em->persist($category);
+
             $em->persist($postReply);
             $em->flush();
             $this->addFlash('success', 'Eine neue Antwort wurde hinzugefügt!');
@@ -277,6 +294,7 @@ class ForumController extends AbstractController
         string $topicId
     ){
         $topic = $topicRepository->findOneBy(['id' => $topicId]);
+        $category = $topic->getCategory();
         $now = new \DateTime();
         $form = $this->createForm(ForumTopicType::class, $topic);
         $form->handleRequest($request);
@@ -285,6 +303,9 @@ class ForumController extends AbstractController
             /** @var ForumPost $post */
             $topic = $form->getData();
             $topic->setUpdatedAt($now);
+            $category->setUpdatedAt($now);
+
+            $em->persist($category);
             $em->persist($topic);
             $em->flush();
             $this->addFlash('success', 'Das Thema wurde bearbeitet!');
