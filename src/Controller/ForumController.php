@@ -195,6 +195,7 @@ class ForumController extends AbstractController
         $replyForm = $this->createForm(ForumReplyType::class);
         $replyForm->handleRequest($request);
 
+
         if($replyForm->isSubmitted() && $replyForm->isValid()) {
 
             /** @var ForumReply $postReply */
@@ -204,16 +205,17 @@ class ForumController extends AbstractController
             $postReply->setReplyCreator($currentUser);
             $postReply->setTopic($post->getPostTopic());
             $postReply->setPost($post);
+            $em->persist($postReply);
 
             $topic->setUpdatedAt($now);
-            $post->setUpdatedAt($now);
-            $category->setUpdatedAt($now);
-
             $em->persist($topic);
+
+            $post->setUpdatedAt($now);
             $em->persist($post);
+
+            $category->setUpdatedAt($now);
             $em->persist($category);
 
-            $em->persist($postReply);
             $em->flush();
             $this->addFlash('success', 'Eine neue Antwort wurde hinzugefügt!');
             return $this->redirectToRoute('forumTopicView', ['topicId' => $post->getPostTopic()->getId()]);

@@ -58,8 +58,8 @@
                         <ul class="list-group list-group-flush">
                             {% for reply in post.forumReplies.values %}
                                 <li class="list-group-item">
-                                    <img class="rounded-circle" src="{{ post.postCreator.avatar }}" width="20"/>
-                                    <span class="badge badge-bluegray">{{ post.postCreator.username }}</span>
+                                    <img class="rounded-circle" src="{{ reply.replyCreator.avatar }}" width="20"/>
+                                    <span class="badge badge-bluegray">{{ reply.replyCreator.username }}</span>
                                     <span class="reply-content">{{ reply.replyContent }}</span>
                                     {% if app.user.id == reply.replyCreator.id or is_granted('ROLE_ADMIN') %}
                                         <a href="/forum/deleteReply/{{ reply.id }}" >
