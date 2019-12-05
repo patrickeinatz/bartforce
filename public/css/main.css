@@ -281,7 +281,7 @@ a.nav-link.sidenav-link:hover{
 .forumTopicList-Item{
     display: block;
     color: rgb(222,206,149);
-    padding: 5px 5px 5px 10px;
+    padding: 10px 5px 10px 10px;
     background-color: rgba(0,0,0,0.25);
     border-radius: 3px;
     margin-bottom: 10px;
@@ -359,6 +359,26 @@ a.nav-link.sidenav-link:hover{
 
 }
 
+.topicAdminMenu{
+    display: block;
+    text-align: right;
+    margin: -13px 0 20px 0;
+    padding: 8px 10px 5px 0;
+    background-color: rgba(132,159,169,0.1);
+    border: none
+}
+
+.topicMenuItem{
+    font-size: 14px;
+    margin-left: 10px;
+    color: rgb(222,206,149);
+}
+
+.topicMenuItem:hover{
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+}
+
 /* TEXT */
 .text-gold-dark{
     color: rgb(148, 115, 64);!important;
@@ -398,10 +418,27 @@ a.nav-link.sidenav-link:hover{
     background-color: rgb(255, 208, 99);
 }
 
+.fire:hover{
+    color: rgb(255,255,255);
+    background: rgb(255,102,0);
+}
+
 /* MODALS */
 .modal-header{
     color: rgb(20,23,25);
     background-color: rgb(222,206,149);
+}
+
+.warning-modal-img-block{
+    padding: 20px;
+    margin: auto;
+    margin-bottom: 20px;
+    border: solid 1px rgb(222,206,149);
+
+}
+
+.warning-modal-img-block img{
+    max-width: 100%;
 }
 
 /* BADGES */

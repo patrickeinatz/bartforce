@@ -80,14 +80,50 @@ class ForumCreateController extends AbstractController
 
 
     /**
+     * @Route("/forum/{catId}/{topicId}/createPost", name="forumCreatePost")
+     */
+    public function createPost(EntityManagerInterface $em, ForumPostRepository $postRepository, ForumTopicRepository $topicRepository, Request $request, string $topicId, string $catId)
+    {
+        $topic = $topicRepository->findOneBy(['id' =>  $topicId]);
+        $category = $topic->getCategory();
+
+        $postForm = $this->createForm(ForumPostType::class);
+        $postForm->handleRequest($request);
+
+
+        if($postForm->isSubmitted() && $postForm->isValid()) {
+            /** @var ForumPost $forumPost */
+            $forumPost = $postForm->getData();
+            $forumPost->setCreatedAt(new \DateTime());
+            $forumPost->setUpdatedAt(new \DateTime());
+            $forumPost->setPostCreator($this->getUser());
+            $forumPost->setPostTopic($topic);
+            $forumPost->setPostCategory($category);
+
+            $topic->setUpdatedAt(new \DateTime());
+            $category->setUpdatedAt(new \DateTime());
+
+            $em->persist($topic);
+            $em->persist($category);
+            $em->persist($forumPost);
+            $em->flush();
+            $this->addFlash('success', 'Ein neuer Beitrag wurde erstellt!');
+
+            return $this->redirectToRoute('forumTopicView', ['topicId' => $topicId]);
+        }
+    }
+
+    /**
      * @Route("/forum/{topicId}/{postId}/createReply", name="forumCreateReply")
      */
     public function createReply(
         EntityManagerInterface $em,
         Request $request,
         ForumPostRepository $postRepository,
+        string $topicId,
         string $postId
     ){
+
         /** @var User $currentUser */
         $currentUser = $this->getUser();
 
@@ -98,7 +134,6 @@ class ForumCreateController extends AbstractController
 
         $replyForm = $this->createForm(ForumReplyType::class);
         $replyForm->handleRequest($request);
-
 
         if($replyForm->isSubmitted() && $replyForm->isValid()) {
 

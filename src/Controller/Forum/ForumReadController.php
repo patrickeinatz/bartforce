@@ -96,8 +96,6 @@ class ForumReadController extends AbstractController
         $category = $categoryRepository->findOneBy(['id' => $topic->getCategory()->getId()]);
 
         /** @var User $currentUser */
-        $currentUser = $this->getUser();
-        $now = new \DateTime();
         $posts = $postRepository->findBy(['postTopic' => $topicId]);
         $replies = $replyRepository->findBy(['topic' => $topicId]);
 
@@ -109,27 +107,6 @@ class ForumReadController extends AbstractController
 
         $replyForm = $this->createForm(ForumReplyType::class);
         $replyForm->handleRequest($request);
-
-        if($postForm->isSubmitted() && $postForm->isValid()) {
-            /** @var ForumPost $forumPost */
-            $forumPost = $postForm->getData();
-            $forumPost->setCreatedAt($now);
-            $forumPost->setUpdatedAt($now);
-            $forumPost->setPostCreator($currentUser);
-            $forumPost->setPostTopic($topic);
-            $forumPost->setPostCategory($category);
-
-            $topic->setUpdatedAt($now);
-            $category->setUpdatedAt($now);
-
-            $em->persist($topic);
-            $em->persist($category);
-            $em->persist($forumPost);
-            $em->flush();
-            $this->addFlash('success', 'Ein neuer Beitrag wurde erstellt!');
-
-            return $this->redirectToRoute('forumTopicView', ['topicId' => $topicId]);
-        }
 
         return $this->render('forum/forumTopicView.html.twig', [
             'title' => 'Forum Thema',

@@ -28,7 +28,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class ForumUpdateController extends AbstractController
 {
     /**
-     * @Route("/forum/topicUpdate/{topicId}", name="forumUpdatetopic")
+     * @Route("/forum/topicUpdate/{topicId}", name="forumUpdateTopic")
      */
     public function updateTopic(
         EntityManagerInterface $em,
@@ -53,6 +53,36 @@ class ForumUpdateController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'Das Thema wurde bearbeitet!');
             return $this->redirectToRoute('forumTopicView', ['topicId' => $topicId]);
+        }
+    }
+
+    /**
+     * @Route("/forum/topicUpdate/{topicId}/redirectRoute", name="forumUpdateTopicRedirect")
+     */
+    public function updateTopicRedirect(
+        EntityManagerInterface $em,
+        Request $request,
+        ForumTopicRepository $topicRepository,
+        string $topicId
+    ){
+        /** @var ForumTopic $topic */
+        $topic = $topicRepository->findOneBy(['id' => $topicId]);
+        $category = $topic->getCategory();
+        $now = new \DateTime();
+        $form = $this->createForm(ForumTopicType::class, $topic);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            /** @var ForumPost $post */
+            $topic = $form->getData();
+            $topic->setUpdatedAt($now);
+            $category->setUpdatedAt($now);
+
+            $em->persist($category);
+            $em->persist($topic);
+            $em->flush();
+            $this->addFlash('success', 'Das Thema wurde bearbeitet!');
+            return $this->redirectToRoute('forumCategoryView', ['id' => $topic->getCategory()->getId()]);
         }
     }
 

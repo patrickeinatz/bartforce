@@ -6,7 +6,7 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <a href="/forum" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-comments mr-1"></i> Kategorien</a>
-            <button type="button" class="btn btn-sm btn-gold float-right" data-toggle="modal" data-target=".topicModal" onclick="createTopic({{ category.id }})">
+            <button type="button" class="btn btn-sm btn-gold float-right green" data-toggle="modal" data-target=".topicModal" onclick="createTopic({{ category.id }})">
                 <i class="fas fa-plus-circle"></i> Neues Thema
             </button>
         </div>
@@ -20,22 +20,32 @@
         <div class="col-md-12">
             {% for topic in topics|sort((a, b) => b.createdAt <=> a.createdAt) %}
                 <a href="/forum/topic/{{ topic.id }}" class="forumTopicList-Item">
-                    <i class="fas fa-stream mr-2 mb-2"></i> {{ topic.title }}<br>
+                    <h5 style="margin-bottom: 3px"><i class="fas fa-stream mr-2 mb-2"></i> {{ topic.title }}</h5>
                     <small class="pl-2">
                         <span><i class="fas fa-clone"></i> {{ topic.forumPosts.values|length }}</span>
                         <span><i class="fas fa-history"></i> {{ topic.updatedAt|date("d.m.Y H:i") }}</span>
                         <span><i class="far fa-calendar"></i> {{ topic.createdAt|date("d.m.Y H:i")  }}</span>
                     </small>
                 </a>
+                {% if app.user.id == topic.topicCreator.id or is_granted('ROLE_ADMIN') %}
+                    <div class="topicAdminMenu">
+                        {% if app.user.id == topic.topicCreator.id %}
+                            <a href="#" class="topicMenuItem" data-toggle="modal" onclick="updateTopic({{ topic.title|json_encode }},{{ topic.topicContent|raw|json_encode }},{{ topic.id }},true)" data-target=".topicModal"><i class="fas fa-wrench"></i></a>
+                        {% endif %}
+                        {% if app.user.id == topic.topicCreator.id or is_granted('ROLE_ADMIN') %}
+                            <a href="#" class="topicMenuItem" data-toggle="modal" data-target=".deleteModal" onclick="deleteTopic({{ topic.id }})"><i class="fas fa-trash"></i></a>
+                        {% endif %}
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>
-    <!-- Modal -->
+    <!-- Topic Modal -->
     <div class="modal fade topicModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content bg-darker">
                 <div class="modal-header border-0">
-                    <h5 class="modal-title" id="topicModalTitle">Neue Thema eröffnen</h5>
+                    <h5 class="modal-title" id="topicModalTitle">Neues Thema eröffnen</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -51,6 +61,33 @@
                     {{ form_end(forumTopicForm) }}
                 </div>
 
+            </div>
+        </div>
+    </div>
+    <!-- Delete Modal -->
+    <div class="modal fade deleteModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-darker">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="replyModalTitle">Bist du so richtig gaaaanz doll sicher?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body border-0">
+                    <div class="modal-body">
+                        <div class="warning-modal-img-block">
+                            <img src="{{ asset('img/gif/haltstopp.gif') }}">
+                        </div>
+                        <h5>
+                            Du bist im Begriff etwas furchtbares zu tun.
+                        </h5>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Uups, ne doch nicht </button>
+                    <a href="%thingToKill%" id="killSwitch" type="btn btn-sm" class="btn btn-gold fire"><i class="fas fa-fire"></i> Jaaa, es soll brennen! </a>
+                </div>
             </div>
         </div>
     </div>

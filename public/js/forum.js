@@ -23,14 +23,14 @@ function createTopic(catId)
     }
 }
 
-function createPost(topicId)
+function createPost(catId, topicId)
 {
     var forms = document.querySelectorAll('form');
 
     for (var i =0; i < forms.length; i++){
         if(forms[i].name === "forum_post") {
             var action = forms[i].getAttribute('action');
-            forms[i].action = action.replace('%action%', '/forum/topic/'+topicId);
+            forms[i].action = action.replace('%action%', '/forum/'+catId+'/'+topicId+'/createPost');
         }
     }
 }
@@ -45,7 +45,7 @@ function createReply(topicId, postId)
     for (var i =0; i < forms.length; i++){
         if(forms[i].name === "forum_reply") {
             var action = forms[i].getAttribute('action');
-            forms[i].action = action.replace('%action%', '/forum/postReply/'+postId);
+            forms[i].action = action.replace('%action%', '/forum/'+topicId+'/'+postId+'/createReply');
         }
     }
 }
@@ -72,8 +72,9 @@ function updatePost(postContent, postId)
 
 }
 
-function updateTopic(topicTitle, topicContent, topicId)
+function updateTopic(topicTitle, topicContent, topicId, redirectRoute=false)
 {
+
     var divs = document.querySelectorAll('div');
     var inputs = document.querySelectorAll('input');
 
@@ -94,10 +95,60 @@ function updateTopic(topicTitle, topicContent, topicId)
 
     var forms = document.querySelectorAll('form');
 
-    for (var i =0; i < forms.length; i++){
-        if(forms[i].name === "forum_topic") {
-            var action = forms[i].getAttribute('action');
-            forms[i].action = action.replace('%action%', '/forum/topicUpdate/'+topicId);
+    if(!redirectRoute) {
+        for (var i =0; i < forms.length; i++){
+            if(forms[i].name === "forum_topic") {
+                var action = forms[i].getAttribute('action');
+                forms[i].action = action.replace('%action%', '/forum/topicUpdate/'+topicId);
+            }
+        }
+    } else {
+        for (var i =0; i < forms.length; i++){
+            if(forms[i].name === "forum_topic") {
+                var action = forms[i].getAttribute('action');
+                forms[i].action = action.replace('%action%', '/forum/topicUpdate/'+topicId+'/redirectRoute');
+            }
+        }
+    }
+}
+
+function deleteCategory(catId)
+{
+    console.log("CATEGORY"+catId);
+}
+
+function deleteTopic(topicId)
+{
+    var a = document.querySelectorAll('a');
+
+    for (var i =0; i < a.length; i++){
+        if(a[i].id === "killSwitch") {
+            var href = a[i].getAttribute('href');
+            a[i].href = href.replace('%thingToKill%', '/forum/deleteTopic/'+topicId);
+        }
+    }
+}
+
+function deletePost(postId)
+{
+    var a = document.querySelectorAll('a');
+
+    for (var i =0; i < a.length; i++){
+        if(a[i].id === "killSwitch") {
+            var href = a[i].getAttribute('href');
+            a[i].href = href.replace('%thingToKill%', '/forum/deletePost/'+postId);
+        }
+    }
+}
+
+function deleteReply(replyId)
+{
+    var a = document.querySelectorAll('a');
+
+    for (var i =0; i < a.length; i++){
+        if(a[i].id === "killSwitch") {
+            var href = a[i].getAttribute('href');
+            a[i].href = href.replace('%thingToKill%', '/forum/deleteReply/'+replyId);
         }
     }
 }
