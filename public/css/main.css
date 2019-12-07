@@ -379,6 +379,26 @@ a.nav-link.sidenav-link:hover{
     color: rgb(255, 255, 255);
 }
 
+.categoryAdminMenu{
+    display: block;
+    text-align: right;
+    margin: -3px 0 20px 0;
+    padding: 8px 10px 5px 0;
+    background-color: rgba(132,159,169,0.1);
+    border: none
+}
+
+.categoryMenuItem{
+    font-size: 14px;
+    margin-left: 10px;
+    color: rgb(222,206,149);
+}
+
+.categoryMenuItem:hover{
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+}
+
 /* TEXT */
 .text-gold-dark{
     color: rgb(148, 115, 64);!important;

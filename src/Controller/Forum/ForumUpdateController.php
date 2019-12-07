@@ -28,6 +28,32 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class ForumUpdateController extends AbstractController
 {
     /**
+     * @Route("/forum/categoryUpdate/{catId}", name="forumUpdateCategory")
+     */
+    public function updateCategory(
+        EntityManagerInterface $em,
+        Request $request,
+        ForumCategoryRepository $categoryRepository,
+        string $catId
+    ){
+        $category = $categoryRepository->findOneBy(['id' => $catId]);
+
+        $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
+        $form = $this->createForm(ForumCategoryType::class, $category);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            /** @var ForumPost $post */
+            $category = $form->getData();
+            $category->setUpdatedAt($now);
+            $em->persist($category);
+            $em->flush();
+            $this->addFlash('success', 'Die Kategorie wurde bearbeitet!');
+            return $this->redirectToRoute('forumView');
+        }
+    }
+
+    /**
      * @Route("/forum/topicUpdate/{topicId}", name="forumUpdateTopic")
      */
     public function updateTopic(
@@ -38,7 +64,7 @@ class ForumUpdateController extends AbstractController
     ){
         $topic = $topicRepository->findOneBy(['id' => $topicId]);
         $category = $topic->getCategory();
-        $now = new \DateTime();
+        $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
         $form = $this->createForm(ForumTopicType::class, $topic);
         $form->handleRequest($request);
 
@@ -68,7 +94,7 @@ class ForumUpdateController extends AbstractController
         /** @var ForumTopic $topic */
         $topic = $topicRepository->findOneBy(['id' => $topicId]);
         $category = $topic->getCategory();
-        $now = new \DateTime();
+        $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
         $form = $this->createForm(ForumTopicType::class, $topic);
         $form->handleRequest($request);
 
@@ -97,7 +123,7 @@ class ForumUpdateController extends AbstractController
     )
     {
         $post = $postRepository->findOneBy(['id' => $postId]);
-        $now = new \DateTime();
+        $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
         $form = $this->createForm(ForumPostType::class, $post);
         $form->handleRequest($request);
 

@@ -41,8 +41,11 @@ class ForumCreateController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             /** @var ForumCategory $forumCategory */
             $forumCategory = $form->getData();
-            $forumCategory->setCreatedAt(new \DateTime());
-            $forumCategory->setUpdatedAt(new \DateTime());
+
+            $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
+
+            $forumCategory->setCreatedAt($now);
+            $forumCategory->setUpdatedAt($now);
             $em->persist($forumCategory);
             $em->flush();
             $this->addFlash('success', 'Eine neue Kategorie wurde hinzugefügt!');
@@ -64,11 +67,13 @@ class ForumCreateController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
+        $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
+
         if($form->isSubmitted() && $form->isValid()) {
             /** @var ForumTopic $forumTopic */
             $forumTopic = $form->getData();
-            $forumTopic->setCreatedAt(new \DateTime());
-            $forumTopic->setUpdatedAt(new \DateTime());
+            $forumTopic->setCreatedAt($now);
+            $forumTopic->setUpdatedAt($now);
             $forumTopic->setTopicCreator($user);
             $forumTopic->setCategory($category);
             $em->persist($forumTopic);
@@ -90,18 +95,19 @@ class ForumCreateController extends AbstractController
         $postForm = $this->createForm(ForumPostType::class);
         $postForm->handleRequest($request);
 
+        $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
 
         if($postForm->isSubmitted() && $postForm->isValid()) {
             /** @var ForumPost $forumPost */
             $forumPost = $postForm->getData();
-            $forumPost->setCreatedAt(new \DateTime());
-            $forumPost->setUpdatedAt(new \DateTime());
+            $forumPost->setCreatedAt($now);
+            $forumPost->setUpdatedAt($now);
             $forumPost->setPostCreator($this->getUser());
             $forumPost->setPostTopic($topic);
             $forumPost->setPostCategory($category);
 
-            $topic->setUpdatedAt(new \DateTime());
-            $category->setUpdatedAt(new \DateTime());
+            $topic->setUpdatedAt($now);
+            $category->setUpdatedAt($now);
 
             $em->persist($topic);
             $em->persist($category);
@@ -135,24 +141,26 @@ class ForumCreateController extends AbstractController
         $replyForm = $this->createForm(ForumReplyType::class);
         $replyForm->handleRequest($request);
 
+        $now = $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
+
         if($replyForm->isSubmitted() && $replyForm->isValid()) {
 
             /** @var ForumReply $postReply */
             $postReply = $replyForm->getData();
-            $postReply->setCreatedAt(new \DateTime());
-            $postReply->setUpdatedAt(new \DateTime());
+            $postReply->setCreatedAt($now);
+            $postReply->setUpdatedAt($now);
             $postReply->setReplyCreator($currentUser);
             $postReply->setTopic($post->getPostTopic());
             $postReply->setPost($post);
             $em->persist($postReply);
 
-            $topic->setUpdatedAt(new \DateTime());
+            $topic->setUpdatedAt($now);
             $em->persist($topic);
 
-            $post->setUpdatedAt(new \DateTime());
+            $post->setUpdatedAt($now);
             $em->persist($post);
 
-            $category->setUpdatedAt(new \DateTime());
+            $category->setUpdatedAt($now);
             $em->persist($category);
 
             $em->flush();

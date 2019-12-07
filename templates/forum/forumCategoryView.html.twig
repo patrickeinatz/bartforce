@@ -33,7 +33,7 @@
                             <a href="#" class="topicMenuItem" data-toggle="modal" onclick="updateTopic({{ topic.title|json_encode }},{{ topic.topicContent|raw|json_encode }},{{ topic.id }},true)" data-target=".topicModal"><i class="fas fa-wrench"></i></a>
                         {% endif %}
                         {% if app.user.id == topic.topicCreator.id or is_granted('ROLE_ADMIN') %}
-                            <a href="#" class="topicMenuItem" data-toggle="modal" data-target=".deleteModal" onclick="deleteTopic({{ topic.id }})"><i class="fas fa-trash"></i></a>
+                            <a href="#" class="topicMenuItem" data-toggle="modal" data-target=".deleteModal" onclick="deleteTopic({{ topic.id }},{{ topic.forumPosts|length }},{{ topic.forumReplies|length }})"><i class="fas fa-trash"></i></a>
                         {% endif %}
                     </div>
                 {% endif %}
@@ -69,7 +69,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content bg-darker">
                 <div class="modal-header border-0">
-                    <h5 class="modal-title" id="replyModalTitle">Bist du so richtig gaaaanz doll sicher?</h5>
+                    <h5 class="modal-title" id="deleteModalTitle"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -79,9 +79,7 @@
                         <div class="warning-modal-img-block">
                             <img src="{{ asset('img/gif/haltstopp.gif') }}">
                         </div>
-                        <h5>
-                            Du bist im Begriff etwas furchtbares zu tun.
-                        </h5>
+                        <h5 id="warningText"></h5>
                     </div>
                 </div>
                 <div class="modal-footer border-0">

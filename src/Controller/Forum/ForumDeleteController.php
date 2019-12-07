@@ -31,6 +31,40 @@ class ForumDeleteController extends AbstractController
 {
 
     /**
+     * @Route("/forum/deleteCategory/{categoryId}", name="forumDeleteCategory")
+     */
+    public function deleteCategory(EntityManagerInterface $em, ForumCategoryRepository $categoryRepository, ForumReplyRepository $replyRepository, string $categoryId)
+    {
+        /** @var ForumCategory $category */
+        $category = $categoryRepository->findOneBy(['id' => $categoryId]);
+        $topics = $category->getForumTopics();
+        $posts = $category->getForumPosts();
+
+        $replyCount = 0;
+
+        foreach ($topics as $topic){
+            $replies = $replyRepository->findBy(['topic' => $topic]);
+            $replyCount *= sizeof($replies);
+
+            foreach ($replies as $reply){
+                $em->remove($reply);
+            }
+            $em->remove($topic);
+        }
+
+        foreach ($posts as $post){
+            $em->remove($post);
+        }
+
+        $em->remove($category);
+        $em->flush();
+
+        $this->addFlash('success', 'Eine Kategorie wurde gelöscht!');
+        return $this->redirectToRoute('forumView');
+
+    }
+
+    /**
      * @Route("/forum/deleteTopic/{topicId}", name="forumDeleteTopic")
      */
     public function deleteTopic(EntityManagerInterface $em, ForumTopicRepository $topicRepository, ForumPostRepository $postRepository, ForumReplyRepository $replyRepository, string $topicId)

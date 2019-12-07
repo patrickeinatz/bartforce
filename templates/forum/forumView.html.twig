@@ -29,10 +29,16 @@
                     </span>
                 </a>
             </div>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="categoryAdminMenu">
+                        <a href="#" class="categoryMenuItem" data-toggle="modal" onclick="updateCategory({{ category.title|json_encode }},{{ category.description|json_encode }},{{ category.id }})" data-target=".categoryModal"><i class="fas fa-wrench"></i></a>
+                        <a href="#" class="categoryMenuItem" data-toggle="modal" data-target=".deleteModal" onclick="deleteCategory({{ category.id }})"><i class="fas fa-trash"></i></a>
+                    </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>
-    <!-- Modal -->
+    <!-- Category Modal -->
     <div class="modal fade categoryModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content bg-darker">
@@ -44,8 +50,8 @@
                 </div>
                 <div class="modal-body border-0">
                     {{ form_start(forumCategoryForm, {'action': '%action%' }) }}
-                    {{ form_row(forumCategoryForm.title) }}
-                    {{ form_row(forumCategoryForm.description) }}
+                    {{ form_row(forumCategoryForm.title, {'id' : 'categoryTitle'}) }}
+                    {{ form_row(forumCategoryForm.description, {'id' : 'categoryDescription'}) }}
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Abbrechen</button>
@@ -53,6 +59,31 @@
                     {{ form_end(forumCategoryForm) }}
                 </div>
 
+            </div>
+        </div>
+    </div>
+    <!-- Delete Modal -->
+    <div class="modal fade deleteModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-darker">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="deleteModalTitle"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body border-0">
+                    <div class="modal-body">
+                        <div class="warning-modal-img-block">
+                            <img src="{{ asset('img/gif/haltstopp.gif') }}">
+                        </div>
+                        <h5 id="warningText"></h5>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Uups, ne doch nicht </button>
+                    <a href="%thingToKill%" id="killSwitch" type="btn btn-sm" class="btn btn-gold fire"><i class="fas fa-fire"></i> Jaaa, es soll brennen! </a>
+                </div>
             </div>
         </div>
     </div>

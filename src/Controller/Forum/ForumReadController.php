@@ -3,8 +3,6 @@
 namespace App\Controller\Forum;
 
 use App\Entity\ForumCategory;
-use App\Entity\ForumPost;
-use App\Entity\ForumReply;
 use App\Entity\ForumTopic;
 use App\Entity\User;
 use App\Form\ForumCategoryType;
@@ -34,9 +32,9 @@ class ForumReadController extends AbstractController
     public function forumView(
         EntityManagerInterface $em,
         Request $request,
-        ForumCategoryRepository $repository
+        ForumCategoryRepository $categoryRepository
     ){
-        $categories = $repository->findAll();
+        $categories = $categoryRepository->findAll();
 
         $form = $this->createForm(ForumCategoryType::class);
         $form->handleRequest($request);
