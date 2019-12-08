@@ -64,14 +64,18 @@ class ForumReadController extends AbstractController
         $category = $categoryRepository->findOneBy(['id' => $id]);
         $catTopics = $topicRepository->findBy(['category' => $id]);
 
-        $form = $this->createForm(ForumTopicType::class);
-        $form->handleRequest($request);
+        $categoryForm = $this->createForm(ForumCategoryType::class);
+        $categoryForm->handleRequest($request);
+
+        $topicForm = $this->createForm(ForumTopicType::class);
+        $topicForm->handleRequest($request);
 
         return $this->render('forum/forumCategoryView.html.twig', [
             'title' => 'Forum Kategorie',
             'topics' => $catTopics,
             'category' => $category,
-            'forumTopicForm' => $form->createView()
+            'forumTopicForm' => $topicForm->createView(),
+            'forumCategoryForm' => $categoryForm->createView()
         ]);
     }
 

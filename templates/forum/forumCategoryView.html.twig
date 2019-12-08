@@ -5,10 +5,20 @@
 {% block content %}
     <div class="row mb-4">
         <div class="col-md-12">
-            <a href="/forum" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-comments mr-1"></i> Kategorien</a>
-            <button type="button" class="btn btn-sm btn-gold float-right green" data-toggle="modal" data-target=".topicModal" onclick="createTopic({{ category.id }})">
-                <i class="fas fa-plus-circle"></i> Neues Thema
-            </button>
+            <a href="/forum" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-comments mr-1"></i> Forum</a>
+            <div class="float-right">
+                <button type="button" class="btn btn-sm btn-gold green ml-1" data-toggle="modal" data-target=".topicModal" onclick="createTopic({{ category.id }})">
+                    <i class="fas fa-plus-circle"></i> Neues Thema
+                </button>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <button type="button" class="btn btn-sm btn-gold yellow ml-1" data-toggle="modal" data-target=".categoryModal" onclick="updateCategory({{ category.title|json_encode }},{{ category.description|json_encode }},{{ category.id }})">
+                        <i class="fas fa-wrench"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-gold red ml-1" data-toggle="modal" data-target=".deleteModal" onclick="deleteCategory({{ category.id }})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                {% endif %}
+            </div>
         </div>
     </div>
     <div class="row">
@@ -29,16 +39,6 @@
                         <span><i class="fas fa-edit"></i> {{ topic.createdAt|ago }}</span>
                     </small>
                 </a>
-                {% if app.user.id == topic.topicCreator.id or is_granted('ROLE_ADMIN') %}
-                    <div class="topicAdminMenu">
-                        {% if app.user.id == topic.topicCreator.id %}
-                            <a href="#" class="topicMenuItem" data-toggle="modal" onclick="updateTopic({{ topic.title|json_encode }},{{ topic.topicContent|raw|json_encode }},{{ topic.id }},true)" data-target=".topicModal"><i class="fas fa-wrench"></i></a>
-                        {% endif %}
-                        {% if app.user.id == topic.topicCreator.id or is_granted('ROLE_ADMIN') %}
-                            <a href="#" class="topicMenuItem" data-toggle="modal" data-target=".deleteModal" onclick="deleteTopic({{ topic.id }},{{ topic.forumPosts|length }},{{ topic.forumReplies|length }})"><i class="fas fa-trash"></i></a>
-                        {% endif %}
-                    </div>
-                {% endif %}
             {% endfor %}
         </div>
     </div>
@@ -61,6 +61,30 @@
                     <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Abbrechen</button>
                     <button type="submit" class="btn btn-gold"><i class="fas fa-paper-plane"></i> Absenden</button>
                     {{ form_end(forumTopicForm) }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Category Modal -->
+    <div class="modal fade categoryModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-darker">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="categoryModalTitle">Neue Kategorie erstellen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body border-0">
+                    {{ form_start(forumCategoryForm, {'action': '%action%' }) }}
+                    {{ form_row(forumCategoryForm.title, {'id' : 'categoryTitle'}) }}
+                    {{ form_row(forumCategoryForm.description, {'id' : 'categoryDescription'}) }}
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Abbrechen</button>
+                    <button type="submit" class="btn btn-gold green"><i class="fas fa-paper-plane"></i> Absenden</button>
+                    {{ form_end(forumCategoryForm) }}
                 </div>
 
             </div>

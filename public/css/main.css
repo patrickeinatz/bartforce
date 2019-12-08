@@ -338,6 +338,40 @@ a.nav-link.sidenav-link:hover{
     background-color: rgba(0,0,0,0.25);
 }
 
+.forum-topic{
+    background: none;
+    border: 1px solid rgba(132,159,169,0.1);
+    border-radius: 0;
+    margin-bottom:20px;
+}
+
+.forum-topic-header{
+    color: rgb(222,206,149);
+    background-color: rgba(132,159,169,0.1);
+    vertical-align: top;
+
+}
+
+.forum-topic-header-headline{
+    display: inline-block;
+}
+
+.forum-topic-body{
+    overflow: hidden;
+    background-color: rgba(0,0,0,0.25);
+}
+
+.forum-topic-body img {
+    max-width:100%;
+    height:auto;
+}
+
+.forum-topic-footer{
+    text-align: right;
+    border: none;
+    background-color: rgba(0,0,0,0.25);
+}
+
 .user-img-forum{
     display: inline-block;
     width: 30px;

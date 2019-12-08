@@ -2,18 +2,13 @@
 
 namespace App\Controller\Forum;
 
-use App\Entity\ForumCategory;
 use App\Entity\ForumPost;
-use App\Entity\ForumReply;
 use App\Entity\ForumTopic;
-use App\Entity\User;
 use App\Form\ForumCategoryType;
 use App\Form\ForumPostType;
-use App\Form\ForumReplyType;
 use App\Form\ForumTopicType;
 use App\Repository\ForumCategoryRepository;
 use App\Repository\ForumPostRepository;
-use App\Repository\ForumReplyRepository;
 use App\Repository\ForumTopicRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,7 +44,7 @@ class ForumUpdateController extends AbstractController
             $em->persist($category);
             $em->flush();
             $this->addFlash('success', 'Die Kategorie wurde bearbeitet!');
-            return $this->redirectToRoute('forumView');
+            return $this->redirectToRoute('forumCategoryView', ['id' => $catId]);
         }
     }
 

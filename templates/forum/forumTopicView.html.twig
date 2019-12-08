@@ -5,11 +5,21 @@
 {% block content %}
     <div class="row mb-4">
         <div class="col-md-12">
-            <a href="/forum" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-comments mr-1"></i> Kategorien</a>
-            <a href="/forum/category/{{ catId }}" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-tag"></i> Themen</a>
-            <button type="button" class="btn btn-sm btn-gold green float-right" data-toggle="modal" data-target=".postModal" onclick="createPost({{ catId }},{{ topic.id }})">
-                <i class="fas fa-plus-circle"></i> Neuer Beitrag
-            </button>
+            <a href="/forum" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-comments mr-1"></i> Forum</a>
+            <a href="/forum/category/{{ catId }}" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-tag"></i> Kategoire</a>
+            <div class="float-right">
+                <button type="button" class="btn btn-sm btn-gold green" data-toggle="modal" data-target=".postModal" onclick="createPost({{ catId }},{{ topic.id }})">
+                    <i class="fas fa-plus-circle"></i> Neuer Beitrag
+                </button>
+                {% if app.user.id == topic.topicCreator.id or is_granted('ROLE_ADMIN') %}
+                    <button type="button" class="btn btn-sm btn-gold yellow ml-1" data-toggle="modal" data-target=".topicModal" onclick="updateTopic({{ topic.title|json_encode }},{{ topic.topicContent|raw|json_encode }},{{ topic.id }})">
+                        <i class="fas fa-wrench"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-gold red ml-1" data-toggle="modal" data-target=".deleteModal" onclick="deleteTopic({{ topic.id }},{{ posts|length }},{{ replies|length }})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                {% endif %}
+            </div>
         </div>
     </div>
     <div class="row">
@@ -19,10 +29,10 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="card forum-post">
-                <div class="card-header forum-post-header">
+            <div class="card forum-topic">
+                <div class="card-header forum-topic-header">
                     <img class="user-img-forum rounded-circle" src="{{ topic.topicCreator.avatar }}">
-                    <h5 class="forum-post-header-headline">{{ topic.topicCreator.username }}</h5>
+                    <h5 class="forum-topic-header-headline">{{ topic.topicCreator.username }}</h5>
                     <span class="float-right">
                         <small><i class="far fa-calendar"></i> {{ topic.createdAt|ago }}</small>
                         {% if topic.updatedAt != topic.createdAt %}
@@ -30,16 +40,8 @@
                         {% endif %}
                     </span>
                 </div>
-                <div class="card-body forum-post-body">
+                <div class="card-body forum-topic-body">
                     <p class="card-text">{{ topic.topicContent|raw}}</p>
-                </div>
-                <div class="card-footer forum-post-footer">
-                    {% if app.user.id == topic.topicCreator.id %}
-                        <a href="#" class="btn btn-sm btn-gold yellow" data-toggle="modal" onclick="updateTopic({{ topic.title|json_encode }},{{ topic.topicContent|raw|json_encode }},{{ topic.id }})" data-target=".topicModal"><i class="fas fa-wrench"></i> Bearbeiten</a>
-                    {% endif %}
-                    {% if app.user.id == topic.topicCreator.id or is_granted('ROLE_ADMIN') %}
-                        <a href="#" class="btn btn-sm btn-gold red" data-toggle="modal" data-target=".deleteModal" onclick="deleteTopic({{ topic.id }}, {{ posts|length }}, {{ replies|length }})"><i class="fas fa-trash"></i> Löschen</a>
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -80,10 +82,10 @@
                     <div class="card-footer forum-post-footer">
                         <a href="#" class="btn btn-sm btn-gold green" data-toggle="modal" onclick="createReply({{ topic.id }},{{ post.id }})" data-target=".replyModal"><i class="fas fa-clone"></i> Antworten</a>
                         {% if app.user.id == post.postCreator.id %}
-                            <a href="#" class="btn btn-sm btn-gold yellow" data-toggle="modal" onclick="updatePost({{ post.postContent|raw|json_encode }},{{ post.id }})" data-target=".postModal"><i class="fas fa-wrench"></i> Bearbeiten</a>
+                            <a href="#" class="btn btn-sm btn-gold yellow ml-1" data-toggle="modal" onclick="updatePost({{ post.postContent|raw|json_encode }},{{ post.id }})" data-target=".postModal"><i class="fas fa-wrench"></i></a>
                         {% endif %}
                         {% if app.user.id == post.postCreator.id or is_granted('ROLE_ADMIN') %}
-                            <a href="#" class="btn btn-sm btn-gold red" data-toggle="modal" data-target=".deleteModal" onclick="deletePost({{ post.id }},{{ post.forumReplies|length }})"><i class="fas fa-trash"></i> Löschen</a>
+                            <a href="#" class="btn btn-sm btn-gold red ml-1" data-toggle="modal" data-target=".deleteModal" onclick="deletePost({{ post.id }},{{ post.forumReplies|length }})"><i class="fas fa-trash"></i></a>
                         {% endif %}
                     </div>
                 </div>
