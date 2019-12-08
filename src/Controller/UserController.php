@@ -50,4 +50,20 @@ class UserController extends AbstractController
         ]);
 
     }
+
+    /**
+     * @Route("/memberlist", name="memberlist")
+     */
+    public function memberlist(DiscordService $discordService, UserRepository $userRepository)
+    {
+        $signedMembers = $userRepository->findAll();
+        $discordMembers = $discordService->getMemberList();
+
+        return $this->render('user/memberlist.html.twig', [
+            'signedMembers' => $signedMembers,
+            'discordMembers' => sizeof($discordMembers)
+        ]);
+
+    }
 }
+

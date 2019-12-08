@@ -74,7 +74,10 @@ class DiscordService
      */
     public function getAvatarPath($discordId, $hash)
     {
-        return $this->avatarPath."/".$discordId."/".$hash.".png";
+        if(!empty($hash)) {
+            return $this->avatarPath . "/" . $discordId . "/" . $hash . ".png";
+        }
+        return 'img/plain_avatar.png';
     }
 
     /**
@@ -96,5 +99,16 @@ class DiscordService
         }
 
         return true;
+    }
+
+    /**
+     * @return \RestCord\Model\Guild\GuildMember[]
+     */
+    public function getMemberList()
+    {
+        return $this->discordServer->guild->listGuildMembers([
+            'guild.id' => $this->guildId,
+            'limit' => 200
+        ]);
     }
 }

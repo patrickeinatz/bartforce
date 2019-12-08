@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bartforce Mitglieder{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="page-headline"><i class="fa fa-address-card mr-1"></i> Mitglieder</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+           <h5>Registrierte Mitglieder: {{ signedMembers|length }}</h5>
+            <ul class="list-group list-group-flush">
+            {% for member in signedMembers %}
+                <a href="/profile/{{ member.discordId }}" class="list-group-item">
+                    <img class="user-img rounded-circle" src="{{ asset(member.avatar) }}" width="30"> {{ member.username }}  <small class="float-right">zuletzt online: {{ member.lastLogin|ago }}</small>
+                </a>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h5>Mitglieder auf Discord: {{ discordMembers }}</h5>
+        </div>
+    </div>
+{% endblock %}

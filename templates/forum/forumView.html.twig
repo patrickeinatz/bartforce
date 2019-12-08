@@ -14,23 +14,19 @@
         </div>
     </div>
     <div class="row">
+        {% for category in categories|sort((a, b) => a.title <=> b.title) %}
         <div class="col-md-12">
-            {% for category in categories|sort((a, b) => a.title <=> b.title) %}
-            <div class="list-group mt-3">
-                <a href="/forum/category/{{ category.id }}" class="list-group-item list-group-item-action forum-category">
-                    <span class="row">
-                        <span class="col-md-10">
-                            <h5 class="mb-1"><i class="fas fa-tag"></i> {{ category.title }}</h5>
-                            <small class="forum-category-desc mb-1">{{ category.description }}</small>
-                        </span>
-                        <span class="col-md-2 pt-1 pr-3 text-right forum-stats forum-category-date">
-                            <span><small><i class="fas fa-history"></i> {{ category.updatedAt|ago }}</small></span>
-                        </span>
-                    </span>
-                </a>
-            </div>
-            {% endfor %}
+            <a href="/forum/category/{{ category.id }}" class="card forum-category-card">
+                <div class="card-body forum-category-card-body">
+                    <h5 class="mb-2"><i class="fas fa-tag"></i> {{ category.title }}</h5>
+                    <small>{{ category.description }}</small>
+                </div>
+                <div class="card-footer forum-category-card-footer text-right">
+                    <small><i class="fas fa-history"></i> {{ category.updatedAt|ago }}</small>
+                </div>
+            </a>
         </div>
+        {% endfor %}
     </div>
     <!-- Category Modal -->
     <div class="modal fade categoryModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
