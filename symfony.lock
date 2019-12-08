@@ -17,6 +17,9 @@
     "guzzlehttp/psr7": {
         "version": "1.6.1"
     },
+    "knplabs/knp-time-bundle": {
+        "version": "v1.10.0"
+    },
     "knpuniversity/oauth2-client-bundle": {
         "version": "1.20",
         "recipe": {
@@ -66,6 +69,9 @@
             "./config/packages/swiftmailer.yaml",
             "./config/packages/test/swiftmailer.yaml"
         ]
+    },
+    "symfony/templating": {
+        "version": "v4.3.9"
     },
     "symfony/web-server-bundle": {
         "version": "3.3",

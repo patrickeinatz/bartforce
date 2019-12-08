@@ -23,8 +23,10 @@
                     <h5 style="margin-bottom: 3px"><i class="fas fa-stream mr-2 mb-2"></i> {{ topic.title }}</h5>
                     <small class="pl-2">
                         <span><i class="fas fa-clone"></i> {{ topic.forumPosts.values|length }}</span>
-                        <span><i class="fas fa-history"></i> {{ topic.updatedAt|date("d.m.Y H:i") }}</span>
-                        <span><i class="far fa-calendar"></i> {{ topic.createdAt|date("d.m.Y H:i")  }}</span>
+                        {% if topic.updatedAt != topic.createdAt %}
+                        <span><i class="fas fa-history"></i> {{ topic.updatedAt|ago }}</span>
+                        {% endif %}
+                        <span><i class="fas fa-edit"></i> {{ topic.createdAt|ago }}</span>
                     </small>
                 </a>
                 {% if app.user.id == topic.topicCreator.id or is_granted('ROLE_ADMIN') %}

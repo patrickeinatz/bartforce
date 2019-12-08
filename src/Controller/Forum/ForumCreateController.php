@@ -42,7 +42,7 @@ class ForumCreateController extends AbstractController
             /** @var ForumCategory $forumCategory */
             $forumCategory = $form->getData();
 
-            $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
+            $now = new \DateTime('now');
 
             $forumCategory->setCreatedAt($now);
             $forumCategory->setUpdatedAt($now);
@@ -67,7 +67,7 @@ class ForumCreateController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
+        $now = new \DateTime('now');
 
         if($form->isSubmitted() && $form->isValid()) {
             /** @var ForumTopic $forumTopic */
@@ -76,6 +76,9 @@ class ForumCreateController extends AbstractController
             $forumTopic->setUpdatedAt($now);
             $forumTopic->setTopicCreator($user);
             $forumTopic->setCategory($category);
+
+            $category->setUpdatedAt($now);
+            $em->persist($category);
             $em->persist($forumTopic);
             $em->flush();
             $this->addFlash('success', 'Ein neues Thema wurde eröffnet!');
@@ -95,7 +98,7 @@ class ForumCreateController extends AbstractController
         $postForm = $this->createForm(ForumPostType::class);
         $postForm->handleRequest($request);
 
-        $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
+        $now = new \DateTime('now');
 
         if($postForm->isSubmitted() && $postForm->isValid()) {
             /** @var ForumPost $forumPost */
@@ -141,7 +144,7 @@ class ForumCreateController extends AbstractController
         $replyForm = $this->createForm(ForumReplyType::class);
         $replyForm->handleRequest($request);
 
-        $now = $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
+        $now = $now = new \DateTime('now');
 
         if($replyForm->isSubmitted() && $replyForm->isValid()) {
 

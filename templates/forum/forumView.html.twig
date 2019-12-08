@@ -24,7 +24,7 @@
                             <small class="forum-category-desc mb-1">{{ category.description }}</small>
                         </span>
                         <span class="col-md-2 pt-1 pr-3 text-right forum-stats forum-category-date">
-                                <small><i class="fas fa-history"></i> {{ category.updatedAt|date("d.m.Y H:i") }}</small>
+                            <span><small><i class="fas fa-history"></i> {{ category.updatedAt|ago }}</small></span>
                         </span>
                     </span>
                 </a>

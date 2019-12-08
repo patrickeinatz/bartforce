@@ -24,7 +24,10 @@
                     <img class="user-img-forum rounded-circle" src="{{ topic.topicCreator.avatar }}">
                     <h5 class="forum-post-header-headline">{{ topic.topicCreator.username }}</h5>
                     <span class="float-right">
-                        <small><i class="far fa-calendar"></i> {{ topic.createdAt|date("d.m.Y H:i") }}</small>
+                        <small><i class="far fa-calendar"></i> {{ topic.createdAt|ago }}</small>
+                        {% if topic.updatedAt != topic.createdAt %}
+                            <br><small><i class="fas fa-history"></i> {{ topic.updatedAt|ago }}</small>
+                        {% endif %}
                     </span>
                 </div>
                 <div class="card-body forum-post-body">
@@ -49,8 +52,11 @@
                         <img class="user-img-forum rounded-circle" src="{{ post.postCreator.avatar }}">
                         <h5 class="forum-post-header-headline">{{ post.postCreator.username }} </h5>
                         <span class="float-right">
-                        <small><i class="far fa-calendar"></i> {{ post.createdAt|date("d.m.Y H:i") }}</small>
-                    </span>
+                            <small><i class="fas fa-edit"></i> {{ post.createdAt|ago }}</small>
+                            {% if post.updatedAt != post.createdAt %}
+                                <br><small><i class="fas fa-history"></i> {{ post.updatedAt|ago }}</small>
+                            {% endif %}
+                        </span>
                     </div>
                     <div class="card-body forum-post-body">
                         <p class="card-text" id="{{ post.id }}">{{ post.postContent|raw}}</p>

@@ -38,7 +38,7 @@ class ForumUpdateController extends AbstractController
     ){
         $category = $categoryRepository->findOneBy(['id' => $catId]);
 
-        $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
+        $now = new \DateTime('now');
         $form = $this->createForm(ForumCategoryType::class, $category);
         $form->handleRequest($request);
 
@@ -64,7 +64,7 @@ class ForumUpdateController extends AbstractController
     ){
         $topic = $topicRepository->findOneBy(['id' => $topicId]);
         $category = $topic->getCategory();
-        $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
+        $now = new \DateTime('now');
         $form = $this->createForm(ForumTopicType::class, $topic);
         $form->handleRequest($request);
 
@@ -94,7 +94,7 @@ class ForumUpdateController extends AbstractController
         /** @var ForumTopic $topic */
         $topic = $topicRepository->findOneBy(['id' => $topicId]);
         $category = $topic->getCategory();
-        $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
+        $now = new \DateTime('now');
         $form = $this->createForm(ForumTopicType::class, $topic);
         $form->handleRequest($request);
 
@@ -123,7 +123,7 @@ class ForumUpdateController extends AbstractController
     )
     {
         $post = $postRepository->findOneBy(['id' => $postId]);
-        $now = new \DateTime('now', new \DateTimeZone('Europe/Berlin'));
+        $now = new \DateTime('now');
         $form = $this->createForm(ForumPostType::class, $post);
         $form->handleRequest($request);
 
