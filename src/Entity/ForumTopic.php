@@ -24,9 +24,14 @@ class ForumTopic
     private $title;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\ManyToOne(targetEntity="App\Entity\TopicContentModule", inversedBy="forumTopics")
      */
-    private $topicContent;
+    private $topicContentModule;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $topicText;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="forumTopics")
@@ -81,18 +86,6 @@ class ForumTopic
         return $this;
     }
 
-    public function getTopicContent(): ?string
-    {
-        return $this->topicContent;
-    }
-
-    public function setTopicContent(string $topicContent): self
-    {
-        $this->topicContent = $topicContent;
-
-        return $this;
-    }
-
     public function getTopicCreator(): ?User
     {
         return $this->topicCreator;
@@ -139,6 +132,38 @@ class ForumTopic
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTopicContentModule()
+    {
+        return $this->topicContentModule;
+    }
+
+    /**
+     * @param mixed $topicContentModule
+     */
+    public function setTopicContentModule($topicContentModule): void
+    {
+        $this->topicContentModule = $topicContentModule;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTopicText()
+    {
+        return $this->topicText;
+    }
+
+    /**
+     * @param mixed $topicText
+     */
+    public function setTopicText($topicText): void
+    {
+        $this->topicText = $topicText;
     }
 
     /**
