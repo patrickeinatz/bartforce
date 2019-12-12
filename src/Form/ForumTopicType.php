@@ -3,7 +3,11 @@
 namespace App\Form;
 
 use App\Entity\ForumTopic;
+use App\Entity\TopicContentModule;
+use App\Repository\TopicContentModuleRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,11 +18,12 @@ class ForumTopicType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('topicContent', TextareaType::class,
-                [
-                        'attr' => ['class' => 'trumbowyg']
-                ]
-            );
+            ->add('topicContentModule', EntityType::class, [
+                'class' => TopicContentModule::class,
+                'choice_label' => 'title',
+            ])
+            ->add('topicContent')
+            ->add('topicText',TextareaType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -27,4 +32,5 @@ class ForumTopicType extends AbstractType
             'data_class' => ForumTopic::class,
         ]);
     }
+
 }

@@ -41,7 +41,19 @@
                     </span>
                 </div>
                 <div class="card-body forum-topic-body">
-                    <p class="card-text">{{ topic.topicContent|raw}}</p>
+                    <p class="card-text">
+                        {% if topic.topicContentModule.id == 2 %}
+                        <div class="warning-modal-img-block">
+                            <img src="{{ topic.topicContent|raw }}">
+                        </div>
+                        {% elseif topic.topicContentModule.id == 1 %}
+                        <div class="warning-modal-img-block">
+                            <div class="video-container"><iframe src="{{ topic.topicContent|raw }}" frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
+                        </div>
+                        {% endif %}
+                        <h4>{{ topic.title }}</h4>
+                        {{ topic.topicText }}
+                    </p>
                 </div>
             </div>
         </div>

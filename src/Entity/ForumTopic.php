@@ -24,6 +24,11 @@ class ForumTopic
     private $title;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $topicContent;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\TopicContentModule", inversedBy="forumTopics")
      */
     private $topicContentModule;
@@ -164,6 +169,22 @@ class ForumTopic
     public function setTopicText($topicText): void
     {
         $this->topicText = $topicText;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTopicContent()
+    {
+        return $this->topicContent;
+    }
+
+    /**
+     * @param mixed $topicContent
+     */
+    public function setTopicContent($topicContent): void
+    {
+        $this->topicContent = $topicContent;
     }
 
     /**
