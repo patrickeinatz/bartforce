@@ -4,10 +4,8 @@ namespace App\Form;
 
 use App\Entity\ForumTopic;
 use App\Entity\TopicContentModule;
-use App\Repository\TopicContentModuleRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,9 +19,15 @@ class ForumTopicType extends AbstractType
             ->add('topicContentModule', EntityType::class, [
                 'class' => TopicContentModule::class,
                 'choice_label' => 'title',
+                'expanded' => true,
             ])
             ->add('topicContent')
-            ->add('topicText',TextareaType::class);
+            ->add('topicText',TextareaType::class, [
+                'attr' => [
+                    'cols' => '5',
+                    'rows' => '5'
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

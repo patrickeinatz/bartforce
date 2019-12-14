@@ -14,8 +14,18 @@ function createCategory()
 function createTopic(catId)
 {
     var forms = document.querySelectorAll('form');
+    var inputs = document.querySelectorAll('input');
     var title = document.getElementById('topicModalTitle');
     title.innerHTML = "Neues Thema eröffnen";
+
+    for (var i=0; i < inputs.length; i++) {
+        if(inputs[i].id === 'forum_topic_topicContentModule_1'){
+            inputs[i].innerHTML = '<i class="fab fa-youtube fa-2x"></i>'
+        }
+        if(inputs[i].id === 'forum_topic_topicContentModule_2'){
+            inputs[i].innerHTML = '<i class="fas fa-camera-retro fa-2x"></i>'
+        }
+    }
 
     for (var i =0; i < forms.length; i++){
         if(forms[i].name === "forum_topic") {

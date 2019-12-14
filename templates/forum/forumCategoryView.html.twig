@@ -54,8 +54,8 @@
                 </div>
                 <div class="modal-body border-0">
                     {{ form_start(forumTopicForm, {'action': '%action%' }) }}
+                    {{ form_row(forumTopicForm.topicContentModule, {'attr': {'class': 'topicModuleSelection'}}) }}
                     {{ form_row(forumTopicForm.title) }}
-                    {{ form_row(forumTopicForm.topicContentModule) }}
                     {{ form_row(forumTopicForm.topicContent) }}
                     {{ form_row(forumTopicForm.topicText) }}
                 </div>
