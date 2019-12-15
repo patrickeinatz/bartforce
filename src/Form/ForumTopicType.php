@@ -18,7 +18,7 @@ class ForumTopicType extends AbstractType
             ->add('title')
             ->add('topicContentModule', EntityType::class, [
                 'class' => TopicContentModule::class,
-                'choice_label' => 'title',
+                'choice_label' => 'icon',
                 'expanded' => true,
             ])
             ->add('topicContent')

@@ -21,6 +21,16 @@ class TopicContentModule
      */
     private $title;
 
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $icon;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isLinkedContend;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -34,6 +44,30 @@ class TopicContentModule
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(string $icon): self
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    public function getIsLinkedContend(): ?bool
+    {
+        return $this->isLinkedContend;
+    }
+
+    public function setIsLinkedContend(bool $isLinkedContend): self
+    {
+        $this->isLinkedContend = $isLinkedContend;
 
         return $this;
     }
