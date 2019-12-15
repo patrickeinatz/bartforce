@@ -13,8 +13,14 @@ class ForumReplyType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('replyContent', TextareaType::class)
-        ;
+            ->add('replyContent', TextareaType::class,
+                [
+                    'attr' => [
+                        'cols' => '5',
+                        'rows' => '5',
+                        'maxlength' => 255
+                    ],
+                ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

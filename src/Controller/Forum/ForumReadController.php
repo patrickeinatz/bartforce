@@ -13,6 +13,7 @@ use App\Repository\ForumCategoryRepository;
 use App\Repository\ForumPostRepository;
 use App\Repository\ForumReplyRepository;
 use App\Repository\ForumTopicRepository;
+use App\Repository\TopicContentModuleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -59,10 +60,18 @@ class ForumReadController extends AbstractController
         Request $request,
         ForumTopicRepository $topicRepository,
         ForumCategoryRepository $categoryRepository,
+        TopicContentModuleRepository $topicContentModuleRepository,
         string $id
     ){
         $category = $categoryRepository->findOneBy(['id' => $id]);
         $catTopics = $topicRepository->findBy(['category' => $id]);
+        $topicModules = $topicContentModuleRepository->findAll();
+
+        $topicModuleIcons = [];
+
+        foreach ($topicModules as $module){
+            $topicModuleIcons[$module->getTitle()] = $module->getIcon();
+        }
 
         $categoryForm = $this->createForm(ForumCategoryType::class);
         $categoryForm->handleRequest($request);
@@ -75,7 +84,8 @@ class ForumReadController extends AbstractController
             'topics' => $catTopics,
             'category' => $category,
             'forumTopicForm' => $topicForm->createView(),
-            'forumCategoryForm' => $categoryForm->createView()
+            'forumCategoryForm' => $categoryForm->createView(),
+            'topicModuleIcons' => $topicModuleIcons
         ]);
     }
 

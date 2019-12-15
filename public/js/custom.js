@@ -22,17 +22,3 @@ $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
     $("#success-alert").slideUp(500);
 });
 
-// WYSIWYG Editor
-$('.trumbowyg').trumbowyg({
-    btns: [
-        ['viewHTML'],
-        ['formatting'],
-        ['strong', 'em', 'del'],
-        ['link'],
-        ['insertImage'],
-        ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-        ['unorderedList', 'orderedList'],
-        ['removeformat']
-    ],
-    autogrow: true
-});

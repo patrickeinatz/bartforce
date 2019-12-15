@@ -322,7 +322,7 @@ a.nav-link.sidenav-link:hover{
 }
 .forum-post{
     background: none;
-    border: 1px solid rgba(132,159,169,0.1);
+    border: none;
     border-radius: 0;
     margin-bottom:20px;
 }
@@ -466,13 +466,15 @@ a.nav-link.sidenav-link:hover{
 
 /* IMAGE STYLES */
 [type=radio] + i {
+    color: rgb(148, 115, 64);
     cursor: pointer;
     margin: 5px 10px 0px 10px;
 }
 
+
 /* CHECKED STYLES */
 [type=radio]:checked + i {
-    color: #0099ff;
+    color: rgb(222,206,149);
 }
 
 .video-container {

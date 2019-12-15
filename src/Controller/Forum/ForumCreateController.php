@@ -6,6 +6,7 @@ use App\Entity\ForumCategory;
 use App\Entity\ForumPost;
 use App\Entity\ForumReply;
 use App\Entity\ForumTopic;
+use App\Entity\TopicContentModule;
 use App\Entity\User;
 use App\Form\ForumCategoryType;
 use App\Form\ForumPostType;
@@ -13,10 +14,9 @@ use App\Form\ForumReplyType;
 use App\Form\ForumTopicType;
 use App\Repository\ForumCategoryRepository;
 use App\Repository\ForumPostRepository;
-use App\Repository\ForumReplyRepository;
 use App\Repository\ForumTopicRepository;
+use App\Services\ForumService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Tests\Fixtures\Validation\Category;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -56,7 +56,7 @@ class ForumCreateController extends AbstractController
     /**
      * @Route("/forum/{catId}/createTopic", name="forumCreateTopic")
      */
-    public function createTopic(EntityManagerInterface $em, ForumCategoryRepository $categoryRepository, Request $request, string $catId)
+    public function createTopic(EntityManagerInterface $em, ForumCategoryRepository $categoryRepository, ForumService $forumService, Request $request, string $catId)
     {
         $form = $this->createForm(ForumTopicType::class);
         $form->handleRequest($request);
@@ -72,6 +72,13 @@ class ForumCreateController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
             /** @var ForumTopic $forumTopic */
             $forumTopic = $form->getData();
+
+            if($forumTopic->getTopicContentModule()->getTitle() === 'video'){
+                $forumTopic->setTopicContent(
+                    $forumService->makeYouTubeEmbedLink($forumTopic->getTopicContent())
+                );
+            }
+
             $forumTopic->setCreatedAt($now);
             $forumTopic->setUpdatedAt($now);
             $forumTopic->setTopicCreator($user);

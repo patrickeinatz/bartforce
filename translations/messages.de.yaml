@@ -1,7 +1,7 @@
-Post content: Beitrag
-Reply content: Antwort
+Post content: Beitrag (max. 255 Zeichen)
+Reply content: Antwort (max. 255 Zeichen)
 Title: Titel
 Topic content: Inhalt
-Topic content module: Themen Modul
-Topic text: Erklärung
-Description: Beschreibung
+Topic content module: Wähle eine Themen-Art
+Topic text: Noch ein paar Worte dazu (max. 255 Zeichen)
+Description: Beschreibung (max. 255 Zeichen)

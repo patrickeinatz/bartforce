@@ -11,19 +11,21 @@ function createCategory()
     }
 }
 
-function createTopic(catId)
+function createTopic(catId, topicModules)
 {
     var forms = document.querySelectorAll('form');
-    var inputs = document.querySelectorAll('input');
+    var divs = document.querySelectorAll('div');
     var title = document.getElementById('topicModalTitle');
     title.innerHTML = "Neues Thema eröffnen";
 
-    for (var i=0; i < inputs.length; i++) {
-        if(inputs[i].id === 'forum_topic_topicContentModule_1'){
-            inputs[i].innerHTML = '<i class="fab fa-youtube fa-2x"></i>'
-        }
-        if(inputs[i].id === 'forum_topic_topicContentModule_2'){
-            inputs[i].innerHTML = '<i class="fas fa-camera-retro fa-2x"></i>'
+    for (var i=0; i < divs.length; i++) {
+        if(divs[i].className === 'form-check'){
+            var divContent = divs[i].innerHTML;
+            if(divContent.search('prepared') < 0){
+                var moduleType = (divs[i].querySelector('label')).innerHTML;
+                var inputField = (divContent.split('\n'))[0]
+                divs[i].innerHTML = '<label class="prepared '+moduleType+'" onclick="prepareTopicContent(this)">\n'+inputField+'\n<i class="'+topicModules[moduleType]+' fa-4x"></i></label>';
+            }
         }
     }
 
@@ -33,6 +35,28 @@ function createTopic(catId)
             forms[i].action = action.replace('%action%', '/forum/'+catId+'/createTopic');
         }
     }
+}
+
+function prepareTopicContent(moduleType){
+    var labels = document.querySelectorAll('label');
+
+    for(var i = 0; i < labels.length; i++) {
+        if (labels[i].htmlFor === 'forum_topic_topicContent') {
+
+            switch ((moduleType.className.split(' '))[1]) {
+                case 'image':
+                    labels[i].innerHTML = 'Grafik-Link (*.png, *.gif oder *.jpg )';
+                    break;
+                case 'video':
+                    labels[i].innerHTML = 'Youtube-Link (Youtube URL z.B. https://youtube.com/xxxx)';
+                    break;
+                case 'link':
+                    labels[i].innerHTML = 'Web-Link (URL z.B. https://www.xxxx.xxx)';
+                    break;
+            }
+        }
+    }
+
 }
 
 function createPost(catId, topicId)
@@ -160,7 +184,7 @@ function deleteCategory(catId)
     }
 
     modalTitle.innerHTML = "Kategorie löschen"
-    warningPrompt.innerHTML = "Willst du wirklich diese Kategorie, <u>ALLE</u> enthaltenen Themen, Posts und Antworten entgültig löschen?"
+    warningPrompt.innerHTML = "Willst du wirklich diese Kategorie, <u>ALLE</u> enthaltenen Themen, Beiträgen und Antworten entgültig löschen?"
 }
 
 function deleteTopic(topicId, postCount, replyCount)
@@ -177,7 +201,7 @@ function deleteTopic(topicId, postCount, replyCount)
     }
 
     modalTitle.innerHTML = "Thema löschen"
-    warningPrompt.innerHTML = "Willst du wirklich <b>1 Thema</b>, <b>"+postCount+" Posts</b> und <b>"+replyCount+" Antworten</b> entgültig löschen?"
+    warningPrompt.innerHTML = "Willst du wirklich <b>1 Thema</b>, <b>"+postCount+" Beiträge</b> und <b>"+replyCount+" Antworten</b> entgültig löschen?"
 
 }
 
@@ -195,7 +219,7 @@ function deletePost(postId, replyCount)
     }
 
     modalTitle.innerHTML = "Post löschen"
-    warningPrompt.innerHTML = "Willst du wirklich <b>1 Post</b> und <b>"+replyCount+" Antworten</b> entgültig löschen?"
+    warningPrompt.innerHTML = "Willst du wirklich <b>1 Beitrag</b> und <b>"+replyCount+" Antworten</b> entgültig löschen?"
 }
 
 function deleteReply(replyId)

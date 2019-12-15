@@ -15,9 +15,12 @@ class ForumPostType extends AbstractType
         $builder
             ->add('postContent', TextareaType::class,
                 [
-                    'attr' => ['class' => 'trumbowyg']
-                ]
-            );
+                    'attr' => [
+                        'cols' => '5',
+                        'rows' => '5',
+                        'maxlength' => 255
+                    ],
+                ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

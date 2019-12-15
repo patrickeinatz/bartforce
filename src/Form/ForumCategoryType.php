@@ -14,12 +14,14 @@ class ForumCategoryType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('description', TextareaType::class
-            //, [
-            //            'attr' => ['class' => 'trumbowyg']
-            // ]
-            )
-        ;
+            ->add('description', TextareaType::class,
+                [
+                'attr' => [
+                    'cols' => '5',
+                    'rows' => '5',
+                    'maxlength' => 255
+                    ],
+                ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

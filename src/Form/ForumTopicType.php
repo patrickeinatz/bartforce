@@ -18,14 +18,15 @@ class ForumTopicType extends AbstractType
             ->add('title')
             ->add('topicContentModule', EntityType::class, [
                 'class' => TopicContentModule::class,
-                'choice_label' => 'icon',
+                'choice_label' => 'title',
                 'expanded' => true,
             ])
             ->add('topicContent')
             ->add('topicText',TextareaType::class, [
                 'attr' => [
                     'cols' => '5',
-                    'rows' => '5'
+                    'rows' => '5',
+                    'maxlength' => 255
                 ],
             ]);
     }

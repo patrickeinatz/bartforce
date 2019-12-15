@@ -7,19 +7,6 @@
         <div class="col-md-12">
             <a href="/forum" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-comments mr-1"></i> Forum</a>
             <a href="/forum/category/{{ catId }}" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-tag"></i> Kategoire</a>
-            <div class="float-right">
-                <button type="button" class="btn btn-sm btn-gold green" data-toggle="modal" data-target=".postModal" onclick="createPost({{ catId }},{{ topic.id }})">
-                    <i class="fas fa-plus-circle"></i> Neuer Beitrag
-                </button>
-                {% if app.user.id == topic.topicCreator.id or is_granted('ROLE_ADMIN') %}
-                    <button type="button" class="btn btn-sm btn-gold yellow ml-1" data-toggle="modal" data-target=".topicModal" onclick="updateTopic({{ topic.title|json_encode }},{{ topic.topicContent|raw|json_encode }},{{ topic.id }})">
-                        <i class="fas fa-wrench"></i>
-                    </button>
-                    <button type="button" class="btn btn-sm btn-gold red ml-1" data-toggle="modal" data-target=".deleteModal" onclick="deleteTopic({{ topic.id }},{{ posts|length }},{{ replies|length }})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                {% endif %}
-            </div>
         </div>
     </div>
     <div class="row">
@@ -42,18 +29,39 @@
                 </div>
                 <div class="card-body forum-topic-body">
                     <p class="card-text">
-                        {% if topic.topicContentModule.id == 2 %}
-                        <div class="warning-modal-img-block">
+                        {% if topic.topicContentModule.title == 'image' %}
+                        <div class="warning-modal-img-block text-center">
                             <img src="{{ topic.topicContent|raw }}">
                         </div>
-                        {% elseif topic.topicContentModule.id == 1 %}
+                        {% elseif topic.topicContentModule.title == 'video' %}
                         <div class="warning-modal-img-block">
-                            <div class="video-container"><iframe src="{{ topic.topicContent|raw }}" frameborder="0" allowfullscreen="allowfullscreen"></iframe></div>
+                            <div class="video-container">
+                                <iframe src="{{ topic.topicContent|raw }}" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                            </div>
                         </div>
+                        {% elseif topic.topicContentModule.title == 'link' %}
+                            <div class="warning-modal-img-block text-center">
+                                <a href="{{ topic.topicContent|raw }}" target="_blank">{{ topic.title }}</a>
+                            </div>
                         {% endif %}
                         <h4>{{ topic.title }}</h4>
                         {{ topic.topicText }}
                     </p>
+                </div>
+                <div class="card-footer forum-topic-footer">
+                    <div class="float-right">
+                        <button type="button" class="btn btn-sm btn-gold green" data-toggle="modal" data-target=".postModal" onclick="createPost({{ catId }},{{ topic.id }})">
+                            <i class="fas fa-plus-circle"></i> Neuer Beitrag
+                        </button>
+                        {% if app.user.id == topic.topicCreator.id or is_granted('ROLE_ADMIN') %}
+                            <button type="button" class="btn btn-sm btn-gold yellow ml-1" data-toggle="modal" data-target=".topicModal" onclick="updateTopic({{ topic.title|json_encode }},{{ topic.topicContent|raw|json_encode }},{{ topic.id }})">
+                                <i class="fas fa-wrench"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-gold red ml-1" data-toggle="modal" data-target=".deleteModal" onclick="deleteTopic({{ topic.id }},{{ posts|length }},{{ replies|length }})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -116,8 +124,10 @@
                 </div>
                 <div class="modal-body border-0">
                     {{ form_start(forumTopicForm, {'action': '%action%' }) }}
-                    {{ form_row(forumTopicForm.title) }}
+                    {{ form_row(forumTopicForm.topicContentModule, {'attr': {'class': 'topicModuleSelection'}}) }}
                     {{ form_row(forumTopicForm.topicContent) }}
+                    {{ form_row(forumTopicForm.title) }}
+                    {{ form_row(forumTopicForm.topicText) }}
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Abbrechen</button>
