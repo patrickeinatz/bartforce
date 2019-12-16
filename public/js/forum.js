@@ -110,7 +110,6 @@ function updatePost(postContent, postId)
 
 function updateTopic(topicTitle, topicContent, topicId, redirectRoute=false)
 {
-
     var divs = document.querySelectorAll('div');
     var inputs = document.querySelectorAll('input');
 

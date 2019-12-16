@@ -27,6 +27,81 @@ mark {
     color: #188dd9;
 }
 
+input[type="text"],
+input[type="email"],
+input[type="search"]{
+    background: none;
+    color: rgb(222,206,149);
+    border-color: rgb(222,206,149);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="search"]:focus {
+    background: none;
+    color: rgb(222,206,149);
+    border-color: rgb(222,206,149);
+    box-shadow: none;!important;
+}
+textarea.form-control {
+    background: none;
+    color: rgb(222,206,149);
+    border-color: rgb(222,206,149);
+}
+
+textarea.form-control:focus {
+    background: none;
+    color: rgb(222,206,149);
+    border-color: rgb(222,206,149);
+    box-shadow: none;!important;
+}
+
+input[type="text"]::-webkit-input-placeholder {
+    color:rgb(222,206,149);
+}
+input[type="text"]::-moz-placeholder {
+    color:rgb(222,206,149);
+}
+
+input::-webkit-input-placeholder { color:rgb(222,206,149); transition: color 1s; }
+input::-moz-placeholder { color:rgb(222,206,149); transition: color 1s; }
+input:-ms-placeholder { color:rgb(222,206,149); transition: color 1s; }
+
+input:focus::-webkit-input-placeholder { color:transparent; }
+input:focus::-moz-placeholder { color:transparent; }
+input:focus:-ms-placeholder { color:transparent; }
+
+.table thead{
+    background-color: rgba(132,159,169,0.1);;
+    border-color: rgb(222,206,149);
+}
+
+.table tbody{
+    border-color: rgb(222,206,149);
+}
+
+.table tr{
+    border-color: rgb(222,206,149);
+    color: rgb(222,206,149);
+}
+
+.clickable-row{
+    cursor: pointer;
+}
+
+.clickable-row:hover{
+    text-decoration: none;
+    background-color: rgba(222,206,149,0.1);
+}
+
+.table td{
+    border-color: rgb(222,206,149);!important;
+}
+
+.table thead th{
+    border-color: rgb(222,206,149);!important;
+}
+
 /* SCHIGGI MIGGI */
 #wallpaper{
     position: fixed;
@@ -296,8 +371,9 @@ a.nav-link.sidenav-link:hover{
 
 .forum-category-card:hover{
     text-decoration: none;
-    color: rgb(20,23,25);
-    background-color: rgb(222,206,149);
+   /* color: rgb(20,23,25); */
+    color: rgb(222,206,149);
+    background-color: rgba(222,206,149,0.1);
 }
 
 .forumTopicList-Item{
@@ -310,17 +386,14 @@ a.nav-link.sidenav-link:hover{
 }
 
 .forumTopicList-Item:hover {
-    color: rgb(20,23,25);
+   /* color: rgb(20,23,25); */
     text-decoration: none;
-    background-color: rgb(222,206,149);
+    color: rgb(222,206,149);
+    background-color: rgba(222,206,149,0.1);
 }
 
 .forumTopicList-Item small{
     color: rgb(222,206,149);
-}
-
-.forumTopicList-Item:hover small{
-    color: rgb(20,23,25);
 }
 
 .forumTopicList-Item span{

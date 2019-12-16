@@ -10,21 +10,14 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <input class="form-control" id="myInput" type="text" placeholder="Search..">
+            <input class="form-control" id="searchInput" type="text" placeholder="Suchen...">
             <br>
-            <table class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <th>Icon</th>
-                    <th>Member</th>
-                    <th>Last Login</th>
-                </tr>
-                </thead>
-                <tbody id="myTable">
+            <table class="table">
+                <tbody id="memberList">
                 {% for member in signedMembers %}
-                <tr>
+                <tr class="clickable-row" data-href="/profile/{{ member.discordId }}">
                     <td><img class="user-img rounded-circle" src="{{ asset(member.avatar) }}" width="30"></td>
-                    <td><a href="/profile/{{ member.discordId }}" class="list-group-item">{{ member.username }}</a></td>
+                    <td>{{ member.username }}</a></td>
                     <td><small class="float-right">zuletzt online: {{ member.lastLogin|ago }}</small></td>
                 </tr>
                 {% endfor %}
@@ -42,11 +35,17 @@
     {{ parent() }}
     <script>
         $(document).ready(function(){
-            $("#myInput").on("keyup", function() {
+            $("#searchInput").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
-                $("#myTable tr").filter(function() {
+                $("#memberList tr").filter(function() {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
+            });
+        });
+
+        $(document).ready(function($) {
+            $(".clickable-row").click(function() {
+                window.location = $(this).data("href");
             });
         });
     </script>
