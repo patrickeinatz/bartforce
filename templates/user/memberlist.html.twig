@@ -10,14 +10,26 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-           <h5>Registrierte Mitglieder: {{ signedMembers|length }}</h5>
-            <ul class="list-group list-group-flush">
-            {% for member in signedMembers %}
-                <a href="/profile/{{ member.discordId }}" class="list-group-item">
-                    <img class="user-img rounded-circle" src="{{ asset(member.avatar) }}" width="30"> {{ member.username }}  <small class="float-right">zuletzt online: {{ member.lastLogin|ago }}</small>
-                </a>
-            {% endfor %}
-            </ul>
+            <input class="form-control" id="myInput" type="text" placeholder="Search..">
+            <br>
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>Icon</th>
+                    <th>Member</th>
+                    <th>Last Login</th>
+                </tr>
+                </thead>
+                <tbody id="myTable">
+                {% for member in signedMembers %}
+                <tr>
+                    <td><img class="user-img rounded-circle" src="{{ asset(member.avatar) }}" width="30"></td>
+                    <td><a href="/profile/{{ member.discordId }}" class="list-group-item">{{ member.username }}</a></td>
+                    <td><small class="float-right">zuletzt online: {{ member.lastLogin|ago }}</small></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="row mt-4">
@@ -25,4 +37,17 @@
             <h5>Mitglieder auf Discord: {{ discordMembers }}</h5>
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function(){
+            $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
 {% endblock %}
