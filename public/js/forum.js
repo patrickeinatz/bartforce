@@ -243,3 +243,22 @@ function deleteReply(replyId)
     modalTitle.innerHTML = "Antwort löschen"
     warningPrompt.innerHTML = "Willst du diese Antwort wirklich entgültig löschen?"
 }
+
+function validateYouTubeUrl(url)
+{
+    if (url != undefined || url != '') {
+        var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+        var match = url.match(regExp);
+        if (match && match[2].length == 11) {
+            // Do anything for being valid
+        } else {
+            // Do anything for not being valid
+        }
+    }
+}
+
+
+function validate()
+{
+
+}
