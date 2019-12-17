@@ -54,7 +54,7 @@
                             <i class="fas fa-plus-circle"></i> Neuer Beitrag
                         </button>
                         {% if app.user.id == topic.topicCreator.id or is_granted('ROLE_ADMIN') %}
-                            <button type="button" class="btn btn-sm btn-gold yellow ml-1" data-toggle="modal" data-target=".topicModal" onclick="updateTopic({{ topic.title|json_encode }},{{ topic.topicContent|raw|json_encode }},{{ topic.id }},{{ topic.topicContentModule.title }})">
+                            <button type="button" class="btn btn-sm btn-gold yellow ml-1" data-toggle="modal" data-target=".topicModal" onclick="updateTopic({{ topic.title|json_encode }},{{ topic.topicContent|raw|json_encode }},{{ topic.id }},{{ topic.topicContentModule.id }},{{ topic.topicText|raw|json_encode }},{{ topicModuleIcons|json_encode }})">
                                 <i class="fas fa-wrench"></i>
                             </button>
                             <button type="button" class="btn btn-sm btn-gold red ml-1" data-toggle="modal" data-target=".deleteModal" onclick="deleteTopic({{ topic.id }},{{ posts|length }},{{ replies|length }})">

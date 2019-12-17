@@ -99,6 +99,7 @@ class ForumReadController extends AbstractController
         ForumTopicRepository $topicRepository,
         ForumPostRepository $postRepository,
         ForumReplyRepository $replyRepository,
+        TopicContentModuleRepository $topicContentModuleRepository,
         string $topicId
     ){
         /** @var ForumTopic $forumTopic */
@@ -110,6 +111,13 @@ class ForumReadController extends AbstractController
         /** @var User $currentUser */
         $posts = $postRepository->findBy(['postTopic' => $topicId]);
         $replies = $replyRepository->findBy(['topic' => $topicId]);
+
+        $topicModules = $topicContentModuleRepository->findAll();
+        $topicModuleIcons = [];
+
+        foreach ($topicModules as $module){
+            $topicModuleIcons[$module->getTitle()] = $module->getIcon();
+        }
 
         $topicForm = $this->createForm(ForumTopicType::class);
         $topicForm->handleRequest($request);
@@ -129,7 +137,8 @@ class ForumReadController extends AbstractController
             'catId' =>  $topic->getCategory()->getId(),
             'forumTopicForm' => $topicForm->createView(),
             'forumPostForm' => $postForm->createView(),
-            'forumReplyForm' => $replyForm->createView()
+            'forumReplyForm' => $replyForm->createView(),
+            'topicModuleIcons' => $topicModuleIcons
         ]);
     }
 }

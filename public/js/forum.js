@@ -14,20 +14,10 @@ function createCategory()
 function createTopic(catId, topicModules)
 {
     var forms = document.querySelectorAll('form');
-    var divs = document.querySelectorAll('div');
     var title = document.getElementById('topicModalTitle');
     title.innerHTML = "Neues Thema eröffnen";
 
-    for (var i=0; i < divs.length; i++) {
-        if(divs[i].className === 'form-check'){
-            var divContent = divs[i].innerHTML;
-            if(divContent.search('prepared') < 0){
-                var moduleType = (divs[i].querySelector('label')).innerHTML;
-                var inputField = (divContent.split('\n'))[0]
-                divs[i].innerHTML = '<label class="prepared '+moduleType+'" onclick="prepareTopicContent(this)">\n'+inputField+'\n<i class="'+topicModules[moduleType]+' fa-4x"></i></label>';
-            }
-        }
-    }
+    initRadioButtons(topicModules);
 
     for (var i =0; i < forms.length; i++){
         if(forms[i].name === "forum_topic") {
@@ -56,7 +46,22 @@ function prepareTopicContent(moduleType){
             }
         }
     }
+}
 
+function initRadioButtons(topicModules){
+
+    var divs = document.querySelectorAll('div');
+
+    for (var i=0; i < divs.length; i++) {
+        if(divs[i].className === 'form-check'){
+            var divContent = divs[i].innerHTML;
+            if(divContent.search('prepared') < 0){
+                var moduleType = (divs[i].querySelector('label')).innerHTML;
+                var inputField = (divContent.split('\n'))[0]
+                divs[i].innerHTML = '<label class="prepared '+moduleType+'" onclick="prepareTopicContent(this)">\n'+inputField+'\n<i class="'+topicModules[moduleType]+' fa-4x"></i></label>';
+            }
+        }
+    }
 }
 
 function createPost(catId, topicId)
@@ -88,15 +93,11 @@ function createReply(topicId, postId)
 
 function updatePost(postContent, postId)
 {
-    var divs = document.querySelectorAll('div');
     var title = document.getElementById('postModalTitle');
     title.innerHTML = "Beitrag bearbeiten";
 
-    for (var i =0; i < divs.length; i++) {
-        if(divs[i].className == "trumbowyg-editor"){
-            divs[i].innerHTML = postContent;
-        }
-    }
+    document.getElementById("forum_post_postContent").innerHTML = postContent;
+
     var forms = document.querySelectorAll('form');
 
     for (var i =0; i < forms.length; i++){
@@ -108,27 +109,32 @@ function updatePost(postContent, postId)
 
 }
 
-function updateTopic(topicTitle, topicContent, topicId, redirectRoute=false)
+function updateTopic(topicTitle, topicContent, topicId, topicContentTypeId, topicText, topicModules, redirectRoute=false)
 {
-    var divs = document.querySelectorAll('div');
+    console.log(topicContentTypeId);
     var inputs = document.querySelectorAll('input');
 
     var title = document.getElementById('topicModalTitle');
     title.innerHTML = "Thema bearbeiten";
 
-    for (var i =0; i < divs.length; i++) {
-        if(divs[i].className == "trumbowyg-editor"){
-            divs[i].innerHTML = topicContent;
-        }
-    }
+
 
     for (var j =0; j < inputs.length; j++) {
         if(inputs[j].name == "forum_topic[title]"){
             inputs[j].value = topicTitle;
         }
-    }
+        if(inputs[j].name == "forum_topic[topicContent]"){
+            inputs[j].value = topicContent;
+        }
+            }
+
+    document.getElementById("forum_topic_topicText").innerHTML = topicText;
 
     var forms = document.querySelectorAll('form');
+
+    initRadioButtons(topicModules);
+
+    (document.getElementById("forum_topic_topicContentModule_"+topicContentTypeId)).checked = true;
 
     if(!redirectRoute) {
         for (var i =0; i < forms.length; i++){
