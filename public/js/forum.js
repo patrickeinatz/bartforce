@@ -5,7 +5,6 @@ function initForumTopicForm()
     //Hide Content field
     (document.getElementById('forum_topic_topicContent').parentElement).hidden = true;
 
-    (document.getElementById('topicSubmit')).disabled = true;
 }
 
 

@@ -79,6 +79,13 @@ class ForumCreateController extends AbstractController
                 );
             }
 
+            if($forumTopic->getTopicContentModule()->getTitle() === 'image'){
+                $forumTopic->setTopicContent(
+                    $forumService->makeImageLink($forumTopic->getTopicContent())
+                );
+            }
+
+
             $forumTopic->setCreatedAt($now);
             $forumTopic->setUpdatedAt($now);
             $forumTopic->setTopicCreator($user);

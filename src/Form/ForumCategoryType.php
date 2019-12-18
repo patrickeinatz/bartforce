@@ -16,6 +16,7 @@ class ForumCategoryType extends AbstractType
             ->add('title')
             ->add('description', TextareaType::class,
                 [
+                'required'   => false,
                 'attr' => [
                     'cols' => '5',
                     'rows' => '5',

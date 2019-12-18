@@ -20,6 +20,7 @@ class ForumTopicType extends AbstractType
                 'class' => TopicContentModule::class,
                 'choice_label' => 'title',
                 'expanded' => true,
+                'label' => false
             ])
             ->add('topicContent')
             ->add('topicText',TextareaType::class, [
@@ -28,6 +29,7 @@ class ForumTopicType extends AbstractType
                     'rows' => '5',
                     'maxlength' => 255
                 ],
+                'required' => false
             ]);
     }
 
