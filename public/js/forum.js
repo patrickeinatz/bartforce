@@ -1,3 +1,13 @@
+function initForumTopicForm()
+{
+    //Preselect first element
+    (document.getElementById("forum_topic_topicContentModule_1")).checked = true;
+    //Hide Content field
+    (document.getElementById('forum_topic_topicContent').parentElement).hidden = true;
+
+    (document.getElementById('topicSubmit')).disabled = true;
+}
+
 
 function createCategory()
 {
@@ -36,12 +46,14 @@ function prepareTopicContent(moduleType){
             switch ((moduleType.className.split(' '))[1]) {
                 case 'image':
                     labels[i].innerHTML = 'Grafik-Link (*.png, *.gif oder *.jpg )';
+                    labels[i].parentElement.hidden = false;
                     break;
                 case 'video':
                     labels[i].innerHTML = 'Youtube-Link (Youtube URL z.B. https://youtube.com/xxxx)';
+                    labels[i].parentElement.hidden = false;
                     break;
-                case 'link':
-                    labels[i].innerHTML = 'Web-Link (URL z.B. https://www.xxxx.xxx)';
+                case 'text':
+                    labels[i].parentElement.hidden = true;
                     break;
             }
         }

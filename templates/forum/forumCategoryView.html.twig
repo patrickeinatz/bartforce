@@ -61,7 +61,7 @@
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Abbrechen</button>
-                    <button type="submit" class="btn btn-gold"><i class="fas fa-paper-plane"></i> Absenden</button>
+                    <button type="submit" class="btn btn-gold" id="topicSubmit"><i class="fas fa-paper-plane"></i> Absenden</button>
                     {{ form_end(forumTopicForm) }}
                 </div>
 
@@ -121,4 +121,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('js/forum.js') }}"></script>
+    <script>
+        initForumTopicForm();
+    </script>
 {% endblock %}
