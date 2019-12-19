@@ -30,13 +30,19 @@
                 <div class="card-body forum-topic-body">
                     <p class="card-text">
                         {% if topic.topicContentModule.title == 'image' %}
-                        <div class="warning-modal-img-block text-center">
-                            <img src="{{ topic.topicContent|raw }}">
-                        </div>
-                        {% elseif topic.topicContentModule.title == 'video' %}
-                            {% if 'img' in topic.topicContent %}
+                            {% if 'Fehler' in topic.topicContent %}
                                 <div class="warning-modal-img-block text-center">
-                                    <img src="{{ asset(topic.topicContent|raw) }}">
+                                    {{ topic.topicContent }}
+                                </div>
+                            {% else %}
+                                <div class="warning-modal-img-block text-center">
+                                    <img src="{{ topic.topicContent }}">
+                                </div>
+                            {% endif %}
+                        {% elseif topic.topicContentModule.title == 'video' %}
+                            {% if 'Fehler' in topic.topicContent %}
+                                <div class="warning-modal-img-block text-center">
+                                    {{ topic.topicContent }}
                                 </div>
                             {% else %}
                                 <div class="warning-modal-img-block">
@@ -235,4 +241,5 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('js/forum.js') }}"></script>
+    <cr
 {% endblock %}

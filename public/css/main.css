@@ -257,7 +257,7 @@ a.list-group-item:hover{
     left: 0;
     width: 220px;
     height: 100%;
-    background-color: rgb(5, 8, 10);
+    background-color: rgba(5, 8, 10,0.5);
 }
 
 .sidenav-col{
@@ -274,7 +274,7 @@ a.list-group-item:hover{
 .sidenav-profile{
     text-align: center;
     padding: 20px 0 0 0;
-    background-color: rgb(20,23,25);
+    background: none;
 }
 
 .sidenav-profile-name{
@@ -284,7 +284,7 @@ a.list-group-item:hover{
 .sidenav-profile-controls{
     margin-top: -5px;
     padding-bottom: 10px;
-    background-color: rgb(20,23,25);
+    background: none;
 }
 
 a.nav-link.sidenav-link{
@@ -323,7 +323,7 @@ a.nav-link.sidenav-link:hover{
 
 /* BACKGROUNDS */
 .bg-darker{
-    background-color: rgb(20,23,25);
+ background-color: rgb(20,23,25);
 }
 
 .bg-darker-trans{
@@ -525,10 +525,6 @@ a.nav-link.sidenav-link:hover{
 .categoryMenuItem:hover{
     text-decoration: none;
     color: rgb(255, 255, 255);
-}
-
-.topicModuleSelection{
-    text-align: center;
 }
 
 .topicModuleSelection .form-check{

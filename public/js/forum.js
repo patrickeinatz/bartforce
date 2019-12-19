@@ -1,13 +1,3 @@
-function initForumTopicForm()
-{
-    //Preselect first element
-    (document.getElementById("forum_topic_topicContentModule_1")).checked = true;
-    //Hide Content field
-    (document.getElementById('forum_topic_topicContent').parentElement).hidden = true;
-
-}
-
-
 function createCategory()
 {
     var forms = document.querySelectorAll('form');
@@ -27,6 +17,11 @@ function createTopic(catId, topicModules)
     title.innerHTML = "Neues Thema eröffnen";
 
     initRadioButtons(topicModules);
+
+    //Preselect first element
+    (document.getElementById("forum_topic_topicContentModule_1")).checked = true;
+    //Hide Content field
+    (document.getElementById('forum_topic_topicContent').parentElement).hidden = true;
 
     for (var i =0; i < forms.length; i++){
         if(forms[i].name === "forum_topic") {
@@ -69,7 +64,7 @@ function initRadioButtons(topicModules){
             if(divContent.search('prepared') < 0){
                 var moduleType = (divs[i].querySelector('label')).innerHTML;
                 var inputField = (divContent.split('\n'))[0]
-                divs[i].innerHTML = '<label class="prepared '+moduleType+'" onclick="prepareTopicContent(this)">\n'+inputField+'\n<i class="'+topicModules[moduleType]+' fa-4x"></i></label>';
+                divs[i].innerHTML = '<label class="prepared '+moduleType+'" onclick="prepareTopicContent(this)">\n'+inputField+'\n<i class="'+topicModules[moduleType]+' fa-lg"></i></label>';
             }
         }
     }
@@ -255,21 +250,3 @@ function deleteReply(replyId)
     warningPrompt.innerHTML = "Willst du diese Antwort wirklich entgültig löschen?"
 }
 
-function validateYouTubeUrl(url)
-{
-    if (url != undefined || url != '') {
-        var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
-        var match = url.match(regExp);
-        if (match && match[2].length == 11) {
-            // Do anything for being valid
-        } else {
-            // Do anything for not being valid
-        }
-    }
-}
-
-
-function validate()
-{
-
-}

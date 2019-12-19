@@ -32,7 +32,7 @@ class ForumTopic
      * @ORM\ManyToOne(targetEntity="App\Entity\TopicContentModule", inversedBy="forumTopics")
      */
     private $topicContentModule;
-
+    
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */

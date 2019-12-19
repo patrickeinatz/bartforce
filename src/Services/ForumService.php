@@ -41,7 +41,7 @@ class ForumService
             return $youTubeLink;
         }
 
-        return $this->getReplacement();
+        return $this->getReplacement('YouTube');
     }
 
     /**
@@ -55,15 +55,15 @@ class ForumService
             return $imgLink;
         }
 
-        return $this->getReplacement();
+        return $this->getReplacement('Bild');
     }
 
     /**
      * @return string
      */
-    public function getReplacement()
+    public function getReplacement(string $type)
     {
-        return 'img/error/wrong_source.jpg';
+        return 'Fehler! Der angegebene Pfad führt zu keiner gültigen '.$type.' Quelle';
     }
 
     /**

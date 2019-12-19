@@ -10,6 +10,7 @@ use App\Form\ForumTopicType;
 use App\Repository\ForumCategoryRepository;
 use App\Repository\ForumPostRepository;
 use App\Repository\ForumTopicRepository;
+use App\Services\ForumService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -55,6 +56,7 @@ class ForumUpdateController extends AbstractController
         EntityManagerInterface $em,
         Request $request,
         ForumTopicRepository $topicRepository,
+        ForumService $forumService,
         string $topicId
     ){
         $topic = $topicRepository->findOneBy(['id' => $topicId]);
@@ -68,6 +70,18 @@ class ForumUpdateController extends AbstractController
             $topic = $form->getData();
             $topic->setUpdatedAt($now);
             $category->setUpdatedAt($now);
+
+            if($topic->getTopicContentModule()->getTitle() === 'image'){
+                $topic->setTopicContent(
+                    $forumService->makeImageLink($topic->getTopicContent())
+                );
+            }
+
+            if($topic->getTopicContentModule()->getTitle() === 'video'){
+                $topic->setTopicContent(
+                    $forumService->makeYouTubeEmbedLink($topic->getTopicContent())
+                );
+            }
 
             $em->persist($category);
             $em->persist($topic);
