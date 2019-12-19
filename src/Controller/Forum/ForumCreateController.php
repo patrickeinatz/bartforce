@@ -73,18 +73,18 @@ class ForumCreateController extends AbstractController
             /** @var ForumTopic $forumTopic */
             $forumTopic = $form->getData();
 
-            if($forumTopic->getTopicContentModule()->getTitle() === 'video'){
-                $forumTopic->setTopicContent(
-                    $forumService->makeYouTubeEmbedLink($forumTopic->getTopicContent())
-                );
-            }
-
             if($forumTopic->getTopicContentModule()->getTitle() === 'image'){
                 $forumTopic->setTopicContent(
                     $forumService->makeImageLink($forumTopic->getTopicContent())
                 );
             }
 
+            if($forumTopic->getTopicContentModule()->getTitle() === 'video'){
+                $forumTopic->setTopicContent(
+                    $forumService->makeYouTubeEmbedLink($forumTopic->getTopicContent())
+                );
+
+            }
 
             $forumTopic->setCreatedAt($now);
             $forumTopic->setUpdatedAt($now);

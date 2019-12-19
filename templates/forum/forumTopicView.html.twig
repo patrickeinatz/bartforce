@@ -34,15 +34,17 @@
                             <img src="{{ topic.topicContent|raw }}">
                         </div>
                         {% elseif topic.topicContentModule.title == 'video' %}
-                        <div class="warning-modal-img-block">
-                            <div class="video-container">
-                                <iframe src="{{ topic.topicContent|raw }}" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-                            </div>
-                        </div>
-                        {% elseif topic.topicContentModule.title == 'link' %}
-                            <div class="warning-modal-img-block text-center">
-                                <a href="{{ topic.topicContent|raw }}" target="_blank">{{ topic.title }}</a>
-                            </div>
+                            {% if 'img' in topic.topicContent %}
+                                <div class="warning-modal-img-block text-center">
+                                    <img src="{{ asset(topic.topicContent|raw) }}">
+                                </div>
+                            {% else %}
+                                <div class="warning-modal-img-block">
+                                    <div class="video-container">
+                                        <iframe src="{{ topic.topicContent|raw }}" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                                    </div>
+                                </div>
+                            {% endif %}
                         {% endif %}
                         <h4>{{ topic.title }}</h4>
                         {{ topic.topicText }}
