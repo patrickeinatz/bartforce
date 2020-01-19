@@ -43,10 +43,25 @@ class UserController extends AbstractController
             }
         }
 
+        $userGivenKudos = count($profileUser->getTopicKudos()) + count($profileUser->getPostKudos());
+        $userReceivedKudos = 0;
+
+        $userTopics = $profileUser->getForumTopics();
+        $userPosts = $profileUser->getForumPosts();
+
+        foreach ($userTopics as $topic){
+            $userReceivedKudos += count($topic->getTopicKudos());
+        }
+        foreach ($userPosts as $post){
+            $userReceivedKudos += count($post->getPostKudos());
+        }
+
         return $this->render('user/profile.html.twig', [
             'profileUser' => $profileUser,
             'member' => $memberData,
-            'profileUserRoles' => $profileUserRoles
+            'profileUserRoles' => $profileUserRoles,
+            'userGivenKudos' => $userGivenKudos,
+            'userReceivedKudos' => $userReceivedKudos
         ]);
 
     }
