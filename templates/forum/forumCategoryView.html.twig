@@ -32,6 +32,7 @@
                 <a href="/forum/topic/{{ topic.id }}" class="forumTopicList-Item">
                     <h5 style="margin-bottom: 3px"><i class="{{ topic.topicContentModule.icon }} mr-2 mb-2"></i> {{ topic.title }}</h5>
                     <small class="pl-2">
+                        <span><i class="fab fa-hotjar"></i> {{ topic.topicKudos|length }}</span>
                         <span><i class="fas fa-clone"></i> {{ topic.forumPosts.values|length }}</span>
                         {% if topic.updatedAt != topic.createdAt %}
                         <span><i class="fas fa-history"></i> {{ topic.updatedAt|ago }}</span>
@@ -121,5 +122,4 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('js/forum.js') }}"></script>
-
 {% endblock %}
