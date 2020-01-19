@@ -4,17 +4,25 @@ namespace App\Controller\Forum;
 
 use App\Entity\ForumPost;
 use App\Entity\ForumTopic;
+use App\Entity\Kudos;
+use App\Entity\PostKudos;
+use App\Entity\TopicKudos;
+use App\Entity\User;
 use App\Form\ForumCategoryType;
 use App\Form\ForumPostType;
 use App\Form\ForumTopicType;
 use App\Repository\ForumCategoryRepository;
 use App\Repository\ForumPostRepository;
 use App\Repository\ForumTopicRepository;
+use App\Repository\KudosRepository;
+use App\Repository\PostKudosRepository;
+use App\Repository\TopicKudosRepository;
 use App\Services\ForumService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 /**
  * Require ROLE_USER for *every* controller method in this class.
@@ -145,5 +153,75 @@ class ForumUpdateController extends AbstractController
             $this->addFlash('success', 'Der Beitrag wurde bearbeitet!');
             return $this->redirectToRoute('forumTopicView', ['topicId' => $post->getPostTopic()->getId()]);
         }
+    }
+
+    /**
+     * @Route("forum/topic/updateTopicKudos/{topicId}", name="forumUpdateTopicKudos")
+     */
+    public function updateTopicKudos(
+        EntityManagerInterface $em,
+        ForumTopicRepository $topicRepository,
+        TopicKudosRepository $topicKudosRepository,
+        string $topicId)
+    {
+
+        /** @var ForumTopic $topic */
+       $topic = $topicRepository->findOneBy(['id'=>$topicId]);
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if(!$topicKudosRepository->findOneBy(['topic' => $topic, 'user' => $user])) {
+            /** @var TopicKudos $kudos */
+            $topicKudos = new TopicKudos();
+            $now = new \DateTime('now');
+            $topicKudos->setTopic($topic);
+            $topicKudos->setCreatedAt($now);
+            $topicKudos->setUser($user);
+
+            $em->persist($topicKudos);
+            $em->flush();
+        } else {
+            $em->remove($topicKudosRepository->findOneBy(['topic' => $topic, 'user' => $user]));
+            $em->flush();
+        }
+
+        return new JsonResponse(['kudos' =>  count($topic->getTopicKudos())]);
+
+    }
+
+    /**
+     * @Route("forum/topic/updatePostKudos/{postId}", name="forumUpdatePostKudos")
+     */
+    public function updatePostKudos(
+        EntityManagerInterface $em,
+        ForumPostRepository $postRepository,
+        PostKudosRepository $postKudosRepository,
+        string $postId)
+    {
+
+        /** @var ForumPost $post */
+        $post = $postRepository->findOneBy(['id'=> $postId]);
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if(!$postKudosRepository->findOneBy(['post' => $post, 'user' => $user])) {
+            /** @var PostKudos $postKudos */
+            $postKudos = new PostKudos();
+            $now = new \DateTime('now');
+            $postKudos->setPost($post);
+            $postKudos->setCreatedAt($now);
+            $postKudos->setUser($user);
+
+            $em->persist($postKudos);
+            $em->flush();
+        } else {
+            $em->remove($postKudosRepository->findOneBy(['post' => $post, 'user' => $user]));
+            $em->flush();
+        }
+
+        return new JsonResponse(['kudos' =>  count($post->getPostKudos())]);
+
     }
 }

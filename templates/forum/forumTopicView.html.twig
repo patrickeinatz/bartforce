@@ -57,7 +57,16 @@
                     </p>
                 </div>
                 <div class="card-footer forum-topic-footer">
+                    {% set kudoClass = 'btn-gold' %}
+                    {% for kudo in topic.topicKudos %}
+                        {% if kudo.user.id == app.user.id %}
+                            {% set kudoClass = 'btn-hot' %}
+                        {% endif %}
+                    {% endfor %}
                     <div class="float-right">
+                        <button type="button" class="btn btn-sm {{ kudoClass }}" onclick="updateTopicKudos({{topic.id}}, this)">
+                            <i class="fab fa-hotjar"></i> <span class="kudos-count">{{ topic.topicKudos|length }}</span>
+                        </button>
                         <button type="button" class="btn btn-sm btn-gold green" data-toggle="modal" data-target=".postModal" onclick="createPost({{ catId }},{{ topic.id }})">
                             <i class="fas fa-plus-circle"></i> Neuer Beitrag
                         </button>
@@ -107,7 +116,17 @@
                         </ul>
                         {% endif %}
                     </div>
+
                     <div class="card-footer forum-post-footer">
+                        {% set kudoClass = 'btn-gold' %}
+                        {% for kudo in post.postKudos %}
+                            {% if kudo.user.id == app.user.id %}
+                                {% set kudoClass = 'btn-hot' %}
+                            {% endif %}
+                        {% endfor %}
+                            <button type="button" class="btn btn-sm {{ kudoClass }}" onclick="updatePostKudos({{ post.Id }}, this)">
+                                <i class="fab fa-hotjar"></i> <span class="kudos-count">{{ post.postKudos|length }}</span>
+                            </button>
                         <a href="#" class="btn btn-sm btn-gold green" data-toggle="modal" onclick="createReply({{ topic.id }},{{ post.id }})" data-target=".replyModal"><i class="fas fa-clone"></i> Antworten</a>
                         {% if app.user.id == post.postCreator.id %}
                             <a href="#" class="btn btn-sm btn-gold yellow ml-1" data-toggle="modal" onclick="updatePost({{ post.postContent|raw|json_encode }},{{ post.id }})" data-target=".postModal"><i class="fas fa-wrench"></i></a>

@@ -68,10 +68,16 @@ class ForumTopic
      */
     private $forumReplies;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TopicKudos", mappedBy="topic", orphanRemoval=true)
+     */
+    private $topicKudos;
+
     public function __construct()
     {
         $this->forumPosts = new ArrayCollection();
         $this->forumReplies = new ArrayCollection();
+        $this->topicKudos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -243,6 +249,37 @@ class ForumTopic
             // set the owning side to null (unless already changed)
             if ($forumReply->getTopic() === $this) {
                 $forumReply->setTopic(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TopicKudos[]
+     */
+    public function getTopicKudos(): Collection
+    {
+        return $this->topicKudos;
+    }
+
+    public function addTopicKudo(TopicKudos $topicKudo): self
+    {
+        if (!$this->topicKudos->contains($topicKudo)) {
+            $this->topicKudos[] = $topicKudo;
+            $topicKudo->setTopic($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTopicKudo(TopicKudos $topicKudo): self
+    {
+        if ($this->topicKudos->contains($topicKudo)) {
+            $this->topicKudos->removeElement($topicKudo);
+            // set the owning side to null (unless already changed)
+            if ($topicKudo->getTopic() === $this) {
+                $topicKudo->setTopic(null);
             }
         }
 

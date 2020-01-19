@@ -53,9 +53,15 @@ class ForumPost
      */
     private $forumReplies;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PostKudos", mappedBy="post", orphanRemoval=true)
+     */
+    private $postKudos;
+
     public function __construct()
     {
         $this->forumReplies = new ArrayCollection();
+        $this->postKudos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +166,37 @@ class ForumPost
             // set the owning side to null (unless already changed)
             if ($forumReply->getPost() === $this) {
                 $forumReply->setPost(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PostKudos[]
+     */
+    public function getPostKudos(): Collection
+    {
+        return $this->postKudos;
+    }
+
+    public function addPostKudo(PostKudos $postKudo): self
+    {
+        if (!$this->postKudos->contains($postKudo)) {
+            $this->postKudos[] = $postKudo;
+            $postKudo->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostKudo(PostKudos $postKudo): self
+    {
+        if ($this->postKudos->contains($postKudo)) {
+            $this->postKudos->removeElement($postKudo);
+            // set the owning side to null (unless already changed)
+            if ($postKudo->getPost() === $this) {
+                $postKudo->setPost(null);
             }
         }
 

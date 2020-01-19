@@ -79,11 +79,23 @@ class User implements UserInterface
      */
     private $last_login;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TopicKudos", mappedBy="user", orphanRemoval=true)
+     */
+    private $topicKudos;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PostKudos", mappedBy="user", orphanRemoval=true)
+     */
+    private $postKudos;
+
     public function __construct()
     {
         $this->forumTopics = new ArrayCollection();
         $this->forumPosts = new ArrayCollection();
         $this->forumReplies = new ArrayCollection();
+        $this->topicKudos = new ArrayCollection();
+        $this->postKudos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -343,6 +355,68 @@ class User implements UserInterface
     public function setLastLogin(\DateTimeInterface $last_login): self
     {
         $this->last_login = $last_login;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TopicKudos[]
+     */
+    public function getTopicKudos(): Collection
+    {
+        return $this->topicKudos;
+    }
+
+    public function addTopicKudo(TopicKudos $topicKudo): self
+    {
+        if (!$this->topicKudos->contains($topicKudo)) {
+            $this->topicKudos[] = $topicKudo;
+            $topicKudo->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTopicKudo(TopicKudos $topicKudo): self
+    {
+        if ($this->topicKudos->contains($topicKudo)) {
+            $this->topicKudos->removeElement($topicKudo);
+            // set the owning side to null (unless already changed)
+            if ($topicKudo->getUser() === $this) {
+                $topicKudo->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PostKudos[]
+     */
+    public function getPostKudos(): Collection
+    {
+        return $this->postKudos;
+    }
+
+    public function addPostKudo(PostKudos $postKudo): self
+    {
+        if (!$this->postKudos->contains($postKudo)) {
+            $this->postKudos[] = $postKudo;
+            $postKudo->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostKudo(PostKudos $postKudo): self
+    {
+        if ($this->postKudos->contains($postKudo)) {
+            $this->postKudos->removeElement($postKudo);
+            // set the owning side to null (unless already changed)
+            if ($postKudo->getUser() === $this) {
+                $postKudo->setUser(null);
+            }
+        }
 
         return $this;
     }

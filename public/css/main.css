@@ -304,6 +304,23 @@ a.nav-link.sidenav-link:hover{
     background-color: rgb(222,206,149);
 }
 
+/* KUDOS */
+.kudos-cold{
+    text-decoration: none;
+    color: rgb(10, 10, 10);
+}
+
+.kudos-hot {
+    text-decoration: none;
+    color: rgb(69, 146, 255);
+}
+
+.kudos-count{
+    margin-left: 5px;
+    font-family: monospace, "Courier New";
+}
+
+
 /* CONTENT CARD */
 .page-headline{
     display: inline-block;
@@ -590,6 +607,17 @@ a.nav-link.sidenav-link:hover{
 
 .btn-gold:hover{
     background-color: rgb(132,159,169);
+}
+
+.btn-hot{
+    font-size: 12px;
+    color: rgb(255,255,255);
+    background-color: rgb(255, 68, 0);!important;
+}
+
+.btn-hot:hover{
+    font-size: 12px;
+    background-color: rgb(219, 40, 9);!important;
 }
 
 .btn-danger{

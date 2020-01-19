@@ -1,3 +1,49 @@
+function updateTopicKudos(topicId, e){
+
+    if(e.className === 'btn btn-sm btn-gold'){
+        e.className = 'btn btn-sm btn-hot';
+    } else {
+        e.className = 'btn btn-sm btn-gold';
+    }
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+            var kudos = JSON.parse(this.responseText);
+            var kudosCount = e.getElementsByClassName('kudos-count');
+
+            kudosCount[0].innerHTML = kudos['kudos'];
+        }
+    };
+    xhttp.open("GET", "updateTopicKudos/"+topicId, true);
+    xhttp.send();
+
+}
+
+function updatePostKudos(postId, e){
+
+    if(e.className === 'btn btn-sm btn-gold'){
+        e.className = 'btn btn-sm btn-hot';
+    } else {
+        e.className = 'btn btn-sm btn-gold';
+    }
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+            var kudos = JSON.parse(this.responseText);
+            var kudosCount = e.getElementsByClassName('kudos-count');
+
+            kudosCount[0].innerHTML = kudos['kudos'];
+        }
+    };
+    xhttp.open("GET", "updatePostKudos/"+postId, true);
+    xhttp.send();
+
+}
+
 function createCategory()
 {
     var forms = document.querySelectorAll('form');
