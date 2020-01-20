@@ -10,7 +10,7 @@ $(function()
         }
         else
         {
-            $('#content').animate({'top' : '290px'}, {duration: 250});
+            $('#content').animate({'top' : '320px'}, {duration: 250});
             expanded = true;
         }
 

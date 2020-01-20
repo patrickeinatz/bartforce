@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\UserRepository;
 use App\Services\DiscordService;
+use App\Services\UserProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -21,9 +22,10 @@ class UserController extends AbstractController
      *
      * @Route("/profile/{discordId}", name="user_profile")
      */
-    public function userProfileView(DiscordService $discordService, UserRepository $userRepository, string $discordId)
+    public function userProfileView(DiscordService $discordService, UserRepository $userRepository, UserProfileService $userProfileService, string $discordId)
     {
         $profileUser = $userRepository->findOneBy(['discordId' => $discordId]);
+
         $profileUserRoles = [];
 
         $memberData = $discordService->getMemberData($discordId);
@@ -43,25 +45,12 @@ class UserController extends AbstractController
             }
         }
 
-        $userGivenKudos = count($profileUser->getTopicKudos()) + count($profileUser->getPostKudos());
-        $userReceivedKudos = 0;
-
-        $userTopics = $profileUser->getForumTopics();
-        $userPosts = $profileUser->getForumPosts();
-
-        foreach ($userTopics as $topic){
-            $userReceivedKudos += count($topic->getTopicKudos());
-        }
-        foreach ($userPosts as $post){
-            $userReceivedKudos += count($post->getPostKudos());
-        }
-
         return $this->render('user/profile.html.twig', [
             'profileUser' => $profileUser,
             'member' => $memberData,
             'profileUserRoles' => $profileUserRoles,
-            'userGivenKudos' => $userGivenKudos,
-            'userReceivedKudos' => $userReceivedKudos
+            'userGivenKudos' => $userProfileService->getGivenKudos($profileUser),
+            'userReceivedKudos' => $userProfileService->getReceivedKudos($profileUser)
         ]);
 
     }
