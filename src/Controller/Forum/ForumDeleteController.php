@@ -16,6 +16,7 @@ use App\Repository\ForumCategoryRepository;
 use App\Repository\ForumPostRepository;
 use App\Repository\ForumReplyRepository;
 use App\Repository\ForumTopicRepository;
+use App\Services\DiscordService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,12 +34,17 @@ class ForumDeleteController extends AbstractController
     /**
      * @Route("/forum/deleteCategory/{categoryId}", name="forumDeleteCategory")
      */
-    public function deleteCategory(EntityManagerInterface $em, ForumCategoryRepository $categoryRepository, ForumReplyRepository $replyRepository, string $categoryId)
+    public function deleteCategory(EntityManagerInterface $em, ForumCategoryRepository $categoryRepository, ForumReplyRepository $replyRepository, DiscordService $discordService, string $categoryId)
     {
         /** @var ForumCategory $category */
         $category = $categoryRepository->findOneBy(['id' => $categoryId]);
         $topics = $category->getForumTopics();
         $posts = $category->getForumPosts();
+
+        //Delete related discord channel
+        $discordService->deleteChannel(
+            $category->getRelatedDiscordChannelId()
+        );
 
         $replyCount = 0;
 

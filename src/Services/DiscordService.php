@@ -8,6 +8,14 @@ use RestCord\DiscordClient;
 
 class DiscordService
 {
+
+    private const DISCORD_VOICE_CHANNEL_TYPE = 2;
+
+    private const DISCORD_TEXT_CHANNEL_TYPE = 0;
+
+    private const FORUM_CAT_PARENT_ID = 669578861587202088;
+
+
     /**
      * @var DiscordClient
      */
@@ -83,8 +91,9 @@ class DiscordService
     /**
      * @param User $dbUser
      * @param array $discordUser
+     * @return bool
      */
-    public function compareUserDataSets($dbUser, $discordUser)
+    public function compareUserDataSets(User $dbUser, $discordUser):bool
     {
         if($dbUser->getUsername() != $discordUser->getUsername()) {
             return false;
@@ -111,4 +120,47 @@ class DiscordService
             'limit' => 200
         ]);
     }
+
+
+    /**
+     * @return \RestCord\Model\Channel\Channel[]
+     */
+    public function getAllChannels()
+    {
+        return $this->discordServer->guild->getGuildChannels([
+            'guild.id' => $this->guildId
+        ]);
+    }
+
+    /**
+     * @param string $channelTitle
+     */
+    public function createNewTextChannel(string $channelTitle)
+    {
+        return ($this->discordServer->guild->createGuildChannel([
+            'guild.id' => $this->guildId,
+            'name' => $channelTitle,
+            'type' => self::DISCORD_TEXT_CHANNEL_TYPE,
+            'parent_id' => self::FORUM_CAT_PARENT_ID,
+        ]))->id;
+    }
+
+    /**
+     * @param string $channelId
+     */
+    public function deleteChannel(string $channelId)
+    {
+        $this->discordServer->channel->deleteOrcloseChannel([
+            'channel.id' => intval($channelId),
+        ]);
+    }
+
+    public function sendChannelMsg(string $channelId, string $content)
+    {
+        $this->discordServer->channel->createMessage([
+            'channel.id' => intval($channelId),
+            'content' => $content,
+        ]);
+    }
+
 }

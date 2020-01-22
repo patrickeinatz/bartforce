@@ -15,6 +15,7 @@ use App\Form\ForumTopicType;
 use App\Repository\ForumCategoryRepository;
 use App\Repository\ForumPostRepository;
 use App\Repository\ForumTopicRepository;
+use App\Services\DiscordService;
 use App\Services\ForumService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +34,7 @@ class ForumCreateController extends AbstractController
     /**
      * @Route("/forum/createCategory", name="forumCreateCategory")
      */
-    public function createCategory(EntityManagerInterface $em, Request $request, ForumCategoryRepository $repository)
+    public function createCategory(EntityManagerInterface $em, Request $request, ForumCategoryRepository $repository, DiscordService $discordService)
     {
         $form = $this->createForm(ForumCategoryType::class);
         $form->handleRequest($request);
@@ -42,6 +43,12 @@ class ForumCreateController extends AbstractController
             /** @var ForumCategory $forumCategory */
             $forumCategory = $form->getData();
 
+            //create new discord text channel
+            $forumCategory->setRelatedDiscordChannelId(
+                $discordService->createNewTextChannel($forumCategory->getTitle())
+            );
+
+
             $now = new \DateTime('now');
 
             $forumCategory->setCreatedAt($now);
@@ -49,6 +56,12 @@ class ForumCreateController extends AbstractController
             $em->persist($forumCategory);
             $em->flush();
             $this->addFlash('success', 'Eine neue Kategorie wurde hinzugefügt!');
+
+            $discordService->sendChannelMsg(
+                $forumCategory->getRelatedDiscordChannelId(),
+                'Eine neue Kategorie mit dem Titel "'.$forumCategory->getTitle().'" wurde im Forum eröffnet! Schau mal vorbei: https://www.bartforce.de/forum/category/'.$forumCategory->getId()
+            );
+
             return $this->redirectToRoute('forumView');
         }
     }
@@ -56,7 +69,7 @@ class ForumCreateController extends AbstractController
     /**
      * @Route("/forum/{catId}/createTopic", name="forumCreateTopic")
      */
-    public function createTopic(EntityManagerInterface $em, ForumCategoryRepository $categoryRepository, ForumService $forumService, Request $request, string $catId)
+    public function createTopic(EntityManagerInterface $em, ForumCategoryRepository $categoryRepository, ForumService $forumService, Request $request, DiscordService $discordService, string $catId)
     {
         $form = $this->createForm(ForumTopicType::class);
         $form->handleRequest($request);

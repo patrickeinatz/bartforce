@@ -10,6 +10,7 @@
 /node_modules
 /package-lock.json
 /public/uploads/
+/config.json
 
 ###> symfony/phpunit-bridge ###
 .phpunit
