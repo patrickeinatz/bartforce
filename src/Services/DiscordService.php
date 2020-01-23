@@ -36,6 +36,22 @@ class DiscordService
     }
 
     /**
+     * @return DiscordClient
+     */
+    public function getDiscordServer(): DiscordClient
+    {
+        return $this->discordServer;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGuildId(): int
+    {
+        return $this->guildId;
+    }
+
+    /**
      * @param $userId
      * @return \RestCord\Model\Guild\GuildMember
      */
