@@ -13,16 +13,7 @@ class IndexController extends AbstractController
      */
     public function index(DiscordService $discordService)
     {
-
-        //WEBHOOK URL: https://discordapp.com/api/webhooks/669948357573083137/3fSvHYE2fdUIidb_tbA3jReIcsk-vwrGmGQvv5B9JaXAWDBrn2tPrGVerze9Kkg_gJq5
-        /*dd($discordService->getDiscordServer()->webhook->executeWebhook([
-            'webhook.id' => 669948357573083137,
-            'webhook.token' => '3fSvHYE2fdUIidb_tbA3jReIcsk-vwrGmGQvv5B9JaXAWDBrn2tPrGVerze9Kkg_gJq5',
-            'content' => 'Hello Peoples! Me is Watson.'
-        ]));
-        */
-
-
+        
         return $this->render('index/index.html.twig', [
             'controller_name' => 'IndexController'
         ]);
