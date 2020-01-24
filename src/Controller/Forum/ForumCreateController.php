@@ -86,6 +86,8 @@ class ForumCreateController extends AbstractController
             /** @var ForumTopic $forumTopic */
             $forumTopic = $form->getData();
 
+            $discordService->sendChannelMsg($category->getRelatedDiscordChannelId(),'**'.$user->getUsername().'** hat ein neues Thema mit dem Titel: **"'.$forumTopic->getTitle().'"** eröffnet!');
+
             if($forumTopic->getTopicContentModule()->getTitle() === 'image'){
                 $forumTopic->setTopicContent(
                     $forumService->makeImageLink($forumTopic->getTopicContent())

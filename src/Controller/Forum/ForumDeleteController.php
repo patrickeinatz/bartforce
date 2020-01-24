@@ -73,7 +73,7 @@ class ForumDeleteController extends AbstractController
     /**
      * @Route("/forum/deleteTopic/{topicId}", name="forumDeleteTopic")
      */
-    public function deleteTopic(EntityManagerInterface $em, ForumTopicRepository $topicRepository, ForumPostRepository $postRepository, ForumReplyRepository $replyRepository, string $topicId)
+    public function deleteTopic(EntityManagerInterface $em, ForumTopicRepository $topicRepository, ForumPostRepository $postRepository, ForumReplyRepository $replyRepository, DiscordService $discordService, string $topicId)
     {
         $topic = $topicRepository->findOneBy(['id' => $topicId]);
         $topicPosts = $postRepository->findBy(['postTopic' => $topic]);
@@ -83,6 +83,8 @@ class ForumDeleteController extends AbstractController
 
         $postCount = sizeof($topicPosts);
         $replyCount = sizeof($postReplies);
+
+        $discordService->sendChannelMsg($topic->getCategory()->getRelatedDiscordChannelId(),' **'.$this->getUser()->getUsername().'** hat das Thema: **"'.$topic->getTitle().'"** entgültig geschlossen!');
 
         $em->remove($topic);
 
