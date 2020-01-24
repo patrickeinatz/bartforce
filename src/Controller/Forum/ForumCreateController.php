@@ -59,7 +59,8 @@ class ForumCreateController extends AbstractController
 
             $discordService->sendChannelMsg(
                 $forumCategory->getRelatedDiscordChannelId(),
-                'Eine neue Kategorie mit dem Titel "'.$forumCategory->getTitle().'" wurde im Forum eröffnet! Schau mal vorbei: https://www.bartforce.de/forum/category/'.$forumCategory->getId()
+                'Eine neue Kategorie mit dem Titel "'.$forumCategory->getTitle().'" wurde im Forum eröffnet! 
+https://www.bartforce.de/forum/category/'.$forumCategory->getId()
             );
 
             return $this->redirectToRoute('forumView');
@@ -86,8 +87,6 @@ class ForumCreateController extends AbstractController
             /** @var ForumTopic $forumTopic */
             $forumTopic = $form->getData();
 
-            $discordService->sendChannelMsg($category->getRelatedDiscordChannelId(),'**'.$user->getUsername().'** hat das Thema **"'.$forumTopic->getTitle().'"** eröffnet! [jetzt ansehen](http://www.bartforce.de/forum/topic/'.$forumTopic->getId().')');
-
             if($forumTopic->getTopicContentModule()->getTitle() === 'image'){
                 $forumTopic->setTopicContent(
                     $forumService->makeImageLink($forumTopic->getTopicContent())
@@ -110,6 +109,10 @@ class ForumCreateController extends AbstractController
             $em->persist($category);
             $em->persist($forumTopic);
             $em->flush();
+
+            $discordService->sendChannelMsg('670283443468238888','**'.$user->getUsername().'** hat das Thema ***'.$forumTopic->getTitle().'*** eröffnet! 
+http://www.bartforce.de/forum/topic/'.$forumTopic->getId());
+
             $this->addFlash('success', 'Ein neues Thema wurde eröffnet!');
             return $this->redirectToRoute('forumCategoryView', ['id' => $catId]);
         }
@@ -133,8 +136,6 @@ class ForumCreateController extends AbstractController
             /** @var ForumPost $forumPost */
             $forumPost = $postForm->getData();
 
-            $discordService->sendChannelMsg($category->getRelatedDiscordChannelId(),'**'.$this->getUser()->getUsername().'** hat seinen Senf zum Thema **"'.$topic->getTitle().'"** dazugegeben! [jetzt ansehen](http://www.bartforce.de/forum/topic/'.$topic->getId().')');
-
             $forumPost->setCreatedAt($now);
             $forumPost->setUpdatedAt($now);
             $forumPost->setPostCreator($this->getUser());
@@ -148,6 +149,10 @@ class ForumCreateController extends AbstractController
             $em->persist($category);
             $em->persist($forumPost);
             $em->flush();
+
+            $discordService->sendChannelMsg($category->getRelatedDiscordChannelId(),'**'.$this->getUser()->getUsername().'** hat seinen Senf zum Thema **"'.$topic->getTitle().'"** dazugegeben! 
+http://www.bartforce.de/forum/topic/'.$topic->getId());
+
             $this->addFlash('success', 'Ein neuer Beitrag wurde erstellt!');
 
             return $this->redirectToRoute('forumTopicView', ['topicId' => $topicId]);
