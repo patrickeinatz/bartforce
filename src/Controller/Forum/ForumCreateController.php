@@ -86,7 +86,7 @@ class ForumCreateController extends AbstractController
             /** @var ForumTopic $forumTopic */
             $forumTopic = $form->getData();
 
-            $discordService->sendChannelMsg($category->getRelatedDiscordChannelId(),'**'.$user->getUsername().'** hat ein neues Thema mit dem Titel: **"'.$forumTopic->getTitle().'"** eröffnet!');
+            $discordService->sendChannelMsg($category->getRelatedDiscordChannelId(),'**'.$user->getUsername().'** hat das Thema **"'.$forumTopic->getTitle().'"** eröffnet! [jetzt ansehen](http://www.bartforce.de/forum/topic/'.$forumTopic->getId().')');
 
             if($forumTopic->getTopicContentModule()->getTitle() === 'image'){
                 $forumTopic->setTopicContent(
@@ -119,7 +119,7 @@ class ForumCreateController extends AbstractController
     /**
      * @Route("/forum/{catId}/{topicId}/createPost", name="forumCreatePost")
      */
-    public function createPost(EntityManagerInterface $em, ForumPostRepository $postRepository, ForumTopicRepository $topicRepository, Request $request, string $topicId, string $catId)
+    public function createPost(EntityManagerInterface $em, ForumPostRepository $postRepository, ForumTopicRepository $topicRepository, Request $request, string $topicId, DiscordService $discordService, string $catId)
     {
         $topic = $topicRepository->findOneBy(['id' =>  $topicId]);
         $category = $topic->getCategory();
@@ -132,6 +132,9 @@ class ForumCreateController extends AbstractController
         if($postForm->isSubmitted() && $postForm->isValid()) {
             /** @var ForumPost $forumPost */
             $forumPost = $postForm->getData();
+
+            $discordService->sendChannelMsg($category->getRelatedDiscordChannelId(),'**'.$this->getUser()->getUsername().'** hat seinen Senf zum Thema **"'.$topic->getTitle().'"** dazugegeben! [jetzt ansehen](http://www.bartforce.de/forum/topic/'.$topic->getId().')');
+
             $forumPost->setCreatedAt($now);
             $forumPost->setUpdatedAt($now);
             $forumPost->setPostCreator($this->getUser());

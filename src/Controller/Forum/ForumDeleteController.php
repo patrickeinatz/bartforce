@@ -104,13 +104,15 @@ class ForumDeleteController extends AbstractController
     /**
      * @Route("/forum/deletePost/{postId}", name="forumDeletePost")
      */
-    public function deletePost(EntityManagerInterface $em, ForumPostRepository $postRepository, ForumReplyRepository $replyRepository, string $postId)
+    public function deletePost(EntityManagerInterface $em, ForumPostRepository $postRepository, ForumReplyRepository $replyRepository, DiscordService $discordService, string $postId)
     {
         $post = $postRepository->findOneBy(['id' => $postId]);
         $postReplies = $replyRepository->findBy(['post' => $post]);
 
         $replyCount = sizeof($postReplies);
         $topicId = $post->getPostTopic()->getId();
+
+        $discordService->sendChannelMsg($post->getPostTopic()->getCategory()->getRelatedDiscordChannelId(),'Ein Beitrag von **'.$post->getPostCreator()->getUsername().'** wurde gewaltsam aus dem Thema: **"'.$post->getPostTopic()->getTitle().'"** entfernt! Denk mal drüber nach.');
 
         $em->remove($post);
         foreach($postReplies as $reply){
