@@ -11,9 +11,9 @@ class IndexController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index(DiscordService $discordService)
+    public function index()
     {
-        
+
         return $this->render('index/index.html.twig', [
             'controller_name' => 'IndexController'
         ]);

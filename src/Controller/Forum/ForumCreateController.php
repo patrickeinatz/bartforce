@@ -110,7 +110,7 @@ https://www.bartforce.de/forum/category/'.$forumCategory->getId()
             $em->persist($forumTopic);
             $em->flush();
 
-            $discordService->sendChannelMsg('670283443468238888','**'.$user->getUsername().'** hat das Thema ***'.$forumTopic->getTitle().'*** eröffnet! 
+            $discordService->sendChannelMsg($forumTopic->getCategory()->getRelatedDiscordChannelId(),'**'.$user->getUsername().'** hat das Thema ***'.$forumTopic->getTitle().'*** eröffnet! 
 http://www.bartforce.de/forum/topic/'.$forumTopic->getId());
 
             $this->addFlash('success', 'Ein neues Thema wurde eröffnet!');
