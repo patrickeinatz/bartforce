@@ -343,6 +343,8 @@ a.nav-link.sidenav-link:hover{
 }
 
 .content{
+    max-width: 900px;
+    margin: auto;
     border: none;
     border-top: 1px solid rgba(132,159,169,0.25);
 }
