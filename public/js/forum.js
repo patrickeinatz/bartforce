@@ -44,44 +44,11 @@ function updatePostKudos(postId, e){
 
 }
 
-function createCategory()
-{
-    var forms = document.querySelectorAll('form');
-
-    for (var i =0; i < forms.length; i++){
-        if(forms[i].name === "forum_category") {
-            var action = forms[i].getAttribute('action');
-            forms[i].action = action.replace('%action%', '/forum/createCategory');
-        }
-    }
-}
-
-function createTopic(catId, topicModules)
-{
-    var forms = document.querySelectorAll('form');
-    var title = document.getElementById('topicModalTitle');
-    title.innerHTML = "Neues Thema eröffnen";
-
-    initRadioButtons(topicModules);
-
-    //Preselect first element
-    (document.getElementById("forum_topic_topicContentModule_1")).checked = true;
-    //Hide Content field
-    (document.getElementById('forum_topic_topicContent').parentElement).hidden = true;
-
-    for (var i =0; i < forms.length; i++){
-        if(forms[i].name === "forum_topic") {
-            var action = forms[i].getAttribute('action');
-            forms[i].action = action.replace('%action%', '/forum/'+catId+'/createTopic');
-        }
-    }
-}
-
-function prepareTopicContent(moduleType){
+function preparePostContent(moduleType){
     var labels = document.querySelectorAll('label');
 
     for(var i = 0; i < labels.length; i++) {
-        if (labels[i].htmlFor === 'forum_topic_topicContent') {
+        if (labels[i].htmlFor === 'forum_post_postContent') {
 
             switch ((moduleType.className.split(' '))[1]) {
                 case 'image':
@@ -100,7 +67,7 @@ function prepareTopicContent(moduleType){
     }
 }
 
-function initRadioButtons(topicModules){
+function initRadioButtons(postModules){
 
     var divs = document.querySelectorAll('div');
 
@@ -110,15 +77,58 @@ function initRadioButtons(topicModules){
             if(divContent.search('prepared') < 0){
                 var moduleType = (divs[i].querySelector('label')).innerHTML;
                 var inputField = (divContent.split('\n'))[0]
-                divs[i].innerHTML = '<label class="prepared '+moduleType+'" onclick="prepareTopicContent(this)">\n'+inputField+'\n<i class="'+topicModules[moduleType]+' fa-lg"></i></label>';
+                divs[i].innerHTML = '<label class="prepared '+moduleType+'" onclick="preparePostContent(this)">\n'+inputField+'\n<i class="'+postModules[moduleType]+' fa-lg"></i></label>';
             }
         }
     }
 }
 
-function createPost(catId, topicId)
+function createCategory()
 {
     var forms = document.querySelectorAll('form');
+
+    for (var i =0; i < forms.length; i++){
+        if(forms[i].name === "forum_category") {
+            var action = forms[i].getAttribute('action');
+            forms[i].action = action.replace('%action%', '/forum/createCategory');
+        }
+    }
+}
+
+function createTopic(catId, postModules)
+{
+    var forms = document.querySelectorAll('form');
+    var title = document.getElementById('topicModalTitle');
+    title.innerHTML = "Neues Thema eröffnen";
+
+    initRadioButtons(postModules);
+
+    //Preselect first element
+    (document.getElementById("forum_post_postContentModule_1")).checked = true;
+    //Hide Content field
+    (document.getElementById('forum_post_postContent').parentElement).hidden = true;
+
+    for (var i =0; i < forms.length; i++){
+        if(forms[i].name === "forum_topic") {
+            var action = forms[i].getAttribute('action');
+            forms[i].action = action.replace('%action%', '/forum/'+catId+'/createTopic');
+        }
+    }
+}
+
+function createPost(catId, topicId, postModules)
+{
+    var forms = document.querySelectorAll('form');
+
+    initRadioButtons(postModules);
+
+    //Preselect first element
+    (document.getElementById("forum_post_postContentModule_1")).checked = true;
+    //Hide Content field
+    (document.getElementById('forum_post_postContent').parentElement).hidden = true;
+
+    document.getElementById("forum_post_postContent").value = "";
+    document.getElementById("forum_post_postText").innerHTML = "";
 
     for (var i =0; i < forms.length; i++){
         if(forms[i].name === "forum_post") {
@@ -143,12 +153,21 @@ function createReply(topicId, postId)
     }
 }
 
-function updatePost(postContent, postId)
+function updatePost(postContent, postId, postModules, postText, postContentModule)
 {
     var title = document.getElementById('postModalTitle');
     title.innerHTML = "Beitrag bearbeiten";
 
-    document.getElementById("forum_post_postContent").innerHTML = postContent;
+    initRadioButtons(postModules);
+
+    (document.getElementById("forum_post_postContentModule_"+postContentModule)).checked = true;
+    if(postContentModule === 1) {
+        (document.getElementById("forum_post_postContent").parentElement).hidden = true;
+    } else {
+        (document.getElementById("forum_post_postContent").parentElement).hidden = false;
+        document.getElementById("forum_post_postContent").value = postContent;
+    }
+    document.getElementById("forum_post_postText").innerHTML = postText;
 
     var forms = document.querySelectorAll('form');
 
@@ -158,35 +177,22 @@ function updatePost(postContent, postId)
             forms[i].action = action.replace('%action%', '/forum/postUpdate/'+postId);
         }
     }
-
 }
 
-function updateTopic(topicTitle, topicContent, topicId, topicContentTypeId, topicText, topicModules, redirectRoute=false)
+function updateTopic(topicTitle, topicId, redirectRoute=false)
 {
-    console.log(topicContentTypeId);
     var inputs = document.querySelectorAll('input');
 
     var title = document.getElementById('topicModalTitle');
     title.innerHTML = "Thema bearbeiten";
 
-
-
     for (var j =0; j < inputs.length; j++) {
         if(inputs[j].name == "forum_topic[title]"){
             inputs[j].value = topicTitle;
         }
-        if(inputs[j].name == "forum_topic[topicContent]"){
-            inputs[j].value = topicContent;
-        }
-            }
-
-    document.getElementById("forum_topic_topicText").innerHTML = topicText;
+    }
 
     var forms = document.querySelectorAll('form');
-
-    initRadioButtons(topicModules);
-
-    (document.getElementById("forum_topic_topicContentModule_"+topicContentTypeId)).checked = true;
 
     if(!redirectRoute) {
         for (var i =0; i < forms.length; i++){

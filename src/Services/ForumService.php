@@ -3,9 +3,6 @@
 
 namespace App\Services;
 
-use Symfony\Component\Asset\Packages as AssetManager;
-use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
-
 class ForumService
 {
     /**

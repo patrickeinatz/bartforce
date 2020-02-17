@@ -4,21 +4,12 @@
 namespace App\Controller\Forum;
 
 use App\Entity\ForumCategory;
-use App\Entity\ForumPost;
-use App\Entity\ForumReply;
-use App\Entity\ForumTopic;
-use App\Entity\User;
-use App\Form\ForumCategoryType;
-use App\Form\ForumPostType;
-use App\Form\ForumReplyType;
-use App\Form\ForumTopicType;
 use App\Repository\ForumCategoryRepository;
 use App\Repository\ForumPostRepository;
 use App\Repository\ForumReplyRepository;
 use App\Repository\ForumTopicRepository;
 use App\Services\DiscordService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

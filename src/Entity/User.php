@@ -80,11 +80,6 @@ class User implements UserInterface
     private $last_login;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TopicKudos", mappedBy="user", orphanRemoval=true)
-     */
-    private $topicKudos;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\PostKudos", mappedBy="user", orphanRemoval=true)
      */
     private $postKudos;
@@ -94,7 +89,6 @@ class User implements UserInterface
         $this->forumTopics = new ArrayCollection();
         $this->forumPosts = new ArrayCollection();
         $this->forumReplies = new ArrayCollection();
-        $this->topicKudos = new ArrayCollection();
         $this->postKudos = new ArrayCollection();
     }
 
@@ -365,29 +359,6 @@ class User implements UserInterface
     public function getTopicKudos(): Collection
     {
         return $this->topicKudos;
-    }
-
-    public function addTopicKudo(TopicKudos $topicKudo): self
-    {
-        if (!$this->topicKudos->contains($topicKudo)) {
-            $this->topicKudos[] = $topicKudo;
-            $topicKudo->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTopicKudo(TopicKudos $topicKudo): self
-    {
-        if ($this->topicKudos->contains($topicKudo)) {
-            $this->topicKudos->removeElement($topicKudo);
-            // set the owning side to null (unless already changed)
-            if ($topicKudo->getUser() === $this) {
-                $topicKudo->setUser(null);
-            }
-        }
-
-        return $this;
     }
 
     /**

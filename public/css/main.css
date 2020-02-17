@@ -560,9 +560,9 @@ a.nav-link.sidenav-link:hover{
     color: rgb(255, 255, 255);
 }
 
-.topicModuleSelection .form-check{
+.form-check{
     display: inline-block;
-    margin: 10px;
+    margin: 10px 5px;
 }
 
 [type=radio] {

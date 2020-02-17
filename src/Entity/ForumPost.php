@@ -19,7 +19,7 @@ class ForumPost
     private $id;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $postContent;
 
@@ -57,6 +57,17 @@ class ForumPost
      * @ORM\OneToMany(targetEntity="App\Entity\PostKudos", mappedBy="post", orphanRemoval=true)
      */
     private $postKudos;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $postText;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\PostContentModule", inversedBy="forumPosts")
+     */
+    private $postContentModule;
+
 
     public function __construct()
     {
@@ -199,6 +210,30 @@ class ForumPost
                 $postKudo->setPost(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPostText(): ?string
+    {
+        return $this->postText;
+    }
+
+    public function setPostText(?string $postText): self
+    {
+        $this->postText = $postText;
+
+        return $this;
+    }
+
+    public function getPostContentModule(): ?PostContentModule
+    {
+        return $this->postContentModule;
+    }
+
+    public function setPostContentModule(?PostContentModule $postContentModule): self
+    {
+        $this->postContentModule = $postContentModule;
 
         return $this;
     }

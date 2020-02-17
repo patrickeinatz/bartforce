@@ -13,7 +13,7 @@ use App\Repository\ForumCategoryRepository;
 use App\Repository\ForumPostRepository;
 use App\Repository\ForumReplyRepository;
 use App\Repository\ForumTopicRepository;
-use App\Repository\TopicContentModuleRepository;
+use App\Repository\PostContentModuleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -60,17 +60,17 @@ class ForumReadController extends AbstractController
         Request $request,
         ForumTopicRepository $topicRepository,
         ForumCategoryRepository $categoryRepository,
-        TopicContentModuleRepository $topicContentModuleRepository,
+        PostContentModuleRepository $postContentModuleRepository,
         string $id
     ){
         $category = $categoryRepository->findOneBy(['id' => $id]);
         $catTopics = $topicRepository->findBy(['category' => $id]);
-        $topicModules = $topicContentModuleRepository->findAll();
+        $postModules = $postContentModuleRepository->findAll();
 
-        $topicModuleIcons = [];
+        $postModuleIcons = [];
 
-        foreach ($topicModules as $module){
-            $topicModuleIcons[$module->getTitle()] = $module->getIcon();
+        foreach ($postModules as $module){
+            $postModuleIcons[$module->getTitle()] = $module->getIcon();
         }
 
         $categoryForm = $this->createForm(ForumCategoryType::class);
@@ -79,13 +79,17 @@ class ForumReadController extends AbstractController
         $topicForm = $this->createForm(ForumTopicType::class);
         $topicForm->handleRequest($request);
 
+        $postForm = $this->createForm(ForumPostType::class);
+        $postForm->handleRequest($request);
+
         return $this->render('forum/forumCategoryView.html.twig', [
             'title' => 'Forum Kategorie',
             'topics' => $catTopics,
             'category' => $category,
             'forumTopicForm' => $topicForm->createView(),
             'forumCategoryForm' => $categoryForm->createView(),
-            'topicModuleIcons' => $topicModuleIcons
+            'forumPostForm' => $postForm->createView(),
+            'postModuleIcons' => $postModuleIcons
         ]);
     }
 
@@ -99,7 +103,7 @@ class ForumReadController extends AbstractController
         ForumTopicRepository $topicRepository,
         ForumPostRepository $postRepository,
         ForumReplyRepository $replyRepository,
-        TopicContentModuleRepository $topicContentModuleRepository,
+        PostContentModuleRepository $postContentModuleRepository,
         string $topicId
     ){
         /** @var ForumTopic $forumTopic */
@@ -112,11 +116,11 @@ class ForumReadController extends AbstractController
         $posts = $postRepository->findBy(['postTopic' => $topicId]);
         $replies = $replyRepository->findBy(['topic' => $topicId]);
 
-        $topicModules = $topicContentModuleRepository->findAll();
-        $topicModuleIcons = [];
+        $postModules = $postContentModuleRepository->findAll();
+        $postModuleIcons = [];
 
-        foreach ($topicModules as $module){
-            $topicModuleIcons[$module->getTitle()] = $module->getIcon();
+        foreach ($postModules as $module){
+            $postModuleIcons[$module->getTitle()] = $module->getIcon();
         }
 
         $topicForm = $this->createForm(ForumTopicType::class);
@@ -138,7 +142,7 @@ class ForumReadController extends AbstractController
             'forumTopicForm' => $topicForm->createView(),
             'forumPostForm' => $postForm->createView(),
             'forumReplyForm' => $replyForm->createView(),
-            'topicModuleIcons' => $topicModuleIcons
+            'postModuleIcons' => $postModuleIcons
         ]);
     }
 }

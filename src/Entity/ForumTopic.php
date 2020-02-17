@@ -24,21 +24,6 @@ class ForumTopic
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $topicContent;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\TopicContentModule", inversedBy="forumTopics")
-     */
-    private $topicContentModule;
-    
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $topicText;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="forumTopics")
      */
     private $topicCreator;
@@ -68,16 +53,11 @@ class ForumTopic
      */
     private $forumReplies;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TopicKudos", mappedBy="topic", orphanRemoval=true)
-     */
-    private $topicKudos;
 
     public function __construct()
     {
         $this->forumPosts = new ArrayCollection();
         $this->forumReplies = new ArrayCollection();
-        $this->topicKudos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -146,54 +126,6 @@ class ForumTopic
     }
 
     /**
-     * @return mixed
-     */
-    public function getTopicContentModule()
-    {
-        return $this->topicContentModule;
-    }
-
-    /**
-     * @param mixed $topicContentModule
-     */
-    public function setTopicContentModule($topicContentModule): void
-    {
-        $this->topicContentModule = $topicContentModule;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTopicText()
-    {
-        return $this->topicText;
-    }
-
-    /**
-     * @param mixed $topicText
-     */
-    public function setTopicText($topicText): void
-    {
-        $this->topicText = $topicText;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTopicContent()
-    {
-        return $this->topicContent;
-    }
-
-    /**
-     * @param mixed $topicContent
-     */
-    public function setTopicContent($topicContent): void
-    {
-        $this->topicContent = $topicContent;
-    }
-
-    /**
      * @return Collection|ForumPost[]
      */
     public function getForumPosts(): Collection
@@ -255,34 +187,4 @@ class ForumTopic
         return $this;
     }
 
-    /**
-     * @return Collection|TopicKudos[]
-     */
-    public function getTopicKudos(): Collection
-    {
-        return $this->topicKudos;
-    }
-
-    public function addTopicKudo(TopicKudos $topicKudo): self
-    {
-        if (!$this->topicKudos->contains($topicKudo)) {
-            $this->topicKudos[] = $topicKudo;
-            $topicKudo->setTopic($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTopicKudo(TopicKudos $topicKudo): self
-    {
-        if ($this->topicKudos->contains($topicKudo)) {
-            $this->topicKudos->removeElement($topicKudo);
-            // set the owning side to null (unless already changed)
-            if ($topicKudo->getTopic() === $this) {
-                $topicKudo->setTopic(null);
-            }
-        }
-
-        return $this;
-    }
 }

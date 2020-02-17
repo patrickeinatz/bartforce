@@ -7,6 +7,19 @@
         <div class="col-md-12">
             <a href="/forum" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-comments mr-1"></i> Forum</a>
             <a href="/forum/category/{{ catId }}" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-tag"></i> Kategoire</a>
+            <div class="float-right">
+                <button type="button" class="btn btn-sm btn-gold green" data-toggle="modal" data-target=".postModal" onclick="createPost({{ catId }},{{ topic.id }}, {{ postModuleIcons|json_encode }})">
+                    <i class="fas fa-plus-circle"></i> Neuer Beitrag
+                </button>
+                {% if app.user.id == topic.topicCreator.id or is_granted('ROLE_ADMIN') %}
+                    <button type="button" class="btn btn-sm btn-gold yellow ml-1" data-toggle="modal" data-target=".topicModal" onclick="updateTopic({{ topic.title|json_encode }},{{ topic.id }})">
+                        <i class="fas fa-wrench"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-gold red ml-1" data-toggle="modal" data-target=".deleteModal" onclick="deleteTopic({{ topic.id }},{{ posts|length }},{{ replies|length }})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                {% endif %}
+            </div>
         </div>
     </div>
     <div class="row">
@@ -16,76 +29,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="card forum-topic">
-                <div class="card-header forum-topic-header">
-                    <img class="user-img-forum rounded-circle" src="{{ topic.topicCreator.avatar }}">
-                    <h5 class="forum-topic-header-headline">{{ topic.topicCreator.username }}</h5>
-                    <span class="float-right">
-                        <small><i class="far fa-calendar"></i> {{ topic.createdAt|ago }}</small>
-                        {% if topic.updatedAt != topic.createdAt %}
-                            <br><small><i class="fas fa-history"></i> {{ topic.updatedAt|ago }}</small>
-                        {% endif %}
-                    </span>
-                </div>
-                <div class="card-body forum-topic-body">
-                    <p class="card-text">
-                        {% if topic.topicContentModule.title == 'image' %}
-                            {% if 'Fehler' in topic.topicContent %}
-                                <div class="warning-modal-img-block text-center">
-                                    {{ topic.topicContent }}
-                                </div>
-                            {% else %}
-                                <div class="warning-modal-img-block text-center">
-                                    <img src="{{ topic.topicContent }}">
-                                </div>
-                            {% endif %}
-                        {% elseif topic.topicContentModule.title == 'video' %}
-                            {% if 'Fehler' in topic.topicContent %}
-                                <div class="warning-modal-img-block text-center">
-                                    {{ topic.topicContent }}
-                                </div>
-                            {% else %}
-                                <div class="warning-modal-img-block">
-                                    <div class="video-container">
-                                        <iframe src="{{ topic.topicContent|raw }}" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endif %}
-                        <h4>{{ topic.title }}</h4>
-                        {{ topic.topicText }}
-                    </p>
-                </div>
-                <div class="card-footer forum-topic-footer">
-                    {% set kudoClass = 'btn-gold' %}
-                    {% for kudo in topic.topicKudos %}
-                        {% if kudo.user.id == app.user.id %}
-                            {% set kudoClass = 'btn-hot' %}
-                        {% endif %}
-                    {% endfor %}
-                    <div class="float-right">
-                        <button type="button" class="btn btn-sm {{ kudoClass }}" onclick="updateTopicKudos({{topic.id}}, this)">
-                            <i class="fab fa-hotjar"></i> <span class="kudos-count">{{ topic.topicKudos|length }}</span>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-gold green" data-toggle="modal" data-target=".postModal" onclick="createPost({{ catId }},{{ topic.id }})">
-                            <i class="fas fa-plus-circle"></i> Neuer Beitrag
-                        </button>
-                        {% if app.user.id == topic.topicCreator.id or is_granted('ROLE_ADMIN') %}
-                            <button type="button" class="btn btn-sm btn-gold yellow ml-1" data-toggle="modal" data-target=".topicModal" onclick="updateTopic({{ topic.title|json_encode }},{{ topic.topicContent|raw|json_encode }},{{ topic.id }},{{ topic.topicContentModule.id }},{{ topic.topicText|raw|json_encode }},{{ topicModuleIcons|json_encode }})">
-                                <i class="fas fa-wrench"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-gold red ml-1" data-toggle="modal" data-target=".deleteModal" onclick="deleteTopic({{ topic.id }},{{ posts|length }},{{ replies|length }})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            {% for post in posts|sort((a, b) => b.createdAt <=> a.createdAt) %}
+            {% for post in posts %}
                 <div class="card forum-post">
                     <div class="card-header forum-post-header">
                         <img class="user-img-forum rounded-circle" src="{{ post.postCreator.avatar }}">
@@ -98,7 +42,32 @@
                         </span>
                     </div>
                     <div class="card-body forum-post-body">
-                        <p class="card-text" id="{{ post.id }}">{{ post.postContent|raw}}</p>
+                            <p class="card-text">
+                                {% if post.postContentModule.title == 'image' %}
+                                {% if 'Fehler' in post.postContent %}
+                            <div class="warning-modal-img-block text-center">
+                                {{ post.postContent }}
+                            </div>
+                            {% else %}
+                                <div class="warning-modal-img-block text-center">
+                                    <img src="{{ post.postContent }}">
+                                </div>
+                            {% endif %}
+                            {% elseif post.postContentModule.title == 'video' %}
+                                {% if 'Fehler' in post.postContent %}
+                                    <div class="warning-modal-img-block text-center">
+                                        {{ post.postContent }}
+                                    </div>
+                                {% else %}
+                                    <div class="warning-modal-img-block">
+                                        <div class="video-container">
+                                            <iframe src="{{ post.postContent|raw }}" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                            {{ post.postText }}
+                            </p>
                         {% if replies|length != 0 %}
                         <ul class="list-group list-group-flush">
                             {% for reply in post.forumReplies.values %}
@@ -129,7 +98,7 @@
                             </button>
                         <a href="#" class="btn btn-sm btn-gold green" data-toggle="modal" onclick="createReply({{ topic.id }},{{ post.id }})" data-target=".replyModal"><i class="fas fa-clone"></i> Antworten</a>
                         {% if app.user.id == post.postCreator.id %}
-                            <a href="#" class="btn btn-sm btn-gold yellow ml-1" data-toggle="modal" onclick="updatePost({{ post.postContent|raw|json_encode }},{{ post.id }})" data-target=".postModal"><i class="fas fa-wrench"></i></a>
+                            <a href="#" class="btn btn-sm btn-gold yellow ml-1" data-toggle="modal" onclick="updatePost({{ post.postContent|raw|json_encode }},{{ post.id }},{{ postModuleIcons|json_encode }},{{ post.postText|raw|json_encode }},{{ post.PostContentModule.id }})" data-target=".postModal"><i class="fas fa-wrench"></i></a>
                         {% endif %}
                         {% if app.user.id == post.postCreator.id or is_granted('ROLE_ADMIN') %}
                             <a href="#" class="btn btn-sm btn-gold red ml-1" data-toggle="modal" data-target=".deleteModal" onclick="deletePost({{ post.id }},{{ post.forumReplies|length }})"><i class="fas fa-trash"></i></a>
@@ -151,14 +120,11 @@
                 </div>
                 <div class="modal-body border-0">
                     {{ form_start(forumTopicForm, {'action': '%action%' }) }}
-                    {{ form_row(forumTopicForm.topicContentModule, {'attr': {'class': 'topicModuleSelection'}}) }}
-                    {{ form_row(forumTopicForm.topicContent) }}
                     {{ form_row(forumTopicForm.title) }}
-                    {{ form_row(forumTopicForm.topicText) }}
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Abbrechen</button>
-                    <button type="submit" class="btn btn-gold"><i class="fas fa-paper-plane"></i> Absenden</button>
+                    <button type="submit" class="btn btn-gold" id="topicSubmit"><i class="fas fa-paper-plane"></i> Absenden</button>
                     {{ form_end(forumTopicForm) }}
                 </div>
 
@@ -177,7 +143,9 @@
                 </div>
                 <div class="modal-body border-0">
                     {{ form_start(forumPostForm, {'action': '%action%' }) }}
+                    {{ form_row(forumPostForm.postContentModule, {'attr': {'class': 'postModuleSelection'}}) }}
                     {{ form_row(forumPostForm.postContent) }}
+                    {{ form_row(forumPostForm.postText) }}
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Abbrechen</button>

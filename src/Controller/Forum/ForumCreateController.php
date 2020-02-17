@@ -6,7 +6,6 @@ use App\Entity\ForumCategory;
 use App\Entity\ForumPost;
 use App\Entity\ForumReply;
 use App\Entity\ForumTopic;
-use App\Entity\TopicContentModule;
 use App\Entity\User;
 use App\Form\ForumCategoryType;
 use App\Form\ForumPostType;
@@ -15,6 +14,7 @@ use App\Form\ForumTopicType;
 use App\Repository\ForumCategoryRepository;
 use App\Repository\ForumPostRepository;
 use App\Repository\ForumTopicRepository;
+use App\Repository\PostContentModuleRepository;
 use App\Services\DiscordService;
 use App\Services\ForumService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -57,6 +57,7 @@ class ForumCreateController extends AbstractController
             $em->flush();
             $this->addFlash('success', 'Eine neue Kategorie wurde hinzugefügt!');
 
+
             $discordService->sendChannelMsg(
                 $forumCategory->getRelatedDiscordChannelId(),
                 'Eine neue Kategorie mit dem Titel "'.$forumCategory->getTitle().'" wurde im Forum eröffnet! 
@@ -70,8 +71,17 @@ https://www.bartforce.de/forum/category/'.$forumCategory->getId()
     /**
      * @Route("/forum/{catId}/createTopic", name="forumCreateTopic")
      */
-    public function createTopic(EntityManagerInterface $em, ForumCategoryRepository $categoryRepository, ForumService $forumService, Request $request, DiscordService $discordService, string $catId)
+    public function createTopic(EntityManagerInterface $em,
+                                ForumCategoryRepository $categoryRepository,
+                                PostContentModuleRepository $postContentModuleRepository,
+                                Request $request,
+                                DiscordService $discordService,
+                                ForumService $forumService,
+                                string $catId
+    )
     {
+        $data =$request->get('forum_post');
+
         $form = $this->createForm(ForumTopicType::class);
         $form->handleRequest($request);
 
@@ -87,27 +97,39 @@ https://www.bartforce.de/forum/category/'.$forumCategory->getId()
             /** @var ForumTopic $forumTopic */
             $forumTopic = $form->getData();
 
-            if($forumTopic->getTopicContentModule()->getTitle() === 'image'){
-                $forumTopic->setTopicContent(
-                    $forumService->makeImageLink($forumTopic->getTopicContent())
-                );
-            }
-
-            if($forumTopic->getTopicContentModule()->getTitle() === 'video'){
-                $forumTopic->setTopicContent(
-                    $forumService->makeYouTubeEmbedLink($forumTopic->getTopicContent())
-                );
-
-            }
-
             $forumTopic->setCreatedAt($now);
             $forumTopic->setUpdatedAt($now);
             $forumTopic->setTopicCreator($user);
             $forumTopic->setCategory($category);
 
             $category->setUpdatedAt($now);
+
+            /** @var ForumPost $forumTopicPost */
+            $forumTopicPost = new ForumPost();
+
+            $forumTopicPost->setPostTopic($forumTopic);
+            $forumTopicPost->setPostCategory($category);
+            $forumTopicPost->setPostCreator($user);
+            $forumTopicPost->setCreatedAt($now);
+            $forumTopicPost->setUpdatedAt($now);
+            $forumTopicPost->setPostText($data['postText']);
+            $forumTopicPost->setPostContentModule($postContentModuleRepository->findOneBy(['id' => $data['postContentModule']]));
+
+            if($forumTopicPost->getPostContentModule()->getTitle() === 'image'){
+                $forumTopicPost->setPostContent(
+                    $forumService->makeImageLink($data['postContent'])
+                );
+            }
+
+            if($forumTopicPost->getPostContentModule()->getTitle() === 'video'){
+                $forumTopicPost->setPostContent(
+                    $forumService->makeYouTubeEmbedLink($data['postContent'])
+                );
+            }
+
             $em->persist($category);
             $em->persist($forumTopic);
+            $em->persist($forumTopicPost);
             $em->flush();
 
             $discordService->sendChannelMsg($forumTopic->getCategory()->getRelatedDiscordChannelId(),'**'.$user->getUsername().'** hat das Thema ***'.$forumTopic->getTitle().'*** eröffnet! 
@@ -118,11 +140,10 @@ http://www.bartforce.de/forum/topic/'.$forumTopic->getId());
         }
     }
 
-
     /**
      * @Route("/forum/{catId}/{topicId}/createPost", name="forumCreatePost")
      */
-    public function createPost(EntityManagerInterface $em, ForumPostRepository $postRepository, ForumTopicRepository $topicRepository, Request $request, string $topicId, DiscordService $discordService, string $catId)
+    public function createPost(EntityManagerInterface $em, ForumService $forumService, ForumTopicRepository $topicRepository, Request $request, string $topicId, DiscordService $discordService)
     {
         $topic = $topicRepository->findOneBy(['id' =>  $topicId]);
         $category = $topic->getCategory();
@@ -135,6 +156,18 @@ http://www.bartforce.de/forum/topic/'.$forumTopic->getId());
         if($postForm->isSubmitted() && $postForm->isValid()) {
             /** @var ForumPost $forumPost */
             $forumPost = $postForm->getData();
+
+            if($forumPost->getPostContentModule()->getTitle() === 'image'){
+                $forumPost->setPostContent(
+                    $forumService->makeImageLink($forumPost->getPostContent())
+                );
+            }
+
+            if($forumPost->getPostContentModule()->getTitle() === 'video'){
+                $forumPost->setPostContent(
+                    $forumService->makeYouTubeEmbedLink($forumPost->getPostContent())
+                );
+            }
 
             $forumPost->setCreatedAt($now);
             $forumPost->setUpdatedAt($now);
