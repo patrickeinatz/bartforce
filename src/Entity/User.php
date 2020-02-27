@@ -354,14 +354,6 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|TopicKudos[]
-     */
-    public function getTopicKudos(): Collection
-    {
-        return $this->topicKudos;
-    }
-
-    /**
      * @return Collection|PostKudos[]
      */
     public function getPostKudos(): Collection
@@ -369,23 +361,23 @@ class User implements UserInterface
         return $this->postKudos;
     }
 
-    public function addPostKudo(PostKudos $postKudo): self
+    public function addPostKudos(PostKudos $postKudos): self
     {
-        if (!$this->postKudos->contains($postKudo)) {
-            $this->postKudos[] = $postKudo;
-            $postKudo->setUser($this);
+        if (!$this->postKudos->contains($postKudos)) {
+            $this->postKudos[] = $postKudos;
+            $postKudos->setUser($this);
         }
 
         return $this;
     }
 
-    public function removePostKudo(PostKudos $postKudo): self
+    public function removePostKudos(PostKudos $postKudos): self
     {
-        if ($this->postKudos->contains($postKudo)) {
-            $this->postKudos->removeElement($postKudo);
+        if ($this->postKudos->contains($postKudos)) {
+            $this->postKudos->removeElement($postKudos);
             // set the owning side to null (unless already changed)
-            if ($postKudo->getUser() === $this) {
-                $postKudo->setUser(null);
+            if ($postKudos->getUser() === $this) {
+                $postKudos->setUser(null);
             }
         }
 

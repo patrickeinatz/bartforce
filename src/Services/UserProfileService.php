@@ -18,18 +18,9 @@ class UserProfileService
      */
     public function getReceivedKudos(User $profileUser):int
     {
-        $userTopics = $profileUser->getForumTopics();
         $userPosts = $profileUser->getForumPosts();
 
         $gainedKudos = [];
-
-        foreach($userTopics as $topic){
-            foreach($topic->getTopicKudos() as $kudo){
-                if($kudo->getUser() !== $profileUser){
-                    $gainedKudos[] = $kudo;
-                }
-            }
-        }
 
         foreach($userPosts as $post){
             foreach($post->getPostKudos() as $kudo){
@@ -48,16 +39,9 @@ class UserProfileService
      */
     public function getGivenKudos(User $profileUser)
     {
-        $userTopicKudos = $profileUser->getTopicKudos();
         $userPostKudos = $profileUser->getPostKudos();
 
         $givenKudos = [];
-
-        foreach($userTopicKudos as $kudo){
-            if($kudo->getTopic()->getTopicCreator() !== $profileUser){
-                $givenKudos[] = $kudo;
-            }
-        }
 
         foreach($userPostKudos as $kudo){
             if($kudo->getPost()->getPostCreator() !== $profileUser){
