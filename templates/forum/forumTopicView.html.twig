@@ -6,7 +6,7 @@
     <div class="row mb-4">
         <div class="col-md-12">
             <a href="/forum" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-comments mr-1"></i> Forum</a>
-            <a href="/forum/category/{{ catId }}" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-tag"></i> Kategoire</a>
+            <a href="/forum/category/{{ catId }}" class="btn btn-sm btn-gold"><i class="fas fa-long-arrow-alt-left"></i> <i class="fas fa-tag"></i> Kategorie</a>
             <div class="float-right">
                 <button type="button" class="btn btn-sm btn-gold green" data-toggle="modal" data-target=".postModal" onclick="createPost({{ catId }},{{ topic.id }}, {{ postModuleIcons|json_encode }})">
                     <i class="fas fa-plus-circle"></i> Neuer Beitrag
