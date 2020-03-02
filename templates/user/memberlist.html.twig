@@ -18,7 +18,7 @@
                 <tr class="clickable-row" data-href="/profile/{{ member.discordId }}">
                     <td><img class="user-img rounded-circle" src="{{ asset(member.avatar) }}" width="30"></td>
                     <td>{{ member.username }}</a></td>
-                    <td></td>
+                    <td><i class="fas fa-award"></i>  {{ member.score }}</td>
                     <td><small class="float-right">zuletzt online: {{ member.lastLogin|ago }}</small></td>
                 </tr>
                 {% endfor %}

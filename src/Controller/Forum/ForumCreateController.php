@@ -17,6 +17,7 @@ use App\Repository\ForumTopicRepository;
 use App\Repository\PostContentModuleRepository;
 use App\Services\DiscordService;
 use App\Services\ForumService;
+use App\Services\UserProfileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -70,13 +71,15 @@ class ForumCreateController extends AbstractController
     /**
      * @Route("/forum/{catId}/createTopic", name="forumCreateTopic")
      */
-    public function createTopic(EntityManagerInterface $em,
-                                ForumCategoryRepository $categoryRepository,
-                                PostContentModuleRepository $postContentModuleRepository,
-                                Request $request,
-                                DiscordService $discordService,
-                                ForumService $forumService,
-                                string $catId
+    public function createTopic(
+        EntityManagerInterface $em,
+        ForumCategoryRepository $categoryRepository,
+        PostContentModuleRepository $postContentModuleRepository,
+        Request $request,
+        DiscordService $discordService,
+        UserProfileService $userProfileService,
+        ForumService $forumService,
+        string $catId
     )
     {
         $data =$request->get('forum_post');
@@ -126,6 +129,9 @@ class ForumCreateController extends AbstractController
                 );
             }
 
+            $userProfileService->increaseScore($user, 'topic');
+            $userProfileService->increaseScore($user, 'post');
+
             $em->persist($category);
             $em->persist($forumTopic);
             $em->persist($forumTopicPost);
@@ -144,7 +150,14 @@ class ForumCreateController extends AbstractController
     /**
      * @Route("/forum/{catId}/{topicId}/createPost", name="forumCreatePost")
      */
-    public function createPost(EntityManagerInterface $em, ForumService $forumService, ForumTopicRepository $topicRepository, Request $request, string $topicId, DiscordService $discordService)
+    public function createPost(
+        EntityManagerInterface $em,
+        ForumService $forumService,
+        ForumTopicRepository $topicRepository,
+        Request $request,
+        string $topicId,
+        UserProfileService $userProfileService,
+        DiscordService $discordService)
     {
         $topic = $topicRepository->findOneBy(['id' =>  $topicId]);
         $category = $topic->getCategory();
@@ -153,6 +166,9 @@ class ForumCreateController extends AbstractController
         $postForm->handleRequest($request);
 
         $now = new \DateTime('now');
+
+        /** @var User $user */
+        $user = $this->getUser();
 
         if($postForm->isSubmitted() && $postForm->isValid()) {
             /** @var ForumPost $forumPost */
@@ -172,12 +188,14 @@ class ForumCreateController extends AbstractController
 
             $forumPost->setCreatedAt($now);
             $forumPost->setUpdatedAt($now);
-            $forumPost->setPostCreator($this->getUser());
+            $forumPost->setPostCreator($user);
             $forumPost->setPostTopic($topic);
             $forumPost->setPostCategory($category);
 
             $topic->setUpdatedAt($now);
             $category->setUpdatedAt($now);
+
+            $userProfileService->increaseScore($user, 'post');
 
             $em->persist($topic);
             $em->persist($category);
@@ -202,12 +220,13 @@ class ForumCreateController extends AbstractController
         EntityManagerInterface $em,
         Request $request,
         ForumPostRepository $postRepository,
+        UserProfileService $userProfileService,
         string $topicId,
         string $postId
     ){
 
-        /** @var User $currentUser */
-        $currentUser = $this->getUser();
+        /** @var User $user */
+        $user = $this->getUser();
 
         /** @var ForumPost $post */
         $post = $postRepository->findOneBy(['id' => $postId]);
@@ -217,7 +236,7 @@ class ForumCreateController extends AbstractController
         $replyForm = $this->createForm(ForumReplyType::class);
         $replyForm->handleRequest($request);
 
-        $now = $now = new \DateTime('now');
+        $now = new \DateTime('now');
 
         if($replyForm->isSubmitted() && $replyForm->isValid()) {
 
@@ -225,20 +244,20 @@ class ForumCreateController extends AbstractController
             $postReply = $replyForm->getData();
             $postReply->setCreatedAt($now);
             $postReply->setUpdatedAt($now);
-            $postReply->setReplyCreator($currentUser);
+            $postReply->setReplyCreator($user);
             $postReply->setTopic($post->getPostTopic());
             $postReply->setPost($post);
-            $em->persist($postReply);
 
             $topic->setUpdatedAt($now);
-            $em->persist($topic);
-
             $post->setUpdatedAt($now);
-            $em->persist($post);
-
             $category->setUpdatedAt($now);
-            $em->persist($category);
 
+            $userProfileService->increaseScore($user, 'reply');
+
+            $em->persist($postReply);
+            $em->persist($category);
+            $em->persist($topic);
+            $em->persist($post);
             $em->flush();
             $this->addFlash('success', 'Eine neue Antwort wurde hinzugefügt!');
             return $this->redirectToRoute('forumTopicView', ['topicId' => $post->getPostTopic()->getId()]);

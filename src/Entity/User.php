@@ -84,6 +84,11 @@ class User implements UserInterface
      */
     private $postKudos;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $score;
+
     public function __construct()
     {
         $this->forumTopics = new ArrayCollection();
@@ -380,6 +385,18 @@ class User implements UserInterface
                 $postKudos->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getScore(): ?int
+    {
+        return $this->score;
+    }
+
+    public function setScore(?int $score): self
+    {
+        $this->score = $score;
 
         return $this;
     }

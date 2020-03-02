@@ -19,6 +19,7 @@ use App\Repository\ForumTopicRepository;
 use App\Repository\KudosRepository;
 use App\Repository\PostKudosRepository;
 use App\Services\ForumService;
+use App\Services\UserProfileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -147,6 +148,7 @@ class ForumUpdateController extends AbstractController
         EntityManagerInterface $em,
         ForumPostRepository $postRepository,
         PostKudosRepository $postKudosRepository,
+        UserProfileService $userProfileService,
         string $postId)
     {
 
@@ -164,10 +166,21 @@ class ForumUpdateController extends AbstractController
             $postKudos->setCreatedAt($now);
             $postKudos->setUser($user);
 
+            if($post->getPostCreator() !== $user){
+                $userProfileService->increaseScore($user, 'givenKudo');
+                $userProfileService->increaseScore($post->getPostCreator(), 'receivedKudo');
+            }
+
             $em->persist($postKudos);
             $em->flush();
         } else {
             $em->remove($postKudosRepository->findOneBy(['post' => $post, 'user' => $user]));
+
+            if($post->getPostCreator() !== $user){
+                $userProfileService->decreaseScore($user, 'givenKudo');
+                $userProfileService->decreaseScore($post->getPostCreator(), 'receivedKudo');
+            }
+
             $em->flush();
         }
 

@@ -50,8 +50,7 @@ class UserController extends AbstractController
             'member' => $memberData,
             'profileUserRoles' => $profileUserRoles,
             'userGivenKudos' => $userProfileService->getGivenKudos($profileUser),
-            'userReceivedKudos' => $userProfileService->getReceivedKudos($profileUser),
-            'score' => $userProfileService->calcScore($discordService, $profileUser)
+            'userReceivedKudos' => $userProfileService->getReceivedKudos($profileUser)
         ]);
 
     }

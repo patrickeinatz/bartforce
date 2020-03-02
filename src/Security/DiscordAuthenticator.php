@@ -4,6 +4,7 @@ namespace App\Security;
 
 use App\Entity\User as User;
 use App\Services\DiscordService;
+use App\Services\UserProfileService;
 use Symfony\Component\Security\Core\User\UserInterface as UserInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
@@ -23,13 +24,15 @@ class DiscordAuthenticator extends SocialAuthenticator
     private $em;
     private $router;
     private $discordService;
+    private $userProfileService;
 
-    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, DiscordService $discordService)
+    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em, RouterInterface $router, DiscordService $discordService, UserProfileService $userProfileService)
     {
         $this->clientRegistry = $clientRegistry;
         $this->em = $em;
         $this->router = $router;
         $this->discordService = $discordService;
+        $this->userProfileService = $userProfileService;
     }
 
     public function supports(Request $request)
@@ -79,6 +82,18 @@ class DiscordAuthenticator extends SocialAuthenticator
                 );
             }
 
+            if($existingUser->getScore() === NULL)
+            {
+                $existingUser->setScore(
+                    $this->userProfileService->initScore($existingUser)
+                );
+            }
+
+            if($this->userProfileService->daysSinceLastLogin($existingUser) > 1){
+                $this->userProfileService->increaseScore($existingUser, 'login');
+            }
+
+
             $existingUser->setLastLogin(new \DateTime());
             $existingUser->setRoles($discordUserRoles);
             $this->em->persist($existingUser);
@@ -103,6 +118,9 @@ class DiscordAuthenticator extends SocialAuthenticator
             $user->setCreatedAt(new \DateTime());
             $user->setLastLogin(new \DateTime());
             $user->setJoinedAt($extendedUserData->joined_at);
+            $user->setScore(
+                    $this->userProfileService->initScore($user)
+            );
             $this->em->persist($user);
             $this->em->flush();
 

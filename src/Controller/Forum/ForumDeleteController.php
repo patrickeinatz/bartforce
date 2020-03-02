@@ -4,11 +4,13 @@
 namespace App\Controller\Forum;
 
 use App\Entity\ForumCategory;
+use App\Entity\User;
 use App\Repository\ForumCategoryRepository;
 use App\Repository\ForumPostRepository;
 use App\Repository\ForumReplyRepository;
 use App\Repository\ForumTopicRepository;
 use App\Services\DiscordService;
+use App\Services\UserProfileService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,7 +27,12 @@ class ForumDeleteController extends AbstractController
     /**
      * @Route("/forum/deleteCategory/{categoryId}", name="forumDeleteCategory")
      */
-    public function deleteCategory(EntityManagerInterface $em, ForumCategoryRepository $categoryRepository, ForumReplyRepository $replyRepository, DiscordService $discordService, string $categoryId)
+    public function deleteCategory(
+        EntityManagerInterface $em,
+        ForumCategoryRepository $categoryRepository,
+        ForumReplyRepository $replyRepository,
+        DiscordService $discordService,
+        string $categoryId)
     {
         /** @var ForumCategory $category */
         $category = $categoryRepository->findOneBy(['id' => $categoryId]);
@@ -64,7 +71,15 @@ class ForumDeleteController extends AbstractController
     /**
      * @Route("/forum/deleteTopic/{topicId}", name="forumDeleteTopic")
      */
-    public function deleteTopic(EntityManagerInterface $em, ForumTopicRepository $topicRepository, ForumPostRepository $postRepository, ForumReplyRepository $replyRepository, DiscordService $discordService, string $topicId)
+    public function deleteTopic(
+        EntityManagerInterface $em,
+        ForumTopicRepository $topicRepository,
+        ForumPostRepository $postRepository,
+        ForumReplyRepository $replyRepository,
+        DiscordService $discordService,
+        UserProfileService $userProfileService,
+        string $topicId
+    )
     {
         $topic = $topicRepository->findOneBy(['id' => $topicId]);
         $topicPosts = $postRepository->findBy(['postTopic' => $topic]);
@@ -80,13 +95,17 @@ class ForumDeleteController extends AbstractController
             ' **'.$this->getUser()->getUsername().'** hat das Thema: **"'.$topic->getTitle().'"** entgültig geschlossen!'
         );
 
+        $userProfileService->decreaseScore($topic->getTopicCreator(), 'topic');
+
         $em->remove($topic);
 
         foreach ($topicPosts as $post){
+            $userProfileService->decreaseScore($post->getPostCreator(), 'post');
             $em->remove($post);
         }
 
         foreach($postReplies as $reply){
+            $userProfileService->decreaseScore($reply->getReplyCreator(), 'reply');
             $em->remove($reply);
         }
 
@@ -98,7 +117,14 @@ class ForumDeleteController extends AbstractController
     /**
      * @Route("/forum/deletePost/{postId}", name="forumDeletePost")
      */
-    public function deletePost(EntityManagerInterface $em, ForumPostRepository $postRepository, ForumReplyRepository $replyRepository, DiscordService $discordService, string $postId)
+    public function deletePost(
+        EntityManagerInterface $em,
+        ForumPostRepository $postRepository,
+        ForumReplyRepository $replyRepository,
+        DiscordService $discordService,
+        UserProfileService $userProfileService,
+        string $postId
+    )
     {
         $post = $postRepository->findOneBy(['id' => $postId]);
         $postReplies = $replyRepository->findBy(['post' => $post]);
@@ -110,8 +136,10 @@ class ForumDeleteController extends AbstractController
             $post->getPostTopic()->getCategory()->getRelatedDiscordChannelId(),
             'Ein Beitrag von **'.$post->getPostCreator()->getUsername().'** wurde gewaltsam aus dem Thema: **"'.$post->getPostTopic()->getTitle().'"** entfernt! Denk mal drüber nach.');
 
+        $userProfileService->decreaseScore($post->getPostCreator(), 'post');
         $em->remove($post);
         foreach($postReplies as $reply){
+            $userProfileService->decreaseScore($reply->getReplyCreator(), 'reply');
             $em->remove($reply);
         }
 
@@ -123,10 +151,17 @@ class ForumDeleteController extends AbstractController
     /**
      * @Route("/forum/deleteReply/{replyId}", name="forumDeleteReply")
      */
-    public function deleteReply(EntityManagerInterface $em, ForumPostRepository $postRepository, ForumReplyRepository $replyRepository, string $replyId)
+    public function deleteReply(
+        EntityManagerInterface $em,
+        ForumPostRepository $postRepository,
+        ForumReplyRepository $replyRepository,
+        UserProfileService $userProfileService,
+        string $replyId)
     {
         $reply = $replyRepository->findOneBy(['id' => $replyId]);
         $topicId = $reply->getTopic()->getId();
+
+        $userProfileService->decreaseScore($reply->getReplyCreator(), 'reply');
 
         $em->remove($reply);
         $em->flush();
