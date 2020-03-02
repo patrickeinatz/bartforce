@@ -89,12 +89,18 @@ class User implements UserInterface
      */
     private $score;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Tournament", mappedBy="champion")
+     */
+    private $tournaments;
+
     public function __construct()
     {
         $this->forumTopics = new ArrayCollection();
         $this->forumPosts = new ArrayCollection();
         $this->forumReplies = new ArrayCollection();
         $this->postKudos = new ArrayCollection();
+        $this->tournaments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -397,6 +403,37 @@ class User implements UserInterface
     public function setScore(?int $score): self
     {
         $this->score = $score;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tournament[]
+     */
+    public function getTournaments(): Collection
+    {
+        return $this->tournaments;
+    }
+
+    public function addTournament(Tournament $tournament): self
+    {
+        if (!$this->tournaments->contains($tournament)) {
+            $this->tournaments[] = $tournament;
+            $tournament->setChampion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTournament(Tournament $tournament): self
+    {
+        if ($this->tournaments->contains($tournament)) {
+            $this->tournaments->removeElement($tournament);
+            // set the owning side to null (unless already changed)
+            if ($tournament->getChampion() === $this) {
+                $tournament->setChampion(null);
+            }
+        }
 
         return $this;
     }
