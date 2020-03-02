@@ -60,8 +60,7 @@ class ForumCreateController extends AbstractController
 
             $discordService->sendChannelMsg(
                 $forumCategory->getRelatedDiscordChannelId(),
-                'Eine neue Kategorie mit dem Titel "'.$forumCategory->getTitle().'" wurde im Forum eröffnet! 
-https://www.bartforce.de/forum/category/'.$forumCategory->getId()
+                'Eine neue Kategorie mit dem Titel "'.$forumCategory->getTitle().'" wurde im Forum eröffnet!/'
             );
 
             return $this->redirectToRoute('forumView');
@@ -132,8 +131,10 @@ https://www.bartforce.de/forum/category/'.$forumCategory->getId()
             $em->persist($forumTopicPost);
             $em->flush();
 
-            $discordService->sendChannelMsg($forumTopic->getCategory()->getRelatedDiscordChannelId(),'**'.$user->getUsername().'** hat das Thema ***'.$forumTopic->getTitle().'*** eröffnet! 
-http://www.bartforce.de/forum/topic/'.$forumTopic->getId());
+            $discordService->sendChannelMsg(
+                $forumTopic->getCategory()->getRelatedDiscordChannelId(),
+                '**'.$user->getUsername().'** hat das Thema ***'.$forumTopic->getTitle().'*** eröffnet!'
+            );
 
             $this->addFlash('success', 'Ein neues Thema wurde eröffnet!');
             return $this->redirectToRoute('forumCategoryView', ['id' => $catId]);
@@ -183,8 +184,10 @@ http://www.bartforce.de/forum/topic/'.$forumTopic->getId());
             $em->persist($forumPost);
             $em->flush();
 
-            $discordService->sendChannelMsg($category->getRelatedDiscordChannelId(),'**'.$this->getUser()->getUsername().'** hat seinen Senf zum Thema **"'.$topic->getTitle().'"** dazugegeben! 
-http://www.bartforce.de/forum/topic/'.$topic->getId());
+            $discordService->sendChannelMsg(
+                $category->getRelatedDiscordChannelId(),
+                '**'.$this->getUser()->getUsername().'** hat seinen Senf zum Thema **"'.$topic->getTitle().'"** dazugegeben!'
+            );
 
             $this->addFlash('success', 'Ein neuer Beitrag wurde erstellt!');
 

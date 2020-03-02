@@ -3,15 +3,18 @@
 namespace App\Controller\Forum;
 
 use App\Entity\ForumPost;
+use App\Entity\ForumReply;
 use App\Entity\ForumTopic;
 use App\Entity\Kudos;
 use App\Entity\PostKudos;
 use App\Entity\User;
 use App\Form\ForumCategoryType;
 use App\Form\ForumPostType;
+use App\Form\ForumReplyType;
 use App\Form\ForumTopicType;
 use App\Repository\ForumCategoryRepository;
 use App\Repository\ForumPostRepository;
+use App\Repository\ForumReplyRepository;
 use App\Repository\ForumTopicRepository;
 use App\Repository\KudosRepository;
 use App\Repository\PostKudosRepository;
@@ -112,6 +115,32 @@ class ForumUpdateController extends AbstractController
     }
 
     /**
+     * @Route("forum/replyUpdate/{replyId}", name="forumUpdateReply")
+     */
+    public function updateReply(
+        EntityManagerInterface $em,
+        Request $request,
+        ForumReplyRepository $replyRepository,
+        string $replyId
+    )
+    {
+        $reply = $replyRepository->findOneBy(['id' => $replyId]);
+        $now = new \DateTime('now');
+        $form = $this->createForm(ForumReplyType::class, $reply);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            /** @var ForumReply $reply */
+            $reply = $form->getData();
+            $reply->setUpdatedAt($now);
+            $em->persist($reply);
+            $em->flush();
+            $this->addFlash('success', 'Die Antwort wurde bearbeitet!');
+            return $this->redirectToRoute('forumTopicView', ['topicId' => $reply->getTopic()->getId()]);
+        }
+    }
+
+    /**
      * @Route("forum/topic/updatePostKudos/{postId}", name="forumUpdatePostKudos")
      */
     public function updatePostKudos(
@@ -143,6 +172,6 @@ class ForumUpdateController extends AbstractController
         }
 
         return new JsonResponse(['kudos' =>  count($post->getPostKudos())]);
-
     }
+
 }

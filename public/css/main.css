@@ -504,20 +504,29 @@ a.nav-link.sidenav-link:hover{
     width: 30px;
     margin-right: 10px;
 }
+.reply{
+    border: none;
+    border-bottom: 1px solid rgba(132,159,169,0.3);
+}
 
 .reply-content{
     color: rgb(132,159,169);
 }
 
+.updateReply{
+    padding: 5px;
+    color: rgb(222,206,149);
+}
+.updateReply:hover{
+    color: rgb(255, 255, 255);
+}
+
 .deleteReply{
-    float: right;
-    font-style: italic;
     padding: 5px;
     color: rgb(222,206,149);
 }
 .deleteReply:hover{
     color: rgb(255, 255, 255);
-
 }
 
 .topicAdminMenu{

@@ -71,13 +71,18 @@
                         {% if replies|length != 0 %}
                         <ul class="list-group list-group-flush">
                             {% for reply in post.forumReplies.values %}
-                                <li class="list-group-item">
+                                <li class="list-group-item reply">
                                     <img class="rounded-circle" src="{{ reply.replyCreator.avatar }}" width="20"/>
                                     <span class="badge badge-bluegray">{{ reply.replyCreator.username }}</span>
                                     <span class="reply-content">{{ reply.replyContent }}</span>
+                                    {% if app.user.id == reply.replyCreator.id %}
+                                        <a href="#" data-toggle="modal" data-target=".replyModal" onclick="updateReply({{ reply.id }}, {{ reply.replyContent|raw|json_encode }})">
+                                            <span class="updateReply"><small><i class="fas fa-wrench"></i></small></span>
+                                        </a>
+                                    {% endif %}
                                     {% if app.user.id == reply.replyCreator.id or is_granted('ROLE_ADMIN') %}
                                         <a href="#" data-toggle="modal" data-target=".deleteModal" onclick="deleteReply({{ reply.id }})">
-                                            <span class="deleteReply"><small>[ Antwort löschen ]</small></span>
+                                            <span class="deleteReply"><small><i class="fas fa-trash"></i></small></span>
                                         </a>
                                     {% endif %}
                                 </li>

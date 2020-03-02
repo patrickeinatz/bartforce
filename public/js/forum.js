@@ -153,6 +153,21 @@ function createReply(topicId, postId)
     }
 }
 
+function updateReply(replyId, replyContent)
+{
+    var content = document.getElementById('forum_reply_replyContent');
+
+    var forms = document.querySelectorAll('form');
+
+    for (var i =0; i < forms.length; i++){
+        if(forms[i].name === "forum_reply") {
+            var action = forms[i].getAttribute('action');
+            forms[i].action = action.replace('%action%', '/forum/replyUpdate/'+replyId);
+        }
+    }
+    content.innerHTML = replyContent;
+}
+
 function updatePost(postContent, postId, postModules, postText, postContentModule)
 {
     var title = document.getElementById('postModalTitle');
@@ -227,8 +242,6 @@ function updateCategory(catTitle, catDescription, catId)
             forms[i].action = action.replace('%action%', '/forum/categoryUpdate/'+catId);
         }
     }
-
-    console.log(catTitle);
     titleData.value = catTitle;
     descriptionData.innerHTML = catDescription;
 }

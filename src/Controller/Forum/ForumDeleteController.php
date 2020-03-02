@@ -75,7 +75,10 @@ class ForumDeleteController extends AbstractController
         $postCount = sizeof($topicPosts);
         $replyCount = sizeof($postReplies);
 
-        $discordService->sendChannelMsg($topic->getCategory()->getRelatedDiscordChannelId(),' **'.$this->getUser()->getUsername().'** hat das Thema: **"'.$topic->getTitle().'"** entgültig geschlossen!');
+        $discordService->sendChannelMsg(
+            $topic->getCategory()->getRelatedDiscordChannelId(),
+            ' **'.$this->getUser()->getUsername().'** hat das Thema: **"'.$topic->getTitle().'"** entgültig geschlossen!'
+        );
 
         $em->remove($topic);
 
@@ -103,7 +106,9 @@ class ForumDeleteController extends AbstractController
         $replyCount = sizeof($postReplies);
         $topicId = $post->getPostTopic()->getId();
 
-        $discordService->sendChannelMsg($post->getPostTopic()->getCategory()->getRelatedDiscordChannelId(),'Ein Beitrag von **'.$post->getPostCreator()->getUsername().'** wurde gewaltsam aus dem Thema: **"'.$post->getPostTopic()->getTitle().'"** entfernt! Denk mal drüber nach.');
+        $discordService->sendChannelMsg(
+            $post->getPostTopic()->getCategory()->getRelatedDiscordChannelId(),
+            'Ein Beitrag von **'.$post->getPostCreator()->getUsername().'** wurde gewaltsam aus dem Thema: **"'.$post->getPostTopic()->getTitle().'"** entfernt! Denk mal drüber nach.');
 
         $em->remove($post);
         foreach($postReplies as $reply){
