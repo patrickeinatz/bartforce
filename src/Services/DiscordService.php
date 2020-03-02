@@ -171,6 +171,10 @@ class DiscordService
         ]);
     }
 
+    /**
+     * @param string $channelId
+     * @param string $content
+     */
     public function sendChannelMsg(string $channelId, string $content)
     {
         $this->discordServer->channel->createMessage([
@@ -179,4 +183,26 @@ class DiscordService
         ]);
     }
 
+    /**
+     * @return array
+     */
+    public function getVoiceChannels():array
+    {
+        $voiceChannels = [];
+
+        $guildChannels = $this->discordServer->guild->getGuildChannels([
+            'guild.id' => $this->guildId
+        ]);
+
+
+        foreach ($guildChannels as $channel){
+            if($channel->type == self::DISCORD_VOICE_CHANNEL_TYPE){
+                if($channel->name !== "AFK"){
+                    array_push($voiceChannels, $channel);
+                }
+            }
+        }
+
+        return $voiceChannels;
+    }
 }

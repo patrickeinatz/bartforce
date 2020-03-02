@@ -13,13 +13,21 @@
             <input class="form-control" id="searchInput" type="text" placeholder="Suchen...">
             <br>
             <table class="table">
+                <thead>
+                    <tr>
+                        <th><small>Avatar</small></th>
+                        <th>Name</small></th>
+                        <th><small>Punkte</small></th>
+                        <th><small class="float-right">zuletzt online</small></th>
+                    </tr>
+                </thead>
                 <tbody id="memberList">
                 {% for member in signedMembers %}
                 <tr class="clickable-row" data-href="/profile/{{ member.discordId }}">
                     <td><img class="user-img rounded-circle" src="{{ asset(member.avatar) }}" width="30"></td>
                     <td>{{ member.username }}</a></td>
                     <td><i class="fas fa-award"></i>  {{ member.score }}</td>
-                    <td><small class="float-right">zuletzt online: {{ member.lastLogin|ago }}</small></td>
+                    <td><small class="float-right">{{ member.lastLogin|ago }}</small></td>
                 </tr>
                 {% endfor %}
                 </tbody>
