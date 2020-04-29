@@ -58,6 +58,11 @@ class Tournament
      */
     private $tournamentMatches;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $openQualifying;
+
     public function __construct()
     {
         $this->tournamentTeams = new ArrayCollection();
@@ -199,6 +204,18 @@ class Tournament
                 $tournamentMatch->setTournament(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOpenQualifying(): ?bool
+    {
+        return $this->openQualifying;
+    }
+
+    public function setOpenQualifying(bool $openQualifying): self
+    {
+        $this->openQualifying = $openQualifying;
 
         return $this;
     }

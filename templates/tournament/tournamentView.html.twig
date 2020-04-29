@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bartforce {{ title }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="page-headline"><i class="fas fa-sitemap mr-1"></i> {{ title }}</h3>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a type="button" href="{{ path('tournament_admin') }}" class="btn btn-sm btn-gold green float-right" >
+                    <i class="fas fa-tools"></i> Administration
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

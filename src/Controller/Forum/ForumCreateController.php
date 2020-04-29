@@ -139,7 +139,7 @@ class ForumCreateController extends AbstractController
 
             $discordService->sendChannelMsg(
                 $forumTopic->getCategory()->getRelatedDiscordChannelId(),
-                '**'.$user->getUsername().'** hat das Thema ***'.$forumTopic->getTitle().'*** eröffnet!'
+                '**'.$user->getUsername().'** hat das Thema ***'.$forumTopic->getTitle().'*** eröffnet! '.$forumTopicPost->getPostContent()
             );
 
             $this->addFlash('success', 'Ein neues Thema wurde eröffnet!');
@@ -204,7 +204,7 @@ class ForumCreateController extends AbstractController
 
             $discordService->sendChannelMsg(
                 $category->getRelatedDiscordChannelId(),
-                '**'.$this->getUser()->getUsername().'** hat seinen Senf zum Thema **"'.$topic->getTitle().'"** dazugegeben!'
+                '**'.$this->getUser()->getUsername().'** hat seinen Senf zum Thema **"'.$topic->getTitle().'"** dazugegeben!'.$forumPost->getPostContent()
             );
 
             $this->addFlash('success', 'Ein neuer Beitrag wurde erstellt!');
