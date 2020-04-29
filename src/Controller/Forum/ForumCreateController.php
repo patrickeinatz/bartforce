@@ -61,7 +61,7 @@ class ForumCreateController extends AbstractController
 
             $discordService->sendChannelMsg(
                 $forumCategory->getRelatedDiscordChannelId(),
-                'Eine neue Kategorie mit dem Titel "'.$forumCategory->getTitle().'" wurde im Forum eröffnet!/'
+                'Eine neue Kategorie mit dem Titel "'.$forumCategory->getTitle().'" wurde im Forum eröffnet!'
             );
 
             return $this->redirectToRoute('forumView');
@@ -139,7 +139,7 @@ class ForumCreateController extends AbstractController
 
             $discordService->sendChannelMsg(
                 $forumTopic->getCategory()->getRelatedDiscordChannelId(),
-                '**'.$user->getUsername().'** hat das Thema ***'.$forumTopic->getTitle().'*** eröffnet! '.$forumTopicPost->getPostContent()
+                '**'.$user->getUsername().'** hat das Thema ***'.$forumTopic->getTitle().'*** eröffnet! '.$data['postContent']." ".$forumTopicPost->getPostText()
             );
 
             $this->addFlash('success', 'Ein neues Thema wurde eröffnet!');
@@ -174,6 +174,8 @@ class ForumCreateController extends AbstractController
             /** @var ForumPost $forumPost */
             $forumPost = $postForm->getData();
 
+            $rawLink = $forumPost->getPostContent();
+
             if($forumPost->getPostContentModule()->getTitle() === 'image'){
                 $forumPost->setPostContent(
                     $forumService->makeImageLink($forumPost->getPostContent())
@@ -204,7 +206,7 @@ class ForumCreateController extends AbstractController
 
             $discordService->sendChannelMsg(
                 $category->getRelatedDiscordChannelId(),
-                '**'.$this->getUser()->getUsername().'** hat seinen Senf zum Thema **"'.$topic->getTitle().'"** dazugegeben!'.$forumPost->getPostContent()
+                '**'.$this->getUser()->getUsername().'** hat seinen Senf zum Thema **"'.$topic->getTitle().'"** dazugegeben!'.$rawLink." ".$forumPost->getPostText()
             );
 
             $this->addFlash('success', 'Ein neuer Beitrag wurde erstellt!');
